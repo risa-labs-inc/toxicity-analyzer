@@ -43,3 +43,13 @@ export {
   type BranchingRule,
   type BranchingEvaluation,
 } from './conditional-branching';
+
+// Drug Module Question Selection exports
+export {
+  selectQuestionsViaDrugModules,
+  getActiveDrugs,
+  unionSymptoms,
+  applyOptionalPhaseFiltering,
+  type DrugModuleQuestionSelectionInput,
+  type DrugModuleQuestionSelectionResult,
+} from './drug-module-selector';

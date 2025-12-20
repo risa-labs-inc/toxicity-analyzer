@@ -11,6 +11,7 @@ export interface Regimen {
   standardCycleLengthDays: number;
   totalCycles?: number;
   toxicityProfile: ToxicityProfile;
+  drugModuleComposition?: any; // Drug module composition for drug-module approach
   nadirWindowStart: number; // Day 7 for most regimens
   nadirWindowEnd: number;   // Day 12 for most regimens
   createdAt: Date;

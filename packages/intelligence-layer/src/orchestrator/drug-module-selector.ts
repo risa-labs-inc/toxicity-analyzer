@@ -5,7 +5,6 @@ import {
   DrugModule,
   ActiveDrugsResult,
   SymptomSource,
-  DrugModuleCompositionStep,
 } from '@toxicity-analyzer/shared';
 import { applyHistoricalEscalation, ensureAttributeCompleteness, SymptomHistory } from './question-selector';
 
@@ -52,23 +51,23 @@ export function getActiveDrugs(context: TreatmentContext): ActiveDrugsResult {
     return {
       drugs,
       regimenStep: null,
-      cycleNumber: context.cycleNumber,
+      cycleNumber: context.currentCycle,
     };
   }
 
-  const currentCycle = context.cycleNumber;
+  const currentCycleNumber = context.currentCycle;
 
   // Find which step applies to the current cycle
   for (const step of composition.steps) {
     const appliesTo =
       step.cycles === 'all' ||
-      (Array.isArray(step.cycles) && step.cycles.includes(currentCycle));
+      (Array.isArray(step.cycles) && step.cycles.includes(currentCycleNumber));
 
     if (appliesTo) {
       return {
         drugs: step.drugModules,
         regimenStep: step.stepName,
-        cycleNumber: currentCycle,
+        cycleNumber: currentCycleNumber,
       };
     }
   }
@@ -77,7 +76,7 @@ export function getActiveDrugs(context: TreatmentContext): ActiveDrugsResult {
   return {
     drugs: [],
     regimenStep: null,
-    cycleNumber: currentCycle,
+    cycleNumber: currentCycleNumber,
   };
 }
 
@@ -204,7 +203,7 @@ export function selectQuestionsViaDrugModules(
   // Step 3: Union symptoms from active drug modules
   const allSymptomSources = unionSymptoms(activeDrugModules);
   const totalSymptomsBeforeDedup = activeDrugModules.reduce(
-    (sum, module) => sum + module.symptomTerms.length + module.safetyProxyItems.reduce((s, p) => s + p.symptoms.length, 0),
+    (sum, module) => sum + module.symptomTerms.length + module.safetyProxyItems.reduce((s: number, p: any) => s + p.symptoms.length, 0),
     0
   );
 

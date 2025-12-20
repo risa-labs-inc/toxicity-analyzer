@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db/connection';
 import { QuestionnaireService } from '../services/questionnaire.service';
+import { QuestionnaireDrugModuleService } from '../services/questionnaire-drug-module.service';
 import { PatientRepository } from '../repositories/patient.repository';
 import { TreatmentRepository } from '../repositories/treatment.repository';
 import { ResponseRepository } from '../repositories/response.repository';
@@ -102,7 +103,7 @@ router.get(
 
 /**
  * POST /api/v1/patient/questionnaires/generate
- * Generate new personalized questionnaire
+ * Generate new personalized questionnaire (regimen-phase-history approach)
  */
 router.post(
   '/questionnaires/generate',
@@ -123,6 +124,29 @@ router.post(
 );
 
 /**
+ * POST /api/v1/patient/questionnaires/generate-drug-module
+ * Generate new personalized questionnaire (drug-module approach)
+ */
+router.post(
+  '/questionnaires/generate-drug-module',
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const db = getDb();
+    const drugModuleService = new QuestionnaireDrugModuleService(db);
+
+    const result = await drugModuleService.generateQuestionnaire(
+      req.user!.patientId!
+    );
+
+    res.status(201).json({
+      questionnaire: result.questionnaire,
+      items: result.items,
+      metadata: result.metadata,
+      message: 'Personalized questionnaire generated successfully (drug-module approach)',
+    });
+  })
+);
+
+/**
  * GET /api/v1/patient/questionnaires/:id
  * Get questionnaire with items
  */
@@ -133,6 +157,33 @@ router.get(
     const questionnaireService = new QuestionnaireService(db);
 
     const result = await questionnaireService.getQuestionnaireWithItems(
+      req.params.id
+    );
+
+    // Verify patient access
+    if (result.questionnaire.patientId !== req.user!.patientId) {
+      res.status(403).json({
+        error: 'Forbidden',
+        message: 'Cannot access other patient questionnaires',
+      });
+      return;
+    }
+
+    res.json(result);
+  })
+);
+
+/**
+ * GET /api/v1/patient/questionnaires/:id/metadata
+ * Get questionnaire with items and generation metadata
+ */
+router.get(
+  '/questionnaires/:id/metadata',
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const db = getDb();
+    const drugModuleService = new QuestionnaireDrugModuleService(db);
+
+    const result = await drugModuleService.getQuestionnaireWithMetadata(
       req.params.id
     );
 
