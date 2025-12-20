@@ -12,7 +12,15 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "build:patient": "npm run build --workspace=packages/patient-app",
+    "build:clinician": "npm run build --workspace=packages/clinician-dashboard",
+    "build:api": "npm run build --workspace=packages/api",
+    "build:production": "npm run build:patient && npm run build:clinician && npm run build:api",
+    "deploy:patient": "npm run build:patient && firebase deploy --only hosting:patient-app",
+    "deploy:clinician": "npm run build:clinician && firebase deploy --only hosting:clinician-dashboard",
+    "deploy:frontend": "npm run build:patient && npm run build:clinician && firebase deploy --only hosting",
+    "deploy:all": "npm run build:production && firebase deploy"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

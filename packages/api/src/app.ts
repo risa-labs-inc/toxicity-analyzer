@@ -22,9 +22,20 @@ export function createApp(): Application {
   app.use(helmet());
 
   // CORS configuration
+  const allowedOrigins = [
+    'https://toxicity-analyzer-patient.web.app',
+    'https://toxicity-analyzer-clinician.web.app',
+    'http://localhost:5173',  // Dev patient app
+    'http://localhost:5174',  // Dev clinician dashboard
+  ];
+
+  if (process.env.CORS_ORIGIN) {
+    allowedOrigins.push(process.env.CORS_ORIGIN);
+  }
+
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN || '*',
+      origin: process.env.NODE_ENV === 'production' ? allowedOrigins : '*',
       credentials: true,
     })
   );
@@ -41,7 +52,17 @@ export function createApp(): Application {
   // HIPAA audit logging middleware
   app.use(auditLog);
 
-  // Health check endpoint
+  // Cloud Run health check endpoint (root path required)
+  app.get('/', (req, res) => {
+    res.json({
+      status: 'ok',
+      service: 'Toxicity Analyzer API',
+      version: '1.0.0',
+      environment: process.env.NODE_ENV || 'development',
+    });
+  });
+
+  // Detailed health check endpoint
   app.get('/health', async (req, res) => {
     const dbHealthy = await testConnection();
 

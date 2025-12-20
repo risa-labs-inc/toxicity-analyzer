@@ -60,3 +60,12 @@ pnpm-debug.log*
 *.key
 credentials.json
 service-account.json
+github-actions-key.json
+
+# Cloud SQL Proxy
+cloud-sql-proxy
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log

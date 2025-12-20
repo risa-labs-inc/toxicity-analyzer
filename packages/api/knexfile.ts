@@ -28,17 +28,24 @@ const config: { [key: string]: Knex.Config } = {
 
   production: {
     client: 'postgresql',
-    connection: process.env.DATABASE_URL,
+    connection: {
+      // Cloud SQL Unix socket connection
+      host: process.env.DB_HOST || '/cloudsql/toxicity-analyzer:us-central1:toxicity-analyzer-db',
+      port: Number(process.env.DB_PORT) || 5432,
+      database: process.env.DB_NAME || 'toxicity_analyzer',
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+    },
     pool: {
       min: 2,
-      max: 10,
+      max: 20,
     },
     migrations: {
       tableName: 'knex_migrations',
-      directory: './src/db/migrations',
+      directory: './dist/db/migrations',
     },
     seeds: {
-      directory: './src/db/seeds',
+      directory: './dist/db/seeds',
     },
   },
 };

@@ -1,7 +1,7 @@
 import { createApp } from './app';
 import { closeDb } from './db/connection';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 const app = createApp();
 

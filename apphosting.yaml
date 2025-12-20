@@ -1,0 +1,39 @@
+# Firebase App Hosting configuration for Cloud Run deployment
+# Based on GHMonitoring deployment pattern
+
+runConfig:
+  runtime: nodejs20
+  cpu: 2                    # Forces Cloud Run Gen2
+  memoryMiB: 2048          # 2GB RAM for questionnaire generation
+  minInstances: 0           # Cost optimization - cold starts acceptable
+  maxInstances: 10
+  concurrency: 80
+
+  vpcAccess:
+    egress: PRIVATE_RANGES_ONLY
+    networkInterfaces:
+      - network: default
+        subnetwork: default
+
+  env:
+    - variable: NODE_ENV
+      value: production
+    - variable: PORT
+      value: "8080"
+    - variable: DB_HOST
+      value: "/cloudsql/toxicity-analyzer:us-central1:toxicity-analyzer-db"
+    - variable: DB_PORT
+      value: "5432"
+    - variable: DB_NAME
+      value: "toxicity_analyzer"
+    - variable: DB_USER
+      secret: DB_USER              # From Secret Manager
+    - variable: DB_PASSWORD
+      secret: DB_PASSWORD          # From Secret Manager
+    - variable: FIREBASE_PROJECT_ID
+      value: "toxicity-analyzer"
+    - variable: LOG_LEVEL
+      value: "info"
+
+buildConfig:
+  rootDirectory: packages/api

@@ -1,0 +1,46 @@
+# Cloud Build configuration for API deployment
+# Builds Docker image and deploys to Cloud Run
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:$COMMIT_SHA',
+      '-t', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest',
+      '-f', 'packages/api/Dockerfile',
+      'packages/api'
+    ]
+
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:$COMMIT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 'deploy', 'toxicity-analyzer-api',
+      '--image', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:$COMMIT_SHA',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--memory', '2Gi',
+      '--cpu', '2',
+      '--min-instances', '0',
+      '--max-instances', '10',
+      '--set-env-vars', 'NODE_ENV=production,FIREBASE_PROJECT_ID=$PROJECT_ID',
+      '--set-secrets', 'DB_USER=DB_USER:latest,DB_PASSWORD=DB_PASSWORD:latest',
+      '--vpc-connector', 'toxicity-analyzer-connector'
+    ]
+
+images:
+  - 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY

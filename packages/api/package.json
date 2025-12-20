@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "clean": "rm -rf dist",
@@ -12,7 +13,9 @@
     "test": "jest",
     "migrate:latest": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
-    "seed:run": "knex seed:run"
+    "seed:run": "knex seed:run",
+    "migrate:prod": "knex migrate:latest --knexfile dist/knexfile.js",
+    "seed:prod": "knex seed:run --knexfile dist/knexfile.js"
   },
   "dependencies": {
     "@toxicity-analyzer/shared": "*",
