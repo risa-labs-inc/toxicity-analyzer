@@ -54,6 +54,8 @@ The Toxicity Analyzer delivers personalized symptom assessments to cancer patien
 
 ## Getting Started
 
+📖 **For detailed setup instructions, see [SETUP.md](/SETUP.md)**
+
 ### Prerequisites
 
 - Node.js >= 20.0.0

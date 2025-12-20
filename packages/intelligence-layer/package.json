@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@toxicity-analyzer/shared": "workspace:*"
+    "@toxicity-analyzer/shared": "*"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

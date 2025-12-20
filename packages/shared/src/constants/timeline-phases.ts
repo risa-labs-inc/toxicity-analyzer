@@ -39,41 +39,40 @@ export const PHASE_WINDOWS: Record<CyclePhase, PhaseWindow> = {
 };
 
 // Symptoms to prioritize by phase
+// Categories must match symptom_category values in proctcae_items table:
+// constitutional, dermatological, neurological, gastrointestinal, hematological,
+// infection_signs, musculoskeletal, oral, pain, cardiac, pulmonary
 export const PHASE_SYMPTOM_PRIORITIES: Record<CyclePhase, string[]> = {
   pre_session: [
-    'fatigue',
-    'pain',
-    'function',
-    'peripheral_neuropathy',
-    'cardiotoxicity_signs'
+    'constitutional',     // fatigue, decreased appetite
+    'pain',               // general pain assessment
+    'neurological',       // peripheral neuropathy
+    'cardiac'             // cardiotoxicity signs
   ],
   post_session: [
-    'nausea',
-    'vomiting',
-    'diarrhea',
-    'acute_infusion_reaction',
-    'injection_site_reaction'
+    'gastrointestinal',   // nausea, vomiting, diarrhea
+    'pain',               // acute pain from infusion
+    'constitutional'      // acute fatigue
   ],
   recovery: [
-    'fatigue',
-    'gastrointestinal',
-    'pain',
-    'mucositis',
-    'neuropathy'
+    'gastrointestinal',   // GI distress
+    'constitutional',     // fatigue
+    'pain',               // general pain
+    'oral',               // mucositis, mouth sores
+    'neurological'        // neuropathy
   ],
   nadir: [
-    'infection_signs',
-    'fever',
-    'bleeding',
-    'bruising',
-    'neutropenia_symptoms'
+    'infection_signs',    // fever, chills
+    'hematological',      // bleeding, bruising, nosebleeds
+    'constitutional',     // fatigue from low blood counts
+    'musculoskeletal'     // aching muscles/joints
   ],
   inter_cycle: [
-    'cumulative_toxicities',
-    'fatigue',
-    'neuropathy',
-    'hand_foot_syndrome',
-    'skin_changes'
+    'constitutional',     // cumulative fatigue
+    'neurological',       // neuropathy
+    'dermatological',     // hand-foot syndrome, skin changes, rash
+    'pain',               // persistent pain
+    'gastrointestinal'    // lingering GI issues
   ]
 };
 

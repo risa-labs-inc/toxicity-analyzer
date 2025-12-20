@@ -1,13 +1,14 @@
 /**
  * Scoring and grading type definitions
  * Based on NCI PRO-CTCAE validated scoring algorithms
+ * Updated to CTCAE v5.0 symptom-specific scoring (each symptom scored individually)
  */
 
 export interface ToxicityScore {
   scoreId: string;
   questionnaireId: string;
   patientId: string;
-  symptomCategory: string;
+  symptomTerm: string; // Specific symptom per CTCAE v5.0 (e.g., "nausea", "vomiting", "diarrhea")
   compositeGrade: CompositeGrade;
   frequencyScore?: number;  // 0-4
   severityScore?: number;   // 0-4
@@ -21,14 +22,14 @@ export type CompositeGrade = 0 | 1 | 2 | 3 | 4;
 export type CTCAEGrade = 0 | 1 | 2 | 3 | 4;
 
 export interface SymptomScoreInput {
-  symptomCategory: string;
+  symptomTerm: string; // Specific symptom (e.g., "nausea", not "gastrointestinal")
   frequencyResponse?: number;
   severityResponse?: number;
   interferenceResponse?: number;
 }
 
 export interface CompositeScoreResult {
-  symptomCategory: string;
+  symptomTerm: string; // Specific symptom (e.g., "nausea", not "gastrointestinal")
   compositeGrade: CompositeGrade;
   ctcaeEquivalent: CTCAEGrade;
   components: {
@@ -57,7 +58,7 @@ export const STANDARD_ALERT_THRESHOLDS: AlertThresholds = {
 
 // Trend analysis
 export interface TrendAnalysis {
-  symptomCategory: string;
+  symptomTerm: string; // Specific symptom (e.g., "nausea", not "gastrointestinal")
   trend: TrendDirection;
   sparkline: TrendDataPoint[];
   currentGrade: CompositeGrade;
@@ -83,7 +84,7 @@ export interface EmergencyAlert {
   alertId: string;
   patientId: string;
   questionnaireId: string;
-  symptomCategory: string;
+  symptomTerm: string; // Specific symptom (e.g., "nausea", not "gastrointestinal")
   grade: CompositeGrade;
   alertType: 'emergency' | 'urgent';
   severity: 'red' | 'yellow';
@@ -101,7 +102,7 @@ export interface TriageClassification {
   activeAlerts: EmergencyAlert[];
   highestGrade: CompositeGrade;
   symptomsSummary: {
-    symptomCategory: string;
+    symptomTerm: string; // Specific symptom (e.g., "nausea", not "gastrointestinal")
     grade: CompositeGrade;
     trend: TrendDirection;
   }[];

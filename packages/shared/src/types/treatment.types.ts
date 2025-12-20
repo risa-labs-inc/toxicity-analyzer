@@ -27,6 +27,13 @@ export interface ToxicityProfile {
   highRisk: string[]; // Symptom categories with high risk for this regimen
   moderate: string[];
   low: string[];
+  phasePriorities?: {
+    pre_session: string[];
+    post_session: string[];
+    recovery: string[];
+    nadir: string[];
+    inter_cycle: string[];
+  };
   regimenSpecific?: {
     symptom: string;
     peakWindow?: { start: number; end: number }; // Days relative to cycle

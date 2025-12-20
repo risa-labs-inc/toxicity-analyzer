@@ -17,7 +17,7 @@ export interface ProCTCAEItem {
   createdAt: Date;
 }
 
-export type AttributeType = 'frequency' | 'severity' | 'interference';
+export type AttributeType = 'frequency' | 'severity' | 'interference' | 'present_absent' | 'amount';
 
 export type ResponseType =
   | 'frequency_5pt'     // 0-4: Never, Rarely, Occasionally, Frequently, Almost constantly

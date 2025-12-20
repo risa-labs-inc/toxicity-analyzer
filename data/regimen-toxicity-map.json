@@ -1,0 +1,213 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-17",
+  "regimens": [
+    {
+      "regimen_code": "AC-T",
+      "regimen_name": "Doxorubicin + Cyclophosphamide → Taxane",
+      "phases": ["AC", "T"],
+      "drug_components": [
+        {"name": "Doxorubicin", "dose": "60 mg/m²", "route": "IV"},
+        {"name": "Cyclophosphamide", "dose": "600 mg/m²", "route": "IV"},
+        {"name": "Paclitaxel", "dose": "175 mg/m²", "route": "IV", "phase": "T"}
+      ],
+      "cycle_length_days": 21,
+      "nadir_window": {"start": 7, "end": 12},
+      "toxicity_profile": {
+        "high_risk": [
+          "gastrointestinal",
+          "hematological",
+          "constitutional",
+          "neurological",
+          "cardiac"
+        ],
+        "moderate": [
+          "dermatological",
+          "musculoskeletal"
+        ],
+        "low": ["pulmonary"],
+        "phase_priorities": {
+          "pre_session": ["constitutional", "pain", "neurological", "cardiac"],
+          "post_session": ["gastrointestinal", "pain", "constitutional"],
+          "recovery": ["gastrointestinal", "constitutional", "pain", "oral", "neurological"],
+          "nadir": ["infection_signs", "hematological", "constitutional", "musculoskeletal"],
+          "inter_cycle": ["constitutional", "neurological", "dermatological", "pain", "gastrointestinal"]
+        },
+        "phase_specific": {
+          "AC": {
+            "high_risk": ["nausea", "vomiting", "neutropenia", "alopecia", "fatigue"],
+            "moderate": ["mouth_sores", "diarrhea"]
+          },
+          "T": {
+            "high_risk": ["neuropathy", "myalgia", "neutropenia", "fatigue"],
+            "moderate": ["nausea", "diarrhea"]
+          }
+        }
+      },
+      "symptom_mapping": [
+        {"symptom": "nausea", "peak_days": [1, 3], "priority": "high"},
+        {"symptom": "vomiting", "peak_days": [1, 3], "priority": "high"},
+        {"symptom": "neutropenia", "peak_days": [7, 12], "priority": "high"},
+        {"symptom": "fatigue", "peak_days": [4, 14], "priority": "high"},
+        {"symptom": "neuropathy", "peak_days": [7, 21], "priority": "high", "phase": "T"},
+        {"symptom": "myalgia", "peak_days": [2, 5], "priority": "high", "phase": "T"},
+        {"symptom": "diarrhea", "peak_days": [3, 7], "priority": "moderate"},
+        {"symptom": "mouth_sores", "peak_days": [5, 10], "priority": "moderate"}
+      ]
+    },
+    {
+      "regimen_code": "TC",
+      "regimen_name": "Docetaxel + Cyclophosphamide",
+      "drug_components": [
+        {"name": "Docetaxel", "dose": "75 mg/m²", "route": "IV"},
+        {"name": "Cyclophosphamide", "dose": "600 mg/m²", "route": "IV"}
+      ],
+      "cycle_length_days": 21,
+      "nadir_window": {"start": 7, "end": 12},
+      "toxicity_profile": {
+        "high_risk": [
+          "hematological",
+          "musculoskeletal",
+          "neurological",
+          "constitutional",
+          "cardiac"
+        ],
+        "moderate": [
+          "gastrointestinal",
+          "dermatological"
+        ],
+        "low": ["pulmonary"],
+        "phase_priorities": {
+          "pre_session": ["constitutional", "pain", "neurological", "cardiac"],
+          "post_session": ["gastrointestinal", "pain", "constitutional"],
+          "recovery": ["gastrointestinal", "constitutional", "pain", "musculoskeletal"],
+          "nadir": ["infection_signs", "hematological", "constitutional", "musculoskeletal"],
+          "inter_cycle": ["constitutional", "neurological", "musculoskeletal", "pain"]
+        }
+      },
+      "symptom_mapping": [
+        {"symptom": "neutropenia", "peak_days": [7, 12], "priority": "high"},
+        {"symptom": "myalgia", "peak_days": [2, 5], "priority": "high"},
+        {"symptom": "fatigue", "peak_days": [3, 14], "priority": "high"},
+        {"symptom": "neuropathy", "peak_days": [7, 21], "priority": "high"},
+        {"symptom": "fluid_retention", "peak_days": [10, 21], "priority": "moderate"},
+        {"symptom": "nausea", "peak_days": [1, 3], "priority": "moderate"},
+        {"symptom": "diarrhea", "peak_days": [3, 7], "priority": "moderate"},
+        {"symptom": "swelling", "peak_days": [10, 21], "priority": "moderate"}
+      ]
+    },
+    {
+      "regimen_code": "T-DM1",
+      "regimen_name": "Trastuzumab Emtansine (Ado-trastuzumab emtansine)",
+      "drug_components": [
+        {"name": "Trastuzumab Emtansine", "dose": "3.6 mg/kg", "route": "IV"}
+      ],
+      "cycle_length_days": 21,
+      "nadir_window": {"start": 7, "end": 14},
+      "toxicity_profile": {
+        "high_risk": [
+          "hematological",
+          "hepatic",
+          "constitutional",
+          "neurological",
+          "cardiac"
+        ],
+        "moderate": [
+          "gastrointestinal",
+          "musculoskeletal"
+        ],
+        "low": ["dermatological"],
+        "phase_priorities": {
+          "pre_session": ["constitutional", "pain", "cardiac", "hepatic"],
+          "post_session": ["gastrointestinal", "constitutional", "hepatic"],
+          "recovery": ["constitutional", "gastrointestinal", "hepatic", "pain"],
+          "nadir": ["hematological", "constitutional", "hepatic"],
+          "inter_cycle": ["constitutional", "neurological", "cardiac", "hepatic", "pain"]
+        }
+      },
+      "symptom_mapping": [
+        {"symptom": "thrombocytopenia", "peak_days": [7, 14], "priority": "high"},
+        {"symptom": "fatigue", "peak_days": [3, 14], "priority": "high"},
+        {"symptom": "epistaxis", "peak_days": [7, 14], "priority": "high"},
+        {"symptom": "bruising", "peak_days": [7, 14], "priority": "high"},
+        {"symptom": "nausea", "peak_days": [1, 3], "priority": "moderate"},
+        {"symptom": "headache", "peak_days": [1, 7], "priority": "moderate"},
+        {"symptom": "myalgia", "peak_days": [2, 5], "priority": "moderate"}
+      ]
+    },
+    {
+      "regimen_code": "Capecitabine",
+      "regimen_name": "Capecitabine (Xeloda)",
+      "drug_components": [
+        {"name": "Capecitabine", "dose": "1250 mg/m² BID", "route": "PO", "schedule": "14 days on, 7 days off"}
+      ],
+      "cycle_length_days": 21,
+      "nadir_window": {"start": 10, "end": 14},
+      "toxicity_profile": {
+        "high_risk": [
+          "gastrointestinal",
+          "dermatological",
+          "hematological"
+        ],
+        "moderate": [
+          "constitutional",
+          "neurological"
+        ],
+        "low": ["cardiac"],
+        "phase_priorities": {
+          "pre_session": ["constitutional", "dermatological", "pain"],
+          "post_session": ["gastrointestinal", "constitutional"],
+          "recovery": ["gastrointestinal", "dermatological", "constitutional", "oral"],
+          "nadir": ["hematological", "constitutional", "dermatological"],
+          "inter_cycle": ["dermatological", "gastrointestinal", "constitutional", "pain"]
+        }
+      },
+      "symptom_mapping": [
+        {"symptom": "hand_foot_syndrome", "peak_days": [7, 14], "priority": "high"},
+        {"symptom": "diarrhea", "peak_days": [5, 14], "priority": "high"},
+        {"symptom": "nausea", "peak_days": [3, 10], "priority": "moderate"},
+        {"symptom": "fatigue", "peak_days": [7, 14], "priority": "moderate"},
+        {"symptom": "mouth_sores", "peak_days": [7, 14], "priority": "moderate"},
+        {"symptom": "decreased_appetite", "peak_days": [7, 14], "priority": "moderate"}
+      ]
+    },
+    {
+      "regimen_code": "Pembrolizumab",
+      "regimen_name": "Pembrolizumab (Keytruda) - Immunotherapy",
+      "drug_components": [
+        {"name": "Pembrolizumab", "dose": "200 mg", "route": "IV"},
+        {"name": "Paclitaxel", "dose": "80 mg/m²", "route": "IV", "optional": true},
+        {"name": "Carboplatin", "dose": "AUC 5-6", "route": "IV", "optional": true}
+      ],
+      "cycle_length_days": 21,
+      "nadir_window": {"start": 0, "end": 0},
+      "toxicity_profile": {
+        "high_risk": [
+          "constitutional",
+          "gastrointestinal",
+          "pulmonary",
+          "dermatological",
+          "infection_signs"
+        ],
+        "moderate": [],
+        "low": ["hematological"],
+        "phase_priorities": {
+          "pre_session": ["constitutional", "pulmonary", "dermatological"],
+          "post_session": ["gastrointestinal", "constitutional", "dermatological"],
+          "recovery": ["gastrointestinal", "constitutional", "dermatological", "pulmonary"],
+          "nadir": ["constitutional", "gastrointestinal", "infection_signs"],
+          "inter_cycle": ["constitutional", "dermatological", "gastrointestinal", "pulmonary"]
+        }
+      },
+      "symptom_mapping": [
+        {"symptom": "rash", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "immune_colitis", "peak_days": [7, 21], "priority": "high"},
+        {"symptom": "diarrhea", "peak_days": [7, 21], "priority": "high"},
+        {"symptom": "cough", "peak_days": [7, 21], "priority": "moderate"},
+        {"symptom": "fatigue", "peak_days": [3, 21], "priority": "moderate"},
+        {"symptom": "nausea", "peak_days": [1, 7], "priority": "moderate"}
+      ]
+    }
+  ],
+  "notes": "Toxicity profiles based on standard chemotherapy guidelines from BC Cancer and NCCN. Peak days are relative to cycle start (infusion date). High-risk symptoms should be monitored more frequently during their peak windows."
+}

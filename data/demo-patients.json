@@ -1,0 +1,250 @@
+{
+  "version": "1.1",
+  "last_sync": "2025-12-20T12:00:00Z",
+  "patients": [
+    {
+      "patient_id": "P001",
+      "profile": { "age": 45, "bmi": 24.2, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "AC-T",
+        "current_phase": "AC",
+        "drugs": ["Doxorubicin", "Cyclophosphamide"],
+        "cycle_number": 1,
+        "last_infusion_date": "2025-12-15"
+      },
+      "symptom_history": [
+        { "symptom": "Nausea", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P002",
+      "profile": { "age": 58, "bmi": 28.5, "comorbidities": ["Diabetes Type II"] },
+      "regimen": {
+        "name": "AC-T",
+        "current_phase": "T",
+        "drugs": ["Paclitaxel"],
+        "cycle_number": 6,
+        "last_infusion_date": "2025-12-07"
+      },
+      "symptom_history": [
+        { "symptom": "Neuropathy", "last_grade": 1, "trend": "Worsening" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P003",
+      "profile": { "age": 65, "bmi": 22.0, "comorbidities": ["Hypertension"] },
+      "regimen": {
+        "name": "AC-T",
+        "current_phase": "T",
+        "drugs": ["Paclitaxel"],
+        "cycle_number": 5,
+        "last_infusion_date": "2025-11-24"
+      },
+      "symptom_history": [
+        { "symptom": "Neuropathy", "last_grade": 2, "trend": "Worsening" },
+        { "symptom": "Fatigue", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P004",
+      "profile": { "age": 52, "bmi": 26.1, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "TC",
+        "drugs": ["Docetaxel", "Cyclophosphamide"],
+        "cycle_number": 2,
+        "last_infusion_date": "2025-12-16"
+      },
+      "symptom_history": [
+        { "symptom": "Myalgia", "last_grade": 2, "trend": "Worsening" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P005",
+      "profile": { "age": 70, "bmi": 23.5, "comorbidities": ["Heart Disease"] },
+      "regimen": {
+        "name": "TC",
+        "drugs": ["Docetaxel", "Cyclophosphamide"],
+        "cycle_number": 4,
+        "last_infusion_date": "2025-12-05"
+      },
+      "symptom_history": [
+        { "symptom": "Edema", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 2 }
+    },
+    {
+      "patient_id": "P006",
+      "profile": { "age": 48, "bmi": 30.2, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "TC",
+        "drugs": ["Docetaxel", "Cyclophosphamide"],
+        "cycle_number": 1,
+        "last_infusion_date": "2025-12-14"
+      },
+      "symptom_history": [],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P007",
+      "profile": { "age": 55, "bmi": 25.0, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "T-DM1",
+        "drugs": ["Trastuzumab Emtansine"],
+        "cycle_number": 5,
+        "last_infusion_date": "2025-12-16"
+      },
+      "symptom_history": [
+        { "symptom": "Fatigue", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P008",
+      "profile": { "age": 62, "bmi": 27.4, "comorbidities": ["Hypertension"] },
+      "regimen": {
+        "name": "T-DM1",
+        "drugs": ["Trastuzumab Emtansine"],
+        "cycle_number": 3,
+        "last_infusion_date": "2025-12-10"
+      },
+      "symptom_history": [
+        { "symptom": "Epistaxis", "last_grade": 1, "trend": "Worsening" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P009",
+      "profile": { "age": 41, "bmi": 22.8, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "T-DM1",
+        "drugs": ["Trastuzumab Emtansine"],
+        "cycle_number": 8,
+        "last_infusion_date": "2025-12-01"
+      },
+      "symptom_history": [],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P010",
+      "profile": { "age": 67, "bmi": 21.5, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "Capecitabine",
+        "drugs": ["Capecitabine"],
+        "cycle_number": 2,
+        "last_infusion_date": "2025-12-15"
+      },
+      "symptom_history": [
+        { "symptom": "Diarrhea", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P011",
+      "profile": { "age": 50, "bmi": 26.5, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "Capecitabine",
+        "drugs": ["Capecitabine"],
+        "cycle_number": 4,
+        "last_infusion_date": "2025-12-12"
+      },
+      "symptom_history": [
+        { "symptom": "Hand-Foot Syndrome", "last_grade": 1, "trend": "Worsening" }
+      ],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P012",
+      "profile": { "age": 59, "bmi": 29.0, "comorbidities": ["Diabetes Type II"] },
+      "regimen": {
+        "name": "Capecitabine",
+        "drugs": ["Capecitabine"],
+        "cycle_number": 3,
+        "last_infusion_date": "2025-12-01"
+      },
+      "symptom_history": [
+        { "symptom": "Hand-Foot Syndrome", "last_grade": 2, "trend": "Worsening" },
+        { "symptom": "Diarrhea", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P013",
+      "profile": { "age": 54, "bmi": 24.8, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "Pembrolizumab",
+        "drugs": ["Pembrolizumab", "Paclitaxel", "Carboplatin"],
+        "cycle_number": 3,
+        "last_infusion_date": "2025-12-16"
+      },
+      "symptom_history": [
+        { "symptom": "Rash", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P014",
+      "profile": { "age": 49, "bmi": 23.1, "comorbidities": ["COPD"] },
+      "regimen": {
+        "name": "Pembrolizumab",
+        "drugs": ["Pembrolizumab"],
+        "cycle_number": 5,
+        "last_infusion_date": "2025-12-05"
+      },
+      "symptom_history": [
+        { "symptom": "Cough", "last_grade": 1, "trend": "Worsening" }
+      ],
+      "functional_status": { "ecog": 1 }
+    },
+    {
+      "patient_id": "P015",
+      "profile": { "age": 61, "bmi": 27.0, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "Pembrolizumab",
+        "drugs": ["Pembrolizumab"],
+        "cycle_number": 2,
+        "last_infusion_date": "2025-11-30"
+      },
+      "symptom_history": [
+        { "symptom": "Fatigue", "last_grade": 3, "trend": "Worsening" },
+        { "symptom": "Rash", "last_grade": 1, "trend": "Stable" }
+      ],
+      "functional_status": { "ecog": 2 }
+    },
+    {
+      "patient_id": "P016",
+      "profile": { "age": 53, "bmi": 25.6, "comorbidities": ["None"] },
+      "regimen": {
+        "name": "AC-T",
+        "current_phase": "AC",
+        "drugs": ["Doxorubicin", "Cyclophosphamide"],
+        "cycle_number": 1,
+        "last_infusion_date": "2025-11-05",
+        "planned_next_infusion": "2025-12-26"
+      },
+      "symptom_history": [
+        { "symptom": "Nausea", "last_grade": 1, "trend": "Improving" }
+      ],
+      "functional_status": { "ecog": 0 }
+    },
+    {
+      "patient_id": "P017",
+      "profile": { "age": 57, "bmi": 28.3, "comorbidities": ["Hypertension"] },
+      "regimen": {
+        "name": "TC",
+        "drugs": ["Docetaxel", "Cyclophosphamide"],
+        "cycle_number": 2,
+        "last_infusion_date": "2025-11-05",
+        "planned_next_infusion": "2025-12-26"
+      },
+      "symptom_history": [
+        { "symptom": "Myalgia", "last_grade": 1, "trend": "Stable" },
+        { "symptom": "Fatigue", "last_grade": 1, "trend": "Improving" }
+      ],
+      "functional_status": { "ecog": 1 }
+    }
+  ]
+}
