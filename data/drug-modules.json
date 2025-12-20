@@ -1,0 +1,363 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-20",
+  "description": "Drug modules for drug-module based questionnaire generation. Each drug is a module with its own symptom list that can be composed into regimens.",
+  "drugModules": [
+    {
+      "drugName": "Doxorubicin",
+      "drugClass": "Anthracycline",
+      "symptomTerms": [
+        "nausea",
+        "vomiting",
+        "alopecia",
+        "fatigue",
+        "mouth_sores",
+        "diarrhea",
+        "loss_of_appetite"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "myelosuppression",
+          "symptoms": ["fever", "chills", "sore_throat"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-12)"
+        },
+        {
+          "type": "cardiotoxicity",
+          "symptoms": ["shortness_of_breath", "chest_pain", "irregular_heartbeat", "swelling"],
+          "rationale": "Monitor for cumulative dose-related cardiac dysfunction"
+        },
+        {
+          "type": "thrombocytopenia",
+          "symptoms": ["bruising", "bleeding"],
+          "rationale": "Monitor for low platelet count"
+        }
+      ],
+      "phaseFilteringRules": {
+        "nausea": ["post_session", "recovery"],
+        "vomiting": ["post_session", "recovery"],
+        "fatigue": ["post_session", "nadir", "recovery", "inter_cycle"],
+        "mouth_sores": ["recovery", "inter_cycle"],
+        "diarrhea": ["post_session", "recovery"]
+      },
+      "isMyelosuppressive": true,
+      "clinicalNotes": "Anthracycline with dose-limiting cardiotoxicity (lifetime cumulative dose: 450-550 mg/m²). Nadir typically days 10-14."
+    },
+    {
+      "drugName": "Cyclophosphamide",
+      "drugClass": "Alkylating agent",
+      "symptomTerms": [
+        "nausea",
+        "vomiting",
+        "alopecia",
+        "fatigue",
+        "loss_of_appetite"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "myelosuppression",
+          "symptoms": ["fever", "chills", "sore_throat"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-12)"
+        },
+        {
+          "type": "thrombocytopenia",
+          "symptoms": ["bruising", "bleeding"],
+          "rationale": "Monitor for low platelet count"
+        },
+        {
+          "type": "hemorrhagic_cystitis",
+          "symptoms": ["blood_in_urine", "painful_urination", "urinary_frequency"],
+          "rationale": "Monitor for bladder toxicity (acrolein metabolite)"
+        }
+      ],
+      "phaseFilteringRules": {
+        "nausea": ["post_session", "recovery"],
+        "vomiting": ["post_session", "recovery"],
+        "fatigue": ["post_session", "nadir", "recovery", "inter_cycle"]
+      },
+      "isMyelosuppressive": true,
+      "clinicalNotes": "Alkylating agent with myelosuppressive effects. Risk of hemorrhagic cystitis requires adequate hydration."
+    },
+    {
+      "drugName": "Paclitaxel",
+      "drugClass": "Taxane",
+      "symptomTerms": [
+        "neuropathy",
+        "myalgia",
+        "arthralgia",
+        "fatigue",
+        "nausea",
+        "diarrhea",
+        "alopecia"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "myelosuppression",
+          "symptoms": ["fever", "chills", "sore_throat"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 8-10)"
+        },
+        {
+          "type": "hypersensitivity",
+          "symptoms": ["rash", "itching", "shortness_of_breath", "flushing"],
+          "rationale": "Monitor for infusion reactions (typically first 2-3 cycles)"
+        },
+        {
+          "type": "thrombocytopenia",
+          "symptoms": ["bruising", "bleeding"],
+          "rationale": "Monitor for low platelet count"
+        }
+      ],
+      "phaseFilteringRules": {
+        "neuropathy": ["recovery", "inter_cycle"],
+        "myalgia": ["post_session", "recovery"],
+        "arthralgia": ["post_session", "recovery"],
+        "fatigue": ["post_session", "nadir", "recovery", "inter_cycle"],
+        "nausea": ["post_session", "recovery"],
+        "diarrhea": ["post_session", "recovery"]
+      },
+      "isMyelosuppressive": true,
+      "clinicalNotes": "Taxane with dose-limiting peripheral neuropathy. Shorter nadir window (days 8-10). Neuropathy is cumulative and may be irreversible."
+    },
+    {
+      "drugName": "Docetaxel",
+      "drugClass": "Taxane",
+      "symptomTerms": [
+        "neuropathy",
+        "myalgia",
+        "arthralgia",
+        "fatigue",
+        "fluid_retention",
+        "nail_changes",
+        "nausea",
+        "diarrhea",
+        "alopecia"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "myelosuppression",
+          "symptoms": ["fever", "chills", "sore_throat"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-10)"
+        },
+        {
+          "type": "hypersensitivity",
+          "symptoms": ["rash", "itching", "shortness_of_breath", "flushing"],
+          "rationale": "Monitor for infusion reactions"
+        },
+        {
+          "type": "thrombocytopenia",
+          "symptoms": ["bruising", "bleeding"],
+          "rationale": "Monitor for low platelet count"
+        }
+      ],
+      "phaseFilteringRules": {
+        "neuropathy": ["recovery", "inter_cycle"],
+        "myalgia": ["post_session", "recovery"],
+        "arthralgia": ["post_session", "recovery"],
+        "fatigue": ["post_session", "nadir", "recovery", "inter_cycle"],
+        "fluid_retention": ["recovery", "inter_cycle"],
+        "nail_changes": ["recovery", "inter_cycle"],
+        "nausea": ["post_session", "recovery"],
+        "diarrhea": ["post_session", "recovery"]
+      },
+      "isMyelosuppressive": true,
+      "clinicalNotes": "Taxane with similar profile to paclitaxel but higher risk of fluid retention and nail changes. Requires corticosteroid premedication."
+    },
+    {
+      "drugName": "T-DM1",
+      "drugClass": "Antibody-drug conjugate",
+      "alternativeNames": ["ado-trastuzumab emtansine", "Kadcyla"],
+      "symptomTerms": [
+        "fatigue",
+        "nausea",
+        "headache",
+        "neuropathy",
+        "muscle_pain",
+        "joint_pain"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "thrombocytopenia",
+          "symptoms": ["bruising", "bleeding", "petechiae"],
+          "rationale": "Monitor for low platelet count (dose-limiting toxicity, nadir: day 8)"
+        },
+        {
+          "type": "hepatotoxicity",
+          "symptoms": ["jaundice", "dark_urine", "right_upper_quadrant_pain", "fatigue"],
+          "rationale": "Monitor for elevated transaminases and liver injury"
+        },
+        {
+          "type": "cardiotoxicity",
+          "symptoms": ["shortness_of_breath", "chest_pain", "irregular_heartbeat", "swelling"],
+          "rationale": "Monitor for left ventricular dysfunction (trastuzumab component)"
+        },
+        {
+          "type": "pulmonary_toxicity",
+          "symptoms": ["shortness_of_breath", "cough", "fever"],
+          "rationale": "Monitor for interstitial lung disease (rare but serious)"
+        }
+      ],
+      "phaseFilteringRules": {
+        "fatigue": ["post_session", "nadir", "recovery", "inter_cycle"],
+        "nausea": ["post_session", "recovery"],
+        "headache": ["post_session", "recovery"],
+        "neuropathy": ["recovery", "inter_cycle"],
+        "muscle_pain": ["post_session", "recovery"],
+        "joint_pain": ["post_session", "recovery"]
+      },
+      "isMyelosuppressive": false,
+      "clinicalNotes": "Antibody-drug conjugate targeting HER2-positive breast cancer. Dose-limiting toxicity is thrombocytopenia (platelet nadir day 8). Less myelosuppressive than traditional chemotherapy."
+    },
+    {
+      "drugName": "Capecitabine",
+      "drugClass": "Oral chemotherapy",
+      "alternativeNames": ["Xeloda"],
+      "symptomTerms": [
+        "hand_foot_syndrome",
+        "diarrhea",
+        "nausea",
+        "vomiting",
+        "fatigue",
+        "loss_of_appetite"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "myelosuppression",
+          "symptoms": ["fever", "chills", "sore_throat"],
+          "rationale": "Monitor for neutropenia-related infection risk"
+        },
+        {
+          "type": "thrombocytopenia",
+          "symptoms": ["bruising", "bleeding"],
+          "rationale": "Monitor for low platelet count"
+        },
+        {
+          "type": "cardiotoxicity",
+          "symptoms": ["chest_pain", "irregular_heartbeat", "shortness_of_breath"],
+          "rationale": "Monitor for coronary artery vasospasm (rare but serious)"
+        }
+      ],
+      "phaseFilteringRules": {
+        "hand_foot_syndrome": ["recovery", "inter_cycle"],
+        "diarrhea": ["post_session", "recovery", "inter_cycle"],
+        "nausea": ["post_session", "recovery", "inter_cycle"],
+        "vomiting": ["post_session", "recovery"],
+        "fatigue": ["post_session", "recovery", "inter_cycle"]
+      },
+      "isMyelosuppressive": true,
+      "clinicalNotes": "Oral fluoropyrimidine pro-drug. Dose-limiting toxicity is hand-foot syndrome (palmar-plantar erythrodysesthesia). Continuous oral dosing requires different monitoring approach."
+    },
+    {
+      "drugName": "Pembrolizumab",
+      "drugClass": "Immunotherapy",
+      "alternativeNames": ["Keytruda", "PD-1 inhibitor"],
+      "symptomTerms": [
+        "fatigue",
+        "rash",
+        "itching",
+        "diarrhea",
+        "nausea",
+        "loss_of_appetite",
+        "joint_pain",
+        "muscle_pain"
+      ],
+      "safetyProxyItems": [
+        {
+          "type": "immune_related_colitis",
+          "symptoms": ["diarrhea", "abdominal_pain", "blood_in_stool"],
+          "rationale": "Monitor for immune-mediated colitis (can occur anytime, peak 6-12 weeks)"
+        },
+        {
+          "type": "immune_related_pneumonitis",
+          "symptoms": ["shortness_of_breath", "cough", "chest_pain"],
+          "rationale": "Monitor for immune-mediated pneumonitis"
+        },
+        {
+          "type": "immune_related_hepatitis",
+          "symptoms": ["jaundice", "dark_urine", "right_upper_quadrant_pain", "fatigue"],
+          "rationale": "Monitor for immune-mediated hepatitis"
+        },
+        {
+          "type": "immune_related_endocrinopathy",
+          "symptoms": ["fatigue", "headache", "weight_changes", "cold_intolerance"],
+          "rationale": "Monitor for thyroid dysfunction, adrenal insufficiency, hypophysitis"
+        },
+        {
+          "type": "immune_related_nephritis",
+          "symptoms": ["decreased_urination", "swelling", "fatigue"],
+          "rationale": "Monitor for immune-mediated nephritis"
+        },
+        {
+          "type": "immune_related_dermatitis",
+          "symptoms": ["rash", "itching", "blistering"],
+          "rationale": "Monitor for severe skin reactions (Stevens-Johnson syndrome, toxic epidermal necrolysis)"
+        }
+      ],
+      "phaseFilteringRules": {},
+      "isMyelosuppressive": false,
+      "clinicalNotes": "PD-1 inhibitor with immune-related adverse events (irAEs) that can occur anytime during or after treatment. Different toxicity profile than traditional chemotherapy. Requires vigilant monitoring for irAEs across multiple organ systems."
+    }
+  ],
+  "regimenCompositions": [
+    {
+      "regimenCode": "AC-T",
+      "regimenName": "Doxorubicin + Cyclophosphamide → Taxane",
+      "drugModuleComposition": {
+        "steps": [
+          {
+            "stepName": "AC",
+            "cycles": [1, 2, 3, 4],
+            "drugModules": ["Doxorubicin", "Cyclophosphamide"]
+          },
+          {
+            "stepName": "T",
+            "cycles": [5, 6, 7, 8],
+            "drugModules": ["Paclitaxel"]
+          }
+        ],
+        "safetyProfile": {
+          "myelosuppressive": true,
+          "cardiotoxic": true,
+          "hepatotoxic": false,
+          "nephrotoxic": false
+        }
+      }
+    },
+    {
+      "regimenCode": "TCH",
+      "regimenName": "Docetaxel + Carboplatin + Trastuzumab",
+      "drugModuleComposition": {
+        "steps": [
+          {
+            "stepName": null,
+            "cycles": "all",
+            "drugModules": ["Docetaxel"]
+          }
+        ],
+        "safetyProfile": {
+          "myelosuppressive": true,
+          "cardiotoxic": true,
+          "hepatotoxic": false,
+          "nephrotoxic": false
+        }
+      }
+    },
+    {
+      "regimenCode": "T-DM1",
+      "regimenName": "Ado-trastuzumab emtansine",
+      "drugModuleComposition": {
+        "steps": [
+          {
+            "stepName": null,
+            "cycles": "all",
+            "drugModules": ["T-DM1"]
+          }
+        ],
+        "safetyProfile": {
+          "myelosuppressive": false,
+          "cardiotoxic": true,
+          "hepatotoxic": true,
+          "nephrotoxic": false
+        }
+      }
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import { importProCTCAE } from './importers/proctcae-importer';
 import { importRegimens } from './importers/regimen-importer';
 import { importPatients } from './importers/patient-importer';
+import { importDrugModules } from './importers/drug-module-importer';
 import { getDbConnection } from './db-connection';
 
 dotenv.config();
@@ -18,7 +19,7 @@ program
 
 program
   .command('all')
-  .description('Import all data (PRO-CTCAE, regimens, patients)')
+  .description('Import all data (PRO-CTCAE, regimens, drug modules, patients)')
   .action(async () => {
     console.log('🚀 Starting full data import...\n');
 
@@ -32,7 +33,10 @@ program
       console.log('\n2️⃣  Importing regimens...');
       await importRegimens(db);
 
-      console.log('\n3️⃣  Importing patients...');
+      console.log('\n3️⃣  Importing drug modules...');
+      await importDrugModules(db);
+
+      console.log('\n4️⃣  Importing patients...');
       await importPatients(db);
 
       console.log('\n✅ All data imported successfully!');
@@ -81,6 +85,21 @@ program
     try {
       const db = getDbConnection();
       await importPatients(db);
+      await db.destroy();
+      process.exit(0);
+    } catch (error) {
+      console.error('❌ Import failed:', error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('drug-modules')
+  .description('Import drug modules only')
+  .action(async () => {
+    try {
+      const db = getDbConnection();
+      await importDrugModules(db);
       await db.destroy();
       process.exit(0);
     } catch (error) {

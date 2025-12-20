@@ -7,3 +7,4 @@ export * from './treatment.types';
 export * from './proctcae.types';
 export * from './questionnaire.types';
 export * from './scoring.types';
+export * from './drug-module.types';
