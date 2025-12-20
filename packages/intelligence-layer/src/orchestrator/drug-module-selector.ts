@@ -212,10 +212,21 @@ export function selectQuestionsViaDrugModules(
   const phaseFilteringApplied = filteredSymptomSources.length < allSymptomSources.length;
 
   // Step 5: Get PRO-CTCAE items for filtered symptoms
-  const symptomTerms = filteredSymptomSources.map((s) => s.symptomTerm);
-  const relevantItems = availableItems.filter((item) =>
-    symptomTerms.includes(item.symptomCategory)
-  );
+  // Extract symptom terms from item codes (e.g., "NAUSEA_FREQ" → "nausea")
+  const symptomTerms = new Set(filteredSymptomSources.map((s) => s.symptomTerm));
+
+  const relevantItems = availableItems.filter((item) => {
+    // Extract symptom term from item code
+    const parts = item.itemCode.split('_');
+    const lastPart = parts[parts.length - 1];
+
+    // Remove attribute suffix (FREQ, SEV, INTERF, PRESENT, AMOUNT)
+    const itemSymptomTerm = ['FREQ', 'SEV', 'INTERF', 'PRESENT', 'AMOUNT'].includes(lastPart)
+      ? parts.slice(0, -1).join('_').toLowerCase()
+      : item.itemCode.toLowerCase();
+
+    return symptomTerms.has(itemSymptomTerm);
+  });
 
   // Step 6: Apply historical escalation (reuse existing logic)
   const priorityScores = applyHistoricalEscalation(relevantItems, patientHistory);

@@ -13,7 +13,7 @@
         "fatigue",
         "mouth_sores",
         "diarrhea",
-        "loss_of_appetite"
+        "decreased_appetite"
       ],
       "safetyProxyItems": [
         {
@@ -50,7 +50,7 @@
         "vomiting",
         "alopecia",
         "fatigue",
-        "loss_of_appetite"
+        "decreased_appetite"
       ],
       "safetyProxyItems": [
         {
@@ -216,7 +216,7 @@
         "nausea",
         "vomiting",
         "fatigue",
-        "loss_of_appetite"
+        "decreased_appetite"
       ],
       "safetyProxyItems": [
         {
@@ -255,7 +255,7 @@
         "itching",
         "diarrhea",
         "nausea",
-        "loss_of_appetite",
+        "decreased_appetite",
         "joint_pain",
         "muscle_pain"
       ],
