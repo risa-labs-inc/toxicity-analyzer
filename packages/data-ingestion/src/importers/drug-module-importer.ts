@@ -2,38 +2,38 @@ import { Knex } from 'knex';
 import * as fs from 'fs';
 import { getDataPath } from '../db-connection';
 
-interface DrugModuleData {
-  drugName: string;
-  drugClass: string;
-  alternativeNames?: string[];
-  symptomTerms: string[];
-  safetyProxyItems: Array<{
-    type: string;
-    symptoms: string[];
-    rationale: string;
-  }>;
-  phaseFilteringRules: Record<string, string[]>;
-  isMyelosuppressive: boolean;
-  clinicalNotes?: string;
-}
+// type DrugModuleData = {
+//   drugName: string;
+//   drugClass: string;
+//   alternativeNames?: string[];
+//   symptomTerms: string[];
+//   safetyProxyItems: Array<{
+//     type: string;
+//     symptoms: string[];
+//     rationale: string;
+//   }>;
+//   phaseFilteringRules: Record<string, string[]>;
+//   isMyelosuppressive: boolean;
+//   clinicalNotes?: string;
+// }
 
-interface RegimenCompositionData {
-  regimenCode: string;
-  regimenName: string;
-  drugModuleComposition: {
-    steps: Array<{
-      stepName: string | null;
-      cycles: number[] | 'all';
-      drugModules: string[];
-    }>;
-    safetyProfile?: {
-      myelosuppressive?: boolean;
-      cardiotoxic?: boolean;
-      hepatotoxic?: boolean;
-      nephrotoxic?: boolean;
-    };
-  };
-}
+// type RegimenCompositionData = {
+//   regimenCode: string;
+//   regimenName: string;
+//   drugModuleComposition: {
+//     steps: Array<{
+//       stepName: string | null;
+//       cycles: number[] | 'all';
+//       drugModules: string[];
+//     }>;
+//     safetyProfile?: {
+//       myelosuppressive?: boolean;
+//       cardiotoxic?: boolean;
+//       hepatotoxic?: boolean;
+//       nephrotoxic?: boolean;
+//     };
+//   };
+// }
 
 export async function importDrugModules(db: Knex): Promise<void> {
   const filePath = getDataPath('drug-modules.json');

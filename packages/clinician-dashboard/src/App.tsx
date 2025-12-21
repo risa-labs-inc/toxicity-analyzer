@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { clinicianApi } from './services/api';
+import { QuestionnaireProvider, useQuestionnaire } from './contexts/QuestionnaireContext';
+import { ModeSelector } from './components/ModeSelector';
 
 function LoginPage() {
   const [clinicianId, setClinicianId] = useState('');
@@ -62,6 +64,7 @@ function LoginPage() {
 function TriagePage() {
   const clinicianId = localStorage.getItem('clinicianId');
   const navigate = useNavigate();
+  const { mode, setMode } = useQuestionnaire();
   const [stats, setStats] = React.useState({
     totalPatients: 0,
     emergencyCount: 0,
@@ -170,6 +173,11 @@ function TriagePage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Mode Selector */}
+        <div className="mb-8">
+          <ModeSelector initialMode={mode} onChange={setMode} />
+        </div>
+
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Patient Queue Statistics</h2>
           <div className="grid gap-6 md:grid-cols-4">
@@ -503,14 +511,16 @@ function PatientDetailPage() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/triage" element={<TriagePage />} />
-        <Route path="/patient/:patientId" element={<PatientDetailPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <QuestionnaireProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/triage" element={<TriagePage />} />
+          <Route path="/patient/:patientId" element={<PatientDetailPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </QuestionnaireProvider>
   );
 }
 

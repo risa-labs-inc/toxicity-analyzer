@@ -81,6 +81,35 @@ export function getActiveDrugs(context: TreatmentContext): ActiveDrugsResult {
 }
 
 /**
+ * Check if a drug name matches a drug module
+ *
+ * Checks if the drug name matches either the module's primary name or any alternative names.
+ * Matching is case-insensitive.
+ *
+ * @param drugName - Drug name to match (e.g., "Trastuzumab Emtansine")
+ * @param module - Drug module to check against
+ * @returns True if the drug name matches
+ */
+function matchesDrugModule(drugName: string, module: DrugModule): boolean {
+  const normalizedDrugName = drugName.toLowerCase().trim();
+
+  // Check primary name
+  if (module.drugName.toLowerCase().trim() === normalizedDrugName) {
+    return true;
+  }
+
+  // Check alternative names if available
+  const alternativeNames = (module as any).alternativeNames;
+  if (alternativeNames && Array.isArray(alternativeNames)) {
+    return alternativeNames.some(
+      (altName: string) => altName.toLowerCase().trim() === normalizedDrugName
+    );
+  }
+
+  return false;
+}
+
+/**
  * Union symptoms from multiple drug modules
  *
  * Takes the UNION of symptom terms and safety proxy items from all active drugs,
@@ -196,8 +225,9 @@ export function selectQuestionsViaDrugModules(
   const activeDrugsResult = getActiveDrugs(context);
 
   // Step 2: Filter drug modules to only active ones
+  // Use matchesDrugModule to support alternative names (e.g., "Trastuzumab Emtansine" matches "T-DM1")
   const activeDrugModules = drugModules.filter((module) =>
-    activeDrugsResult.drugs.includes(module.drugName)
+    activeDrugsResult.drugs.some((drugName) => matchesDrugModule(drugName, module))
   );
 
   // Step 3: Union symptoms from active drug modules

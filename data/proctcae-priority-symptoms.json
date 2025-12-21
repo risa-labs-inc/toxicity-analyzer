@@ -1,0 +1,562 @@
+{
+  "description": "Priority PRO-CTCAE symptoms for Phase 1 import - 20 critical symptoms + 5 custom safety items",
+  "version": "1.0",
+  "importDate": "2025-12-20",
+  "source": "NCI PRO-CTCAE Item Library Version 1.0 (5/11/2023)",
+  "symptoms": [
+    {
+      "symptomTerm": "shortness_of_breath",
+      "symptomCategory": "pulmonary",
+      "isCriticalSafety": true,
+      "rationale": "Critical for cardiotoxicity and pulmonary toxicity monitoring",
+      "items": [
+        {
+          "itemCode": "SHORTNESS_OF_BREATH_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your SHORTNESS OF BREATH at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "SHORTNESS_OF_BREATH_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did your SHORTNESS OF BREATH INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "headache",
+      "symptomCategory": "neurological",
+      "isCriticalSafety": true,
+      "rationale": "Important for immunotherapy toxicity and CNS monitoring",
+      "items": [
+        {
+          "itemCode": "HEADACHE_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have a HEADACHE?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "HEADACHE_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your HEADACHE at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "HEADACHE_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did your HEADACHE INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "joint_pain",
+      "symptomCategory": "musculoskeletal",
+      "isCriticalSafety": true,
+      "rationale": "Critical for taxane arthralgia and immunotherapy-related arthritis",
+      "items": [
+        {
+          "itemCode": "JOINT_PAIN_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have ACHING JOINTS (SUCH AS ELBOWS, KNEES, SHOULDERS)?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "JOINT_PAIN_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your ACHING JOINTS (SUCH AS ELBOWS, KNEES, SHOULDERS) at their WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "JOINT_PAIN_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did ACHING JOINTS (SUCH AS ELBOWS, KNEES, SHOULDERS) INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "abdominal_pain",
+      "symptomCategory": "gastrointestinal",
+      "isCriticalSafety": true,
+      "rationale": "Important for GI toxicity and perforation risk",
+      "items": [
+        {
+          "itemCode": "ABDOMINAL_PAIN_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have PAIN IN THE ABDOMEN (BELLY AREA)?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "ABDOMINAL_PAIN_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your PAIN IN THE ABDOMEN (BELLY AREA) at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "ABDOMINAL_PAIN_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did PAIN IN THE ABDOMEN (BELLY AREA) INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "dizziness",
+      "symptomCategory": "neurological",
+      "isCriticalSafety": true,
+      "rationale": "Important for fall risk and neurological toxicity",
+      "items": [
+        {
+          "itemCode": "DIZZINESS_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your DIZZINESS at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "DIZZINESS_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did DIZZINESS INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "heart_palpitations",
+      "symptomCategory": "cardiac",
+      "isCriticalSafety": true,
+      "rationale": "Critical for cardiotoxicity monitoring",
+      "items": [
+        {
+          "itemCode": "HEART_PALPITATIONS_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you feel a POUNDING OR RACING HEARTBEAT (PALPITATIONS)?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "HEART_PALPITATIONS_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your POUNDING OR RACING HEARTBEAT (PALPITATIONS) at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "wheezing",
+      "symptomCategory": "pulmonary",
+      "isCriticalSafety": true,
+      "rationale": "Important for pulmonary toxicity and bronchospasm",
+      "items": [
+        {
+          "itemCode": "WHEEZING_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your WHEEZING (WHISTLING NOISE IN THE CHEST WITH BREATHING) at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "concentration",
+      "symptomCategory": "neurological",
+      "isCriticalSafety": false,
+      "rationale": "Chemo brain - quality of life impact",
+      "items": [
+        {
+          "itemCode": "CONCENTRATION_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your PROBLEMS WITH CONCENTRATION at their WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "CONCENTRATION_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did PROBLEMS WITH CONCENTRATION INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "memory",
+      "symptomCategory": "neurological",
+      "isCriticalSafety": false,
+      "rationale": "Chemo brain - quality of life impact",
+      "items": [
+        {
+          "itemCode": "MEMORY_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your PROBLEMS WITH MEMORY at their WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "MEMORY_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did PROBLEMS WITH MEMORY INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "insomnia",
+      "symptomCategory": "general",
+      "isCriticalSafety": false,
+      "rationale": "Quality of life and recovery impact",
+      "items": [
+        {
+          "itemCode": "INSOMNIA_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your INSOMNIA (INCLUDING DIFFICULTY FALLING ASLEEP, STAYING ASLEEP, OR WAKING UP EARLY) at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "INSOMNIA_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did INSOMNIA (INCLUDING DIFFICULTY FALLING ASLEEP, STAYING ASLEEP, OR WAKING UP EARLY) INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "anxious",
+      "symptomCategory": "psychological",
+      "isCriticalSafety": false,
+      "rationale": "Mental health monitoring during treatment",
+      "items": [
+        {
+          "itemCode": "ANXIOUS_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you feel ANXIETY?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "ANXIOUS_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your ANXIETY at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "ANXIOUS_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did ANXIETY INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "sad",
+      "symptomCategory": "psychological",
+      "isCriticalSafety": false,
+      "rationale": "Mental health monitoring during treatment",
+      "items": [
+        {
+          "itemCode": "SAD_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have SAD OR UNHAPPY FEELINGS?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "SAD_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your SAD OR UNHAPPY FEELINGS at their WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "SAD_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did SAD OR UNHAPPY FEELINGS INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "discouraged",
+      "symptomCategory": "psychological",
+      "isCriticalSafety": false,
+      "rationale": "Mental health monitoring during treatment",
+      "items": [
+        {
+          "itemCode": "DISCOURAGED_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you FEEL THAT NOTHING COULD CHEER YOU UP?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "DISCOURAGED_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your FEELINGS THAT NOTHING COULD CHEER YOU UP at their WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "DISCOURAGED_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did FEELING THAT NOTHING COULD CHEER YOU UP INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "painful_urination",
+      "symptomCategory": "genitourinary",
+      "isCriticalSafety": true,
+      "rationale": "Important for urinary toxicity and infection",
+      "items": [
+        {
+          "itemCode": "PAINFUL_URINATION_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your PAIN OR BURNING WITH URINATION at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "urinary_urgency",
+      "symptomCategory": "genitourinary",
+      "isCriticalSafety": false,
+      "rationale": "Quality of life impact",
+      "items": [
+        {
+          "itemCode": "URINARY_URGENCY_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you feel an URGE TO URINATE ALL OF A SUDDEN?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "URINARY_URGENCY_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did SUDDEN URGES TO URINATE INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "urinary_frequency",
+      "symptomCategory": "genitourinary",
+      "isCriticalSafety": false,
+      "rationale": "Quality of life impact",
+      "items": [
+        {
+          "itemCode": "URINARY_FREQUENCY_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, were there times when you had to URINATE FREQUENTLY?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "URINARY_FREQUENCY_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did FREQUENT URINATION INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "blurred_vision",
+      "symptomCategory": "visual",
+      "isCriticalSafety": false,
+      "rationale": "Neurological and ocular toxicity monitoring",
+      "items": [
+        {
+          "itemCode": "BLURRED_VISION_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your BLURRY VISION at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "BLURRED_VISION_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did BLURRY VISION INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "heartburn",
+      "symptomCategory": "gastrointestinal",
+      "isCriticalSafety": false,
+      "rationale": "Common GI symptom affecting quality of life",
+      "items": [
+        {
+          "itemCode": "HEARTBURN_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have HEARTBURN?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "HEARTBURN_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your HEARTBURN at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "bloating",
+      "symptomCategory": "gastrointestinal",
+      "isCriticalSafety": false,
+      "rationale": "Common GI symptom affecting quality of life",
+      "items": [
+        {
+          "itemCode": "BLOATING_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have BLOATING OF THE ABDOMEN (BELLY)?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "BLOATING_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your BLOATING OF THE ABDOMEN (BELLY) at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "fever",
+      "symptomCategory": "general",
+      "isCriticalSafety": true,
+      "isCustom": true,
+      "rationale": "CRITICAL - Neutropenic fever is dose-limiting toxicity requiring immediate intervention",
+      "items": [
+        {
+          "itemCode": "FEVER_PRESENT",
+          "attribute": "PRESENT",
+          "questionText": "In the last 7 days, did you have any FEVER (temperature over 100.4°F or 38°C)?",
+          "responseType": "present",
+          "responseOptions": ["Yes", "No"]
+        },
+        {
+          "itemCode": "FEVER_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your FEVER at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "chest_pain",
+      "symptomCategory": "cardiac",
+      "isCriticalSafety": true,
+      "isCustom": true,
+      "rationale": "CRITICAL - Cardiotoxicity monitoring, requires immediate attention",
+      "items": [
+        {
+          "itemCode": "CHEST_PAIN_FREQ",
+          "attribute": "FREQ",
+          "questionText": "In the last 7 days, how OFTEN did you have CHEST PAIN?",
+          "responseType": "frequency",
+          "responseOptions": ["Never", "Rarely", "Occasionally", "Frequently", "Almost constantly"]
+        },
+        {
+          "itemCode": "CHEST_PAIN_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of your CHEST PAIN at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        },
+        {
+          "itemCode": "CHEST_PAIN_INTERF",
+          "attribute": "INTERF",
+          "questionText": "In the last 7 days, how much did CHEST PAIN INTERFERE with your usual or daily activities?",
+          "responseType": "interference",
+          "responseOptions": ["Not at all", "A little bit", "Somewhat", "Quite a bit", "Very much"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "bleeding",
+      "symptomCategory": "hematologic",
+      "isCriticalSafety": true,
+      "isCustom": true,
+      "rationale": "CRITICAL - Thrombocytopenia and bleeding risk monitoring",
+      "items": [
+        {
+          "itemCode": "BLEEDING_PRESENT",
+          "attribute": "PRESENT",
+          "questionText": "In the last 7 days, did you have any UNUSUAL BLEEDING (other than minor cuts)?",
+          "responseType": "present",
+          "responseOptions": ["Yes", "No"]
+        },
+        {
+          "itemCode": "BLEEDING_SEV",
+          "attribute": "SEV",
+          "questionText": "In the last 7 days, what was the SEVERITY of any UNUSUAL BLEEDING at its WORST?",
+          "responseType": "severity",
+          "responseOptions": ["None", "Mild", "Moderate", "Severe", "Very severe"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "jaundice",
+      "symptomCategory": "hepatic",
+      "isCriticalSafety": true,
+      "isCustom": true,
+      "rationale": "CRITICAL - Hepatotoxicity monitoring",
+      "items": [
+        {
+          "itemCode": "JAUNDICE_PRESENT",
+          "attribute": "PRESENT",
+          "questionText": "In the last 7 days, did you notice YELLOWING OF YOUR SKIN OR EYES (JAUNDICE)?",
+          "responseType": "present",
+          "responseOptions": ["Yes", "No"]
+        }
+      ]
+    },
+    {
+      "symptomTerm": "dark_urine",
+      "symptomCategory": "hepatic",
+      "isCriticalSafety": true,
+      "isCustom": true,
+      "rationale": "CRITICAL - Hepatotoxicity and hydration monitoring",
+      "items": [
+        {
+          "itemCode": "DARK_URINE_PRESENT",
+          "attribute": "PRESENT",
+          "questionText": "In the last 7 days, did you have DARK-COLORED URINE (tea or cola-colored)?",
+          "responseType": "present",
+          "responseOptions": ["Yes", "No"]
+        }
+      ]
+    }
+  ]
+}

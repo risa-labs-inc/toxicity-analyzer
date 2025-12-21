@@ -1,6 +1,6 @@
 {
-  "version": "1.0",
-  "last_updated": "2025-12-17",
+  "version": "1.1",
+  "last_updated": "2025-12-20",
   "regimens": [
     {
       "regimen_code": "AC-T",
@@ -19,19 +19,23 @@
           "hematological",
           "constitutional",
           "neurological",
-          "cardiac"
+          "cardiac",
+          "infection_signs",
+          "genitourinary"
         ],
         "moderate": [
           "dermatological",
-          "musculoskeletal"
+          "musculoskeletal",
+          "psychological",
+          "hepatic"
         ],
         "low": ["pulmonary"],
         "phase_priorities": {
-          "pre_session": ["constitutional", "pain", "neurological", "cardiac"],
-          "post_session": ["gastrointestinal", "pain", "constitutional"],
-          "recovery": ["gastrointestinal", "constitutional", "pain", "oral", "neurological"],
+          "pre_session": ["constitutional", "pain", "neurological", "cardiac", "hepatic", "psychological"],
+          "post_session": ["gastrointestinal", "pain", "constitutional", "infection_signs"],
+          "recovery": ["gastrointestinal", "constitutional", "pain", "oral", "neurological", "hepatic", "genitourinary"],
           "nadir": ["infection_signs", "hematological", "constitutional", "musculoskeletal"],
-          "inter_cycle": ["constitutional", "neurological", "dermatological", "pain", "gastrointestinal"]
+          "inter_cycle": ["constitutional", "neurological", "dermatological", "pain", "gastrointestinal", "psychological"]
         },
         "phase_specific": {
           "AC": {
@@ -52,7 +56,14 @@
         {"symptom": "neuropathy", "peak_days": [7, 21], "priority": "high", "phase": "T"},
         {"symptom": "myalgia", "peak_days": [2, 5], "priority": "high", "phase": "T"},
         {"symptom": "diarrhea", "peak_days": [3, 7], "priority": "moderate"},
-        {"symptom": "mouth_sores", "peak_days": [5, 10], "priority": "moderate"}
+        {"symptom": "mouth_sores", "peak_days": [5, 10], "priority": "moderate"},
+        {"symptom": "fever", "peak_days": [7, 12], "priority": "high"},
+        {"symptom": "chest_pain", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "heart_palpitations", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "bleeding", "peak_days": [7, 12], "priority": "high"},
+        {"symptom": "joint_pain", "peak_days": [2, 5], "priority": "moderate", "phase": "T"},
+        {"symptom": "painful_urination", "peak_days": [1, 7], "priority": "moderate"},
+        {"symptom": "urinary_frequency", "peak_days": [1, 7], "priority": "moderate"}
       ]
     },
     {
@@ -70,7 +81,9 @@
           "musculoskeletal",
           "neurological",
           "constitutional",
-          "cardiac"
+          "cardiac",
+          "infection_signs",
+          "genitourinary"
         ],
         "moderate": [
           "gastrointestinal",
@@ -79,8 +92,8 @@
         "low": ["pulmonary"],
         "phase_priorities": {
           "pre_session": ["constitutional", "pain", "neurological", "cardiac"],
-          "post_session": ["gastrointestinal", "pain", "constitutional"],
-          "recovery": ["gastrointestinal", "constitutional", "pain", "musculoskeletal"],
+          "post_session": ["gastrointestinal", "pain", "constitutional", "infection_signs"],
+          "recovery": ["gastrointestinal", "constitutional", "pain", "musculoskeletal", "genitourinary"],
           "nadir": ["infection_signs", "hematological", "constitutional", "musculoskeletal"],
           "inter_cycle": ["constitutional", "neurological", "musculoskeletal", "pain"]
         }
@@ -93,7 +106,12 @@
         {"symptom": "fluid_retention", "peak_days": [10, 21], "priority": "moderate"},
         {"symptom": "nausea", "peak_days": [1, 3], "priority": "moderate"},
         {"symptom": "diarrhea", "peak_days": [3, 7], "priority": "moderate"},
-        {"symptom": "swelling", "peak_days": [10, 21], "priority": "moderate"}
+        {"symptom": "swelling", "peak_days": [10, 21], "priority": "moderate"},
+        {"symptom": "fever", "peak_days": [7, 12], "priority": "high"},
+        {"symptom": "chest_pain", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "bleeding", "peak_days": [7, 12], "priority": "high"},
+        {"symptom": "joint_pain", "peak_days": [2, 5], "priority": "high"},
+        {"symptom": "painful_urination", "peak_days": [1, 7], "priority": "moderate"}
       ]
     },
     {
@@ -110,19 +128,22 @@
           "hepatic",
           "constitutional",
           "neurological",
-          "cardiac"
+          "cardiac",
+          "pulmonary"
         ],
         "moderate": [
           "gastrointestinal",
-          "musculoskeletal"
+          "musculoskeletal",
+          "infection_signs",
+          "psychological"
         ],
         "low": ["dermatological"],
         "phase_priorities": {
-          "pre_session": ["constitutional", "pain", "cardiac", "hepatic"],
+          "pre_session": ["constitutional", "pain", "cardiac", "hepatic", "pulmonary"],
           "post_session": ["gastrointestinal", "constitutional", "hepatic"],
-          "recovery": ["constitutional", "gastrointestinal", "hepatic", "pain"],
+          "recovery": ["constitutional", "gastrointestinal", "hepatic", "pain", "pulmonary"],
           "nadir": ["hematological", "constitutional", "hepatic"],
-          "inter_cycle": ["constitutional", "neurological", "cardiac", "hepatic", "pain"]
+          "inter_cycle": ["constitutional", "neurological", "cardiac", "hepatic", "pain", "psychological"]
         }
       },
       "symptom_mapping": [
@@ -132,7 +153,16 @@
         {"symptom": "bruising", "peak_days": [7, 14], "priority": "high"},
         {"symptom": "nausea", "peak_days": [1, 3], "priority": "moderate"},
         {"symptom": "headache", "peak_days": [1, 7], "priority": "moderate"},
-        {"symptom": "myalgia", "peak_days": [2, 5], "priority": "moderate"}
+        {"symptom": "myalgia", "peak_days": [2, 5], "priority": "moderate"},
+        {"symptom": "fever", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "chest_pain", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "heart_palpitations", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "bleeding", "peak_days": [7, 14], "priority": "high"},
+        {"symptom": "jaundice", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "dark_urine", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "abdominal_pain", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "dizziness", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "wheezing", "peak_days": [1, 21], "priority": "moderate"}
       ]
     },
     {
@@ -147,18 +177,20 @@
         "high_risk": [
           "gastrointestinal",
           "dermatological",
-          "hematological"
+          "hematological",
+          "cardiac",
+          "infection_signs"
         ],
         "moderate": [
           "constitutional",
           "neurological"
         ],
-        "low": ["cardiac"],
+        "low": [],
         "phase_priorities": {
-          "pre_session": ["constitutional", "dermatological", "pain"],
-          "post_session": ["gastrointestinal", "constitutional"],
+          "pre_session": ["constitutional", "dermatological", "pain", "cardiac"],
+          "post_session": ["gastrointestinal", "constitutional", "infection_signs"],
           "recovery": ["gastrointestinal", "dermatological", "constitutional", "oral"],
-          "nadir": ["hematological", "constitutional", "dermatological"],
+          "nadir": ["hematological", "constitutional", "dermatological", "infection_signs"],
           "inter_cycle": ["dermatological", "gastrointestinal", "constitutional", "pain"]
         }
       },
@@ -168,7 +200,12 @@
         {"symptom": "nausea", "peak_days": [3, 10], "priority": "moderate"},
         {"symptom": "fatigue", "peak_days": [7, 14], "priority": "moderate"},
         {"symptom": "mouth_sores", "peak_days": [7, 14], "priority": "moderate"},
-        {"symptom": "decreased_appetite", "peak_days": [7, 14], "priority": "moderate"}
+        {"symptom": "decreased_appetite", "peak_days": [7, 14], "priority": "moderate"},
+        {"symptom": "fever", "peak_days": [7, 14], "priority": "moderate"},
+        {"symptom": "chest_pain", "peak_days": [1, 14], "priority": "high"},
+        {"symptom": "heart_palpitations", "peak_days": [1, 14], "priority": "moderate"},
+        {"symptom": "bleeding", "peak_days": [7, 14], "priority": "moderate"},
+        {"symptom": "abdominal_pain", "peak_days": [3, 14], "priority": "moderate"}
       ]
     },
     {
@@ -187,16 +224,20 @@
           "gastrointestinal",
           "pulmonary",
           "dermatological",
-          "infection_signs"
+          "infection_signs",
+          "cardiac",
+          "hepatic",
+          "neurological",
+          "psychological"
         ],
         "moderate": [],
         "low": ["hematological"],
         "phase_priorities": {
-          "pre_session": ["constitutional", "pulmonary", "dermatological"],
-          "post_session": ["gastrointestinal", "constitutional", "dermatological"],
-          "recovery": ["gastrointestinal", "constitutional", "dermatological", "pulmonary"],
+          "pre_session": ["constitutional", "pulmonary", "dermatological", "cardiac", "psychological"],
+          "post_session": ["gastrointestinal", "constitutional", "dermatological", "hepatic"],
+          "recovery": ["gastrointestinal", "constitutional", "dermatological", "pulmonary", "hepatic", "neurological"],
           "nadir": ["constitutional", "gastrointestinal", "infection_signs"],
-          "inter_cycle": ["constitutional", "dermatological", "gastrointestinal", "pulmonary"]
+          "inter_cycle": ["constitutional", "dermatological", "gastrointestinal", "pulmonary", "psychological", "neurological"]
         }
       },
       "symptom_mapping": [
@@ -205,7 +246,24 @@
         {"symptom": "diarrhea", "peak_days": [7, 21], "priority": "high"},
         {"symptom": "cough", "peak_days": [7, 21], "priority": "moderate"},
         {"symptom": "fatigue", "peak_days": [3, 21], "priority": "moderate"},
-        {"symptom": "nausea", "peak_days": [1, 7], "priority": "moderate"}
+        {"symptom": "nausea", "peak_days": [1, 7], "priority": "moderate"},
+        {"symptom": "fever", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "chest_pain", "peak_days": [1, 21], "priority": "high"},
+        {"symptom": "heart_palpitations", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "bleeding", "peak_days": [1, 21], "priority": "low"},
+        {"symptom": "jaundice", "peak_days": [7, 21], "priority": "high"},
+        {"symptom": "dark_urine", "peak_days": [7, 21], "priority": "high"},
+        {"symptom": "abdominal_pain", "peak_days": [7, 21], "priority": "high"},
+        {"symptom": "headache", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "dizziness", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "concentration", "peak_days": [7, 21], "priority": "moderate"},
+        {"symptom": "memory", "peak_days": [7, 21], "priority": "moderate"},
+        {"symptom": "anxious", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "sad", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "discouraged", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "insomnia", "peak_days": [1, 21], "priority": "moderate"},
+        {"symptom": "joint_pain", "peak_days": [7, 21], "priority": "moderate"},
+        {"symptom": "wheezing", "peak_days": [7, 21], "priority": "high"}
       ]
     }
   ],

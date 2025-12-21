@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import QuestionnairePage from './pages/QuestionnairePage';
 import ResultsPage from './pages/ResultsPage';
-import { patientApi } from './services/api';
+import { patientApi, QuestionnaireMode } from './services/api';
 
 function LoginPage() {
   const [selectedPatient, setSelectedPatient] = useState('');
@@ -78,6 +78,7 @@ function DashboardPage() {
   } | null>(null);
   const [generating, setGenerating] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [selectedMode, setSelectedMode] = React.useState<QuestionnaireMode>('drug-module');
 
   React.useEffect(() => {
     loadTreatmentInfo();
@@ -120,7 +121,7 @@ function DashboardPage() {
   const handleStartQuestionnaire = async () => {
     try {
       setGenerating(true);
-      const response = await patientApi.generateQuestionnaire();
+      const response = await patientApi.generateQuestionnaire(selectedMode);
       const questionnaireId = response.data.questionnaire.questionnaireId;
       navigate(`/questionnaire/${questionnaireId}`);
     } catch (error: any) {
@@ -157,6 +158,37 @@ function DashboardPage() {
           </div>
         ) : (
           <>
+            {/* Mode Selector */}
+            <div className="mb-6 bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Questionnaire Generation Mode (Demo)
+              </label>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setSelectedMode('drug-module')}
+                  className={`flex-1 px-4 py-3 rounded-lg border-2 transition text-left ${
+                    selectedMode === 'drug-module'
+                      ? 'bg-teal-50 border-teal-600'
+                      : 'bg-white border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="font-semibold text-sm">Drug-Module</div>
+                  <div className="text-xs text-gray-600 mt-1">Better safety coverage (Recommended)</div>
+                </button>
+                <button
+                  onClick={() => setSelectedMode('regimen')}
+                  className={`flex-1 px-4 py-3 rounded-lg border-2 transition text-left ${
+                    selectedMode === 'regimen'
+                      ? 'bg-blue-50 border-blue-600'
+                      : 'bg-white border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="font-semibold text-sm">Regimen-Phase</div>
+                  <div className="text-xs text-gray-600 mt-1">Lower question burden (Legacy)</div>
+                </button>
+              </div>
+            </div>
+
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                 <h3 className="text-sm font-medium text-gray-500 mb-2">Current Treatment</h3>

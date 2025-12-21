@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getDb } from '../db/connection';
 import { QuestionnaireService } from '../services/questionnaire.service';
 import { QuestionnaireDrugModuleService } from '../services/questionnaire-drug-module.service';
+import { ComparisonService } from '../services/comparison.service';
 import { PatientRepository } from '../repositories/patient.repository';
 import { TreatmentRepository } from '../repositories/treatment.repository';
 import { ResponseRepository } from '../repositories/response.repository';
@@ -102,23 +103,76 @@ router.get(
 );
 
 /**
- * POST /api/v1/patient/questionnaires/generate
- * Generate new personalized questionnaire (regimen-phase-history approach)
+ * POST /api/v1/patient/questionnaires/generate?mode=drug-module|regimen
+ * Generate new personalized questionnaire
+ *
+ * Query Parameters:
+ *   - mode: 'drug-module' (default) | 'regimen'
+ *
+ * Drug-module approach (default):
+ *   - 200% better safety coverage
+ *   - Safety proxy symptoms bypass phase filtering
+ *   - Granular drug tracking with metadata
+ *
+ * Regimen approach (legacy):
+ *   - Phase-filtered symptoms only
+ *   - Lower question burden
  */
 router.post(
   '/questionnaires/generate',
   asyncHandler(async (req: AuthenticatedRequest, res) => {
     const db = getDb();
-    const questionnaireService = new QuestionnaireService(db);
+    const mode = (req.query.mode as string) || 'drug-module';
 
-    const result = await questionnaireService.generateQuestionnaire(
-      req.user!.patientId!
-    );
+    if (mode !== 'drug-module' && mode !== 'regimen') {
+      res.status(400).json({
+        error: 'Bad Request',
+        message: 'Invalid mode parameter. Must be "drug-module" or "regimen"',
+      });
+      return;
+    }
+
+    let result;
+    if (mode === 'drug-module') {
+      const drugModuleService = new QuestionnaireDrugModuleService(db);
+      const drugResult = await drugModuleService.generateQuestionnaire(
+        req.user!.patientId!
+      );
+
+      // Add generationApproach to metadata for consistency
+      result = {
+        questionnaire: drugResult.questionnaire,
+        items: drugResult.items,
+        metadata: {
+          generationApproach: 'drug-module',
+          ...drugResult.metadata,
+        },
+      };
+    } else {
+      // Regimen approach
+      const questionnaireService = new QuestionnaireService(db);
+      const regimenResult = await questionnaireService.generateQuestionnaire(
+        req.user!.patientId!
+      );
+
+      // Wrap regimen result to match drug-module format
+      result = {
+        questionnaire: regimenResult.questionnaire,
+        items: regimenResult.items,
+        metadata: {
+          generationApproach: 'regimen-phase-history',
+          activeDrugs: [],
+          totalSymptoms: { beforeDedup: 0, afterDedup: 0 },
+          phaseFilteringApplied: true,
+        },
+      };
+    }
 
     res.status(201).json({
       questionnaire: result.questionnaire,
       items: result.items,
-      message: 'Personalized questionnaire generated successfully',
+      metadata: result.metadata,
+      message: `Personalized questionnaire generated successfully (${mode} approach)`,
     });
   })
 );
@@ -197,6 +251,30 @@ router.get(
     }
 
     res.json(result);
+  })
+);
+
+/**
+ * POST /api/v1/patient/questionnaires/compare
+ * Generate questionnaires using both approaches and compare them
+ */
+router.post(
+  '/questionnaires/compare',
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const db = getDb();
+    const comparisonService = new ComparisonService(db);
+
+    const result = await comparisonService.compareApproaches(
+      req.user!.patientId!
+    );
+
+    const summary = comparisonService.getComparisonSummary(result);
+
+    res.status(201).json({
+      comparison: result,
+      summary,
+      message: 'Questionnaires generated and compared successfully',
+    });
   })
 );
 

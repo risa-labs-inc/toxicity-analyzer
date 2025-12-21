@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "toxicity-analyzer",
-    "staging": "toxicity-analyzer-staging",
-    "production": "toxicity-analyzer"
+    "default": "toxicity-analyzer-prod",
+    "staging": "toxicity-analyzer-prod",
+    "production": "toxicity-analyzer-prod"
   }
 }

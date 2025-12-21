@@ -19,6 +19,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export type QuestionnaireGenerationMode = 'drug-module' | 'regimen';
+
 export const clinicianApi = {
   // Get prioritized triage queue
   getTriageQueue: () => api.get('/clinician/triage/queue'),
@@ -38,6 +40,25 @@ export const clinicianApi = {
   // Acknowledge alert
   acknowledgeAlert: (alertId: string) =>
     api.post(`/clinician/alerts/${alertId}/acknowledge`),
+};
+
+// Patient API endpoints (for demo purposes - allows clinicians to trigger questionnaire generation)
+export const patientApi = {
+  // Generate questionnaire for a patient
+  generateQuestionnaire: (patientId: string, mode: QuestionnaireGenerationMode = 'drug-module') =>
+    api.post(`/patient/questionnaires/generate?mode=${mode}`, null, {
+      headers: {
+        Authorization: `Patient ${patientId}`,
+      },
+    }),
+
+  // Compare both approaches
+  compareApproaches: (patientId: string) =>
+    api.post(`/patient/questionnaires/compare`, null, {
+      headers: {
+        Authorization: `Patient ${patientId}`,
+      },
+    }),
 };
 
 export default api;

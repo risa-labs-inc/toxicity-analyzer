@@ -99,6 +99,44 @@ npm run build
 npm test
 ```
 
+## Questionnaire Generation Approaches
+
+The system supports two questionnaire generation approaches:
+
+### 1. Drug-Module Approach (Default, Recommended) ✅
+
+**Endpoint:** `POST /api/v1/patient/questionnaires/generate?mode=drug-module`
+
+**Features:**
+- **200% better safety signal coverage** - Significantly improved detection of critical safety events
+- **Safety proxy symptoms** - Critical symptoms (fever, chest pain, bleeding, etc.) always included regardless of treatment phase
+- **Granular drug tracking** - Each drug is a module with specific symptom mappings and safety proxies
+- **Sequential regimen support** - Properly handles multi-phase regimens (e.g., AC → T)
+
+**Use Cases:**
+- ✅ Production use (recommended)
+- ✅ Comprehensive safety monitoring
+- ✅ Research and clinical trials
+- ✅ Early detection of dose-limiting toxicities
+
+### 2. Regimen-Phase-History Approach (Legacy)
+
+**Endpoint:** `POST /api/v1/patient/questionnaires/generate?mode=regimen`
+
+**Features:**
+- **Lower question burden** - Average 10.3 questions vs 12.3 for drug-module
+- **Phase-based filtering** - All symptoms respect cycle phase filtering
+- **Established patterns** - Based on well-known regimen toxicity profiles
+
+**Use Cases:**
+- ⚠️ Backward compatibility
+- ⚠️ Comparison studies
+- ⚠️ Scenarios requiring minimal question burden
+
+### Default Behavior
+
+If no `mode` parameter is provided, the system defaults to **`drug-module`** for superior safety coverage.
+
 ## API Endpoints
 
 ### Patient API
@@ -112,7 +150,9 @@ npm test
 | GET | `/profile` | Get patient profile |
 | GET | `/treatment/timeline` | Get current treatment timeline and cycle phase |
 | GET | `/questionnaires/pending` | Get pending questionnaires |
-| POST | `/questionnaires/generate` | Generate new personalized questionnaire |
+| POST | `/questionnaires/generate?mode=drug-module\|regimen` | Generate new personalized questionnaire (defaults to drug-module) |
+| POST | `/questionnaires/generate-drug-module` | Generate questionnaire (drug-module, legacy endpoint) |
+| POST | `/questionnaires/compare` | Generate and compare both approaches |
 | GET | `/questionnaires/:id` | Get questionnaire with items |
 | POST | `/questionnaires/:id/start` | Start questionnaire session |
 | POST | `/questionnaires/:id/responses` | Submit response to question |
@@ -142,10 +182,16 @@ npm test
 
 ## Usage Examples
 
-### Patient: Generate Questionnaire
+### Patient: Generate Questionnaire (Drug-Module Approach)
 
 ```bash
+# Default: drug-module approach
 curl -X POST http://localhost:3000/api/v1/patient/questionnaires/generate \
+  -H "Authorization: Demo P001" \
+  -H "Content-Type: application/json"
+
+# Explicit drug-module
+curl -X POST "http://localhost:3000/api/v1/patient/questionnaires/generate?mode=drug-module" \
   -H "Authorization: Demo P001" \
   -H "Content-Type: application/json"
 ```
@@ -174,7 +220,48 @@ curl -X POST http://localhost:3000/api/v1/patient/questionnaires/generate \
         ...
       ]
     }
-  ]
+  ],
+  "metadata": {
+    "generationApproach": "drug-module",
+    "activeDrugs": [
+      {"drugName": "Paclitaxel", "cycleNumber": 5}
+    ],
+    "totalSymptoms": {
+      "beforeDedup": 15,
+      "afterDedup": 11
+    },
+    "phaseFilteringApplied": true,
+    "currentPhase": "nadir",
+    "regimenCode": "AC-T",
+    "cycleDay": 9
+  },
+  "message": "Personalized questionnaire generated successfully (drug-module approach)"
+}
+```
+
+### Patient: Generate Questionnaire (Regimen Approach)
+
+```bash
+curl -X POST "http://localhost:3000/api/v1/patient/questionnaires/generate?mode=regimen" \
+  -H "Authorization: Demo P001" \
+  -H "Content-Type: application/json"
+```
+
+**Response:**
+```json
+{
+  "questionnaire": { /* same structure */ },
+  "items": [ /* same structure */ ],
+  "metadata": {
+    "generationApproach": "regimen-phase-history",
+    "activeDrugs": [],
+    "totalSymptoms": {
+      "beforeDedup": 0,
+      "afterDedup": 0
+    },
+    "phaseFilteringApplied": true
+  },
+  "message": "Personalized questionnaire generated successfully (regimen approach)"
 }
 ```
 

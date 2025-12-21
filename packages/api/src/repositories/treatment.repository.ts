@@ -161,6 +161,7 @@ export class TreatmentRepository {
       toxicityProfile: typeof row.toxicity_profile === 'string' ? JSON.parse(row.toxicity_profile) : row.toxicity_profile,
       nadirWindowStart: row.nadir_window_start,
       nadirWindowEnd: row.nadir_window_end,
+      drugModuleComposition: typeof row.drug_module_composition === 'string' ? JSON.parse(row.drug_module_composition) : row.drug_module_composition,
     };
   }
 }

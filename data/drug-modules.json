@@ -1,7 +1,7 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "last_updated": "2025-12-20",
-  "description": "Drug modules for drug-module based questionnaire generation. Each drug is a module with its own symptom list that can be composed into regimens.",
+  "description": "Drug modules for drug-module based questionnaire generation. Updated to reference Phase 1 priority PRO-CTCAE symptoms (84 items total).",
   "drugModules": [
     {
       "drugName": "Doxorubicin",
@@ -18,18 +18,18 @@
       "safetyProxyItems": [
         {
           "type": "myelosuppression",
-          "symptoms": ["fever", "chills", "sore_throat"],
-          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-12)"
+          "symptoms": ["fever", "chills"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-12). UPDATED: Now includes fever (FEVER_PRESENT, FEVER_SEV)"
         },
         {
           "type": "cardiotoxicity",
-          "symptoms": ["shortness_of_breath", "chest_pain", "irregular_heartbeat", "swelling"],
-          "rationale": "Monitor for cumulative dose-related cardiac dysfunction"
+          "symptoms": ["shortness_of_breath", "chest_pain", "heart_palpitations", "swelling"],
+          "rationale": "Monitor for cumulative dose-related cardiac dysfunction. UPDATED: Added chest_pain (CHEST_PAIN_*), heart_palpitations"
         },
         {
           "type": "thrombocytopenia",
           "symptoms": ["bruising", "bleeding"],
-          "rationale": "Monitor for low platelet count"
+          "rationale": "Monitor for low platelet count. UPDATED: Now includes bleeding (BLEEDING_PRESENT, BLEEDING_SEV)"
         }
       ],
       "phaseFilteringRules": {
@@ -55,18 +55,18 @@
       "safetyProxyItems": [
         {
           "type": "myelosuppression",
-          "symptoms": ["fever", "chills", "sore_throat"],
-          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-12)"
+          "symptoms": ["fever", "chills"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-12). UPDATED: Now includes fever"
         },
         {
           "type": "thrombocytopenia",
           "symptoms": ["bruising", "bleeding"],
-          "rationale": "Monitor for low platelet count"
+          "rationale": "Monitor for low platelet count. UPDATED: Now includes bleeding"
         },
         {
           "type": "hemorrhagic_cystitis",
-          "symptoms": ["blood_in_urine", "painful_urination", "urinary_frequency"],
-          "rationale": "Monitor for bladder toxicity (acrolein metabolite)"
+          "symptoms": ["painful_urination", "urinary_frequency"],
+          "rationale": "Monitor for bladder toxicity (acrolein metabolite). UPDATED: Added painful_urination, urinary_frequency"
         }
       ],
       "phaseFilteringRules": {
@@ -92,18 +92,28 @@
       "safetyProxyItems": [
         {
           "type": "myelosuppression",
-          "symptoms": ["fever", "chills", "sore_throat"],
-          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 8-10)"
+          "symptoms": ["fever", "chills"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 8-10). UPDATED: Now includes fever"
         },
         {
           "type": "hypersensitivity",
-          "symptoms": ["rash", "itching", "shortness_of_breath", "flushing"],
-          "rationale": "Monitor for infusion reactions (typically first 2-3 cycles)"
+          "symptoms": ["rash", "shortness_of_breath"],
+          "rationale": "Monitor for infusion reactions (typically first 2-3 cycles). UPDATED: Removed itching (not imported yet)"
         },
         {
           "type": "thrombocytopenia",
           "symptoms": ["bruising", "bleeding"],
-          "rationale": "Monitor for low platelet count"
+          "rationale": "Monitor for low platelet count. UPDATED: Now includes bleeding"
+        },
+        {
+          "type": "neuropathy",
+          "symptoms": ["neuropathy", "dizziness"],
+          "rationale": "Monitor for peripheral neuropathy (cumulative, may be irreversible). UPDATED: Added dizziness"
+        },
+        {
+          "type": "arthralgia_myalgia",
+          "symptoms": ["joint_pain", "myalgia"],
+          "rationale": "Monitor for taxane-induced musculoskeletal pain (peak 2-5 days post-infusion). UPDATED: Now uses joint_pain from PRO-CTCAE"
         }
       ],
       "phaseFilteringRules": {
@@ -134,18 +144,23 @@
       "safetyProxyItems": [
         {
           "type": "myelosuppression",
-          "symptoms": ["fever", "chills", "sore_throat"],
-          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-10)"
+          "symptoms": ["fever", "chills"],
+          "rationale": "Monitor for neutropenia-related infection risk (nadir: days 7-10). UPDATED: Now includes fever"
         },
         {
           "type": "hypersensitivity",
-          "symptoms": ["rash", "itching", "shortness_of_breath", "flushing"],
-          "rationale": "Monitor for infusion reactions"
+          "symptoms": ["rash", "shortness_of_breath"],
+          "rationale": "Monitor for infusion reactions. UPDATED: Focused on available symptoms"
         },
         {
           "type": "thrombocytopenia",
           "symptoms": ["bruising", "bleeding"],
-          "rationale": "Monitor for low platelet count"
+          "rationale": "Monitor for low platelet count. UPDATED: Now includes bleeding"
+        },
+        {
+          "type": "arthralgia_myalgia",
+          "symptoms": ["joint_pain", "myalgia"],
+          "rationale": "Monitor for taxane-induced musculoskeletal pain. UPDATED: Now uses joint_pain"
         }
       ],
       "phaseFilteringRules": {
@@ -164,7 +179,7 @@
     {
       "drugName": "T-DM1",
       "drugClass": "Antibody-drug conjugate",
-      "alternativeNames": ["ado-trastuzumab emtansine", "Kadcyla"],
+      "alternativeNames": ["ado-trastuzumab emtansine", "Kadcyla", "Trastuzumab Emtansine", "trastuzumab emtansine"],
       "symptomTerms": [
         "fatigue",
         "nausea",
@@ -176,23 +191,28 @@
       "safetyProxyItems": [
         {
           "type": "thrombocytopenia",
-          "symptoms": ["bruising", "bleeding", "petechiae"],
-          "rationale": "Monitor for low platelet count (dose-limiting toxicity, nadir: day 8)"
+          "symptoms": ["bruising", "bleeding"],
+          "rationale": "Monitor for low platelet count (dose-limiting toxicity, nadir: day 8). UPDATED: Now includes bleeding (BLEEDING_PRESENT, BLEEDING_SEV)"
         },
         {
           "type": "hepatotoxicity",
-          "symptoms": ["jaundice", "dark_urine", "right_upper_quadrant_pain", "fatigue"],
-          "rationale": "Monitor for elevated transaminases and liver injury"
+          "symptoms": ["jaundice", "dark_urine", "abdominal_pain", "fatigue"],
+          "rationale": "Monitor for elevated transaminases and liver injury. UPDATED: Now includes jaundice (JAUNDICE_PRESENT), dark_urine (DARK_URINE_PRESENT), abdominal_pain"
         },
         {
           "type": "cardiotoxicity",
-          "symptoms": ["shortness_of_breath", "chest_pain", "irregular_heartbeat", "swelling"],
-          "rationale": "Monitor for left ventricular dysfunction (trastuzumab component)"
+          "symptoms": ["shortness_of_breath", "chest_pain", "heart_palpitations", "swelling"],
+          "rationale": "Monitor for left ventricular dysfunction (trastuzumab component). UPDATED: Added chest_pain, heart_palpitations"
         },
         {
           "type": "pulmonary_toxicity",
-          "symptoms": ["shortness_of_breath", "cough", "fever"],
-          "rationale": "Monitor for interstitial lung disease (rare but serious)"
+          "symptoms": ["shortness_of_breath", "cough", "fever", "wheezing"],
+          "rationale": "Monitor for interstitial lung disease (rare but serious). UPDATED: Added fever, wheezing"
+        },
+        {
+          "type": "neuropathy",
+          "symptoms": ["neuropathy", "headache", "dizziness"],
+          "rationale": "Monitor for peripheral neuropathy and neurological symptoms. UPDATED: Added headache, dizziness"
         }
       ],
       "phaseFilteringRules": {
@@ -221,18 +241,23 @@
       "safetyProxyItems": [
         {
           "type": "myelosuppression",
-          "symptoms": ["fever", "chills", "sore_throat"],
-          "rationale": "Monitor for neutropenia-related infection risk"
+          "symptoms": ["fever", "chills"],
+          "rationale": "Monitor for neutropenia-related infection risk. UPDATED: Now includes fever"
         },
         {
           "type": "thrombocytopenia",
           "symptoms": ["bruising", "bleeding"],
-          "rationale": "Monitor for low platelet count"
+          "rationale": "Monitor for low platelet count. UPDATED: Now includes bleeding"
         },
         {
           "type": "cardiotoxicity",
-          "symptoms": ["chest_pain", "irregular_heartbeat", "shortness_of_breath"],
-          "rationale": "Monitor for coronary artery vasospasm (rare but serious)"
+          "symptoms": ["chest_pain", "heart_palpitations", "shortness_of_breath"],
+          "rationale": "Monitor for coronary artery vasospasm (rare but serious). UPDATED: Added chest_pain, heart_palpitations"
+        },
+        {
+          "type": "gastrointestinal",
+          "symptoms": ["diarrhea", "nausea", "vomiting", "abdominal_pain"],
+          "rationale": "Monitor for GI toxicity. UPDATED: Added abdominal_pain"
         }
       ],
       "phaseFilteringRules": {
@@ -262,33 +287,38 @@
       "safetyProxyItems": [
         {
           "type": "immune_related_colitis",
-          "symptoms": ["diarrhea", "abdominal_pain", "blood_in_stool"],
-          "rationale": "Monitor for immune-mediated colitis (can occur anytime, peak 6-12 weeks)"
+          "symptoms": ["diarrhea", "abdominal_pain"],
+          "rationale": "Monitor for immune-mediated colitis (can occur anytime, peak 6-12 weeks). UPDATED: Now includes abdominal_pain"
         },
         {
           "type": "immune_related_pneumonitis",
-          "symptoms": ["shortness_of_breath", "cough", "chest_pain"],
-          "rationale": "Monitor for immune-mediated pneumonitis"
+          "symptoms": ["shortness_of_breath", "cough", "chest_pain", "fever", "wheezing"],
+          "rationale": "Monitor for immune-mediated pneumonitis. UPDATED: Added chest_pain, fever, wheezing"
         },
         {
           "type": "immune_related_hepatitis",
-          "symptoms": ["jaundice", "dark_urine", "right_upper_quadrant_pain", "fatigue"],
-          "rationale": "Monitor for immune-mediated hepatitis"
+          "symptoms": ["jaundice", "dark_urine", "abdominal_pain", "fatigue"],
+          "rationale": "Monitor for immune-mediated hepatitis. UPDATED: Now includes jaundice, dark_urine, abdominal_pain"
         },
         {
           "type": "immune_related_endocrinopathy",
-          "symptoms": ["fatigue", "headache", "weight_changes", "cold_intolerance"],
-          "rationale": "Monitor for thyroid dysfunction, adrenal insufficiency, hypophysitis"
-        },
-        {
-          "type": "immune_related_nephritis",
-          "symptoms": ["decreased_urination", "swelling", "fatigue"],
-          "rationale": "Monitor for immune-mediated nephritis"
+          "symptoms": ["fatigue", "headache"],
+          "rationale": "Monitor for thyroid dysfunction, adrenal insufficiency, hypophysitis. UPDATED: Now includes headache"
         },
         {
           "type": "immune_related_dermatitis",
-          "symptoms": ["rash", "itching", "blistering"],
+          "symptoms": ["rash"],
           "rationale": "Monitor for severe skin reactions (Stevens-Johnson syndrome, toxic epidermal necrolysis)"
+        },
+        {
+          "type": "neurological_toxicity",
+          "symptoms": ["headache", "dizziness", "concentration", "memory"],
+          "rationale": "Monitor for immune-related neurological complications. NEW: Added comprehensive neuro monitoring"
+        },
+        {
+          "type": "psychological_monitoring",
+          "symptoms": ["anxious", "sad", "discouraged", "insomnia"],
+          "rationale": "Monitor psychological well-being during immunotherapy. NEW: Added mental health screening"
         }
       ],
       "phaseFilteringRules": {},

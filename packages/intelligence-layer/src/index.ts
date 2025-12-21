@@ -21,3 +21,6 @@ export * from './scoring';
 
 // Alert Engine
 export * from './alerting';
+
+// Comparison Framework
+export * from './comparison';

@@ -18,6 +18,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export type QuestionnaireMode = 'drug-module' | 'regimen';
+
 export const patientApi = {
   // Get patient profile
   getProfile: () => api.get('/patient/profile'),
@@ -26,7 +28,8 @@ export const patientApi = {
   getTimeline: () => api.get('/patient/treatment/timeline'),
 
   // Generate new questionnaire
-  generateQuestionnaire: () => api.post('/patient/questionnaires/generate'),
+  generateQuestionnaire: (mode: QuestionnaireMode = 'drug-module') =>
+    api.post(`/patient/questionnaires/generate?mode=${mode}`),
 
   // Get questionnaire by ID
   getQuestionnaire: (questionnaireId: string) =>

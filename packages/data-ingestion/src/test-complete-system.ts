@@ -132,7 +132,7 @@ async function runComprehensiveTests() {
       const treatmentDay = daysSince + 1;
 
       let phase = 'inter_cycle';
-      const cycleLengthDays = p.standard_cycle_length_days || 21;
+      // const cycleLengthDays = p.standard_cycle_length_days || 21;
 
       // Check if approaching next infusion (pre_session logic)
       if (p.planned_next_infusion) {

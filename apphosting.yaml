@@ -21,7 +21,7 @@ runConfig:
     - variable: PORT
       value: "8080"
     - variable: DB_HOST
-      value: "/cloudsql/toxicity-analyzer:us-central1:toxicity-analyzer-db"
+      value: "/cloudsql/toxicity-analyzer-prod:us-central1:toxicity-analyzer-db"
     - variable: DB_PORT
       value: "5432"
     - variable: DB_NAME
@@ -31,7 +31,7 @@ runConfig:
     - variable: DB_PASSWORD
       secret: DB_PASSWORD          # From Secret Manager
     - variable: FIREBASE_PROJECT_ID
-      value: "toxicity-analyzer"
+      value: "toxicity-analyzer-prod"
     - variable: LOG_LEVEL
       value: "info"
 

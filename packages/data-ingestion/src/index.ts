@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import * as dotenv from 'dotenv';
 import { importProCTCAE } from './importers/proctcae-importer';
+import { importPriorityProCTCAE } from './importers/proctcae-priority-importer';
 import { importRegimens } from './importers/regimen-importer';
 import { importPatients } from './importers/patient-importer';
 import { importDrugModules } from './importers/drug-module-importer';
@@ -104,6 +105,27 @@ program
       process.exit(0);
     } catch (error) {
       console.error('❌ Import failed:', error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('proctcae-priority')
+  .description('Import priority PRO-CTCAE symptoms (25 critical safety items - Phase 1)')
+  .action(async () => {
+    console.log('🚀 Starting priority PRO-CTCAE import (Phase 1)...\n');
+    try {
+      const db = getDbConnection();
+      await importPriorityProCTCAE(db);
+      console.log('\n✅ Priority PRO-CTCAE import complete!');
+      console.log('\n📝 Next steps:');
+      console.log('   1. Run comparison testing to measure improved safety coverage');
+      console.log('   2. Update drug modules to reference new safety symptoms');
+      console.log('   3. Plan Phase 2 import (remaining 55 symptoms)\n');
+      await db.destroy();
+      process.exit(0);
+    } catch (error) {
+      console.error('\n❌ Import failed:', error);
       process.exit(1);
     }
   });

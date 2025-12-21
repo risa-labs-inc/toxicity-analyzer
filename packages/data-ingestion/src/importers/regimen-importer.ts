@@ -2,15 +2,6 @@ import { Knex } from 'knex';
 import * as fs from 'fs';
 import { getDataPath } from '../db-connection';
 
-interface Regimen {
-  regimen_code: string;
-  regimen_name: string;
-  drug_components: any[];
-  cycle_length_days: number;
-  nadir_window: { start: number; end: number };
-  toxicity_profile: any;
-}
-
 export async function importRegimens(db: Knex): Promise<void> {
   const filePath = getDataPath('regimen-toxicity-map.json');
 

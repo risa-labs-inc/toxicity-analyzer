@@ -8,7 +8,6 @@
 
 import { getDbConnection, getDataPath } from './db-connection';
 import * as fs from 'fs';
-import * as crypto from 'crypto';
 
 interface DemoPatient {
   patient_id: string;

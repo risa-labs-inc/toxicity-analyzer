@@ -11,21 +11,21 @@
 import { getDbConnection, getDataPath } from './db-connection';
 import * as fs from 'fs';
 
-interface RegimenData {
-  regimen_code: string;
-  toxicity_profile: {
-    high_risk: string[];
-    moderate: string[];
-    low: string[];
-    phase_priorities?: {
-      pre_session: string[];
-      post_session: string[];
-      recovery: string[];
-      nadir: string[];
-      inter_cycle: string[];
-    };
-  };
-}
+// type RegimenData = {
+//   regimen_code: string;
+//   toxicity_profile: {
+//     high_risk: string[];
+//     moderate: string[];
+//     low: string[];
+//     phase_priorities?: {
+//       pre_session: string[];
+//       post_session: string[];
+//       recovery: string[];
+//       nadir: string[];
+//       inter_cycle: string[];
+//     };
+//   };
+// }
 
 async function updateRegimenToxicityProfiles() {
   console.log('🔄 Updating regimen toxicity profiles...\n');
