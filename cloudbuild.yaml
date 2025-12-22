@@ -40,7 +40,7 @@ steps:
       - '--max-instances=10'
       - '--concurrency=80'
       - '--execution-environment=gen2'
-      - '--set-env-vars=NODE_ENV=production,PORT=8080,DB_HOST=/cloudsql/toxicity-analyzer-prod:us-central1:toxicity-analyzer-db,DB_PORT=5432,DB_NAME=toxicity_analyzer,FIREBASE_PROJECT_ID=toxicity-analyzer-prod,LOG_LEVEL=info'
+      - '--set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/toxicity-analyzer-prod:us-central1:toxicity-analyzer-db,DB_PORT=5432,DB_NAME=toxicity_analyzer,FIREBASE_PROJECT_ID=toxicity-analyzer-prod,LOG_LEVEL=info'
       - '--set-secrets=DB_USER=DB_USER:latest,DB_PASSWORD=DB_PASSWORD:latest'
       - '--set-cloudsql-instances=toxicity-analyzer-prod:us-central1:toxicity-analyzer-db'
       - '--vpc-connector=toxicity-connector'
