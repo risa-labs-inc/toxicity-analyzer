@@ -1,4 +1,5 @@
 import knex, { Knex } from 'knex';
+import knexConfig from '../knexfile';
 
 let dbInstance: Knex | null = null;
 
@@ -12,22 +13,14 @@ let dbInstance: Knex | null = null;
  */
 export function getDb(): Knex {
   if (!dbInstance) {
-    dbInstance = knex({
-      client: 'postgresql',
-      connection: {
-        host: process.env.DB_HOST || 'localhost',
-        port: Number(process.env.DB_PORT) || 5432,
-        database: process.env.DB_NAME || 'toxicity_analyzer_dev',
-        user: process.env.DB_USER || 'postgres',
-        password: process.env.DB_PASSWORD || 'postgres',
-      },
-      pool: {
-        min: 2,
-        max: 10,
-      },
-      // Enable debug mode in development
-      debug: process.env.NODE_ENV === 'development' && process.env.DEBUG === 'true',
-    });
+    const env = process.env.NODE_ENV || 'development';
+    const config = knexConfig[env];
+
+    if (!config) {
+      throw new Error(`No Knex configuration found for environment: ${env}`);
+    }
+
+    dbInstance = knex(config);
   }
 
   return dbInstance;
