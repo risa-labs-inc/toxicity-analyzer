@@ -257,7 +257,7 @@ function TriagePage() {
 
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                       <div className="flex gap-2">
-                        {patient.alerts.map((alert, idx) => (
+                        {patient.alerts.map((alert: string, idx: number) => (
                           <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
                             {alert}
                           </span>
