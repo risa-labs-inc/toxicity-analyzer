@@ -9,9 +9,6 @@ runConfig:
   maxInstances: 10
   concurrency: 80
 
-  # Explicitly require Gen2 execution environment (required for Container Threat Detection)
-  executionEnvironment: gen2
-
   vpcAccess:
     egress: PRIVATE_RANGES_ONLY
     networkInterfaces:
@@ -21,7 +18,8 @@ runConfig:
   env:
     - variable: NODE_ENV
       value: production
-    # NOTE: PORT is set automatically by Cloud Run, do not specify
+    - variable: PORT
+      value: "8080"
     - variable: DB_HOST
       value: "/cloudsql/toxicity-analyzer-prod:us-central1:toxicity-analyzer-db"
     - variable: DB_PORT
