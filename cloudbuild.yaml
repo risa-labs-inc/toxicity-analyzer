@@ -1,5 +1,5 @@
-# Cloud Build configuration for API deployment
-# Builds Docker image and deploys to Cloud Run
+# Cloud Build configuration for API image build
+# Builds Docker image and pushes to GCR
 
 steps:
   # Build Docker image from root (monorepo context)
@@ -11,30 +11,7 @@ steps:
       '.'
     ]
 
-  # Push to Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest']
-
-  # Deploy to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args: [
-      'run', 'deploy', 'toxicity-analyzer-api',
-      '--image', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest',
-      '--region', 'us-central1',
-      '--platform', 'managed',
-      '--allow-unauthenticated',
-      '--memory', '2Gi',
-      '--cpu', '2',
-      '--min-instances', '0',
-      '--max-instances', '10',
-      '--set-env-vars', 'NODE_ENV=production,PORT=8080,DB_HOST=/cloudsql/$PROJECT_ID:us-central1:toxicity-analyzer-db,DB_PORT=5432,DB_NAME=toxicity_analyzer,FIREBASE_PROJECT_ID=$PROJECT_ID,LOG_LEVEL=info',
-      '--set-secrets', 'DB_USER=DB_USER:latest,DB_PASSWORD=DB_PASSWORD:latest',
-      '--vpc-connector', 'toxicity-connector',
-      '--vpc-egress', 'private-ranges-only',
-      '--add-cloudsql-instances', '$PROJECT_ID:us-central1:toxicity-analyzer-db'
-    ]
-
+# Cloud Build will automatically push images listed here
 images:
   - 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest'
 

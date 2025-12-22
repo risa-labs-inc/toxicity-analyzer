@@ -97,12 +97,19 @@ export class QuestionnaireService {
 
     const selectedItems = selectionResult.selectedQuestions.map((q) => q.item);
 
+    // Map CyclePhase to QuestionnaireType
+    const questionnaireType =
+      context.phase === 'nadir' ? 'guardian' :
+      context.phase === 'inter_cycle' ? 'on_demand' :
+      context.phase; // pre_session, post_session, recovery are valid in both
+
     // Create questionnaire record
     const questionnaire = await this.questionnaireRepo.create({
       patientId,
       treatmentId: treatment.treatmentId,
       cycleId: currentCycle.cycleId,
-      questionnaireType: context.phase,
+      questionnaireType,
+      scheduledDate: new Date(),
       treatmentDay: context.treatmentDay,
       dueDate: new Date(),
       status: 'pending',

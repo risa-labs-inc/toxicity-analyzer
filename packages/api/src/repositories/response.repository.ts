@@ -81,7 +81,7 @@ export class ResponseRepository {
    * Get symptom history for patient
    */
   async getSymptomHistory(patientId: string): Promise<Array<{
-    symptomTerm: string;
+    symptomCategory: string;
     lastGrade: number;
     trend: 'improving' | 'worsening' | 'stable';
     lastReportedDate: Date;
@@ -122,7 +122,7 @@ export class ResponseRepository {
     `, [patientId]);
 
     return rows.rows.map((row: any) => ({
-      symptomTerm: row.symptom_term,
+      symptomCategory: row.symptom_term, // Map to symptomCategory to match SymptomHistory interface
       lastGrade: row.last_grade,
       trend: row.trend,
       lastReportedDate: row.last_reported_date,

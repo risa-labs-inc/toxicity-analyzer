@@ -7,7 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "npm install && npm run build --workspace=packages/shared && npm run build --workspace=packages/intelligence-layer && npm run build --workspace=packages/api",
+    "start": "node packages/api/dist/index.js",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -20,6 +21,7 @@
     "deploy:patient": "npm run build:patient && firebase deploy --only hosting:patient-app",
     "deploy:clinician": "npm run build:clinician && firebase deploy --only hosting:clinician-dashboard",
     "deploy:frontend": "npm run build:patient && npm run build:clinician && firebase deploy --only hosting",
+    "deploy:backend": "firebase deploy --only apphosting",
     "deploy:all": "npm run build:production && firebase deploy"
   },
   "devDependencies": {

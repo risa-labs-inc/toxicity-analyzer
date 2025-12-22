@@ -72,7 +72,7 @@ export class ComparisonService {
           }
         : undefined,
       patientHistory.map(h => ({
-        symptomTerm: h.symptomTerm,
+        symptomTerm: h.symptomCategory,
         lastGrade: h.lastGrade,
       }))
     );

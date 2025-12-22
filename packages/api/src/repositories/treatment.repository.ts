@@ -140,7 +140,6 @@ export class TreatmentRepository {
       plannedNextInfusion: row.planned_next_infusion,
       actualNextInfusion: row.actual_next_infusion,
       doseModifications: row.dose_modifications,
-      delayReasons: row.delay_reasons,
       completed: row.completed,
       createdAt: row.created_at,
     };
@@ -162,6 +161,7 @@ export class TreatmentRepository {
       nadirWindowStart: row.nadir_window_start,
       nadirWindowEnd: row.nadir_window_end,
       drugModuleComposition: typeof row.drug_module_composition === 'string' ? JSON.parse(row.drug_module_composition) : row.drug_module_composition,
+      createdAt: row.created_at,
     };
   }
 }

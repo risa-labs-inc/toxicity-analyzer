@@ -18,8 +18,7 @@ runConfig:
   env:
     - variable: NODE_ENV
       value: production
-    - variable: PORT
-      value: "8080"
+    # NOTE: PORT is set automatically by Cloud Run, do not specify
     - variable: DB_HOST
       value: "/cloudsql/toxicity-analyzer-prod:us-central1:toxicity-analyzer-db"
     - variable: DB_PORT
@@ -35,5 +34,5 @@ runConfig:
     - variable: LOG_LEVEL
       value: "info"
 
-buildConfig:
-  rootDirectory: packages/api
+# buildConfig not needed - Firebase buildpack auto-detects from root package.json
+# The root package.json build script will be used automatically

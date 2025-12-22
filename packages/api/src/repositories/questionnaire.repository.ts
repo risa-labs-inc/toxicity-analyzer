@@ -111,6 +111,7 @@ export class QuestionnaireRepository {
       treatmentId: row.treatment_id,
       cycleId: row.cycle_id,
       questionnaireType: row.questionnaire_type,
+      scheduledDate: row.scheduled_date,
       treatmentDay: row.treatment_day,
       dueDate: row.due_date,
       status: row.status,

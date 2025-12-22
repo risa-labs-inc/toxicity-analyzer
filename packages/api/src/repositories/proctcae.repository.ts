@@ -109,6 +109,7 @@ export class ProCTCAERepository {
       responseOptions: typeof row.response_options === 'string' ? JSON.parse(row.response_options) : row.response_options,
       applicablePopulations: row.applicable_populations,
       ctcaeMapping: row.ctcae_mapping,
+      createdAt: row.created_at,
     };
   }
 }

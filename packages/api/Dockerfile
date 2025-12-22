@@ -1,20 +1,28 @@
-# Simple Dockerfile for Toxicity Analyzer API
+# Dockerfile for Toxicity Analyzer API
 FROM node:20-slim
 
 WORKDIR /app
 
-# Copy everything from monorepo root
-COPY . .
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
 
-# Install dependencies
+# Copy only backend packages (not frontends)
+COPY packages/shared ./packages/shared
+COPY packages/intelligence-layer ./packages/intelligence-layer
+COPY packages/api ./packages/api
+
+# Install all dependencies
 RUN npm install
 
-# Build all packages
-RUN npm run build --workspaces
+# Build only backend packages
+RUN npm run build --workspace=packages/shared
+RUN npm run build --workspace=packages/intelligence-layer
+RUN npm run build --workspace=packages/api
 
-# Expose port
+# Expose Cloud Run port
 EXPOSE 8080
 
-# Start API server
+# Start API
 WORKDIR /app/packages/api
 CMD ["node", "dist/index.js"]
