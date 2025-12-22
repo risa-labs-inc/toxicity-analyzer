@@ -1,5 +1,5 @@
 import knex, { Knex } from 'knex';
-import knexConfig from '../knexfile';
+import knexConfig from '../../knexfile';
 
 let dbInstance: Knex | null = null;
 
