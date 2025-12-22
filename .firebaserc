@@ -3,5 +3,18 @@
     "default": "toxicity-analyzer-prod",
     "staging": "toxicity-analyzer-prod",
     "production": "toxicity-analyzer-prod"
-  }
+  },
+  "targets": {
+    "toxicity-analyzer-prod": {
+      "hosting": {
+        "patient-app": [
+          "toxicity-analyzer-patient"
+        ],
+        "clinician-dashboard": [
+          "toxicity-analyzer-clinician"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

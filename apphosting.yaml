@@ -3,11 +3,14 @@
 
 runConfig:
   runtime: nodejs20
-  cpu: 2                    # Forces Cloud Run Gen2
+  cpu: 2
   memoryMiB: 2048          # 2GB RAM for questionnaire generation
   minInstances: 0           # Cost optimization - cold starts acceptable
   maxInstances: 10
   concurrency: 80
+
+  # Explicitly require Gen2 execution environment (required for Container Threat Detection)
+  executionEnvironment: gen2
 
   vpcAccess:
     egress: PRIVATE_RANGES_ONLY
