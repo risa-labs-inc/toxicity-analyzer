@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import QuestionnairePage from './pages/QuestionnairePage';
+import ReviewPage from './pages/ReviewPage';
 import ResultsPage from './pages/ResultsPage';
-import { patientApi, QuestionnaireMode } from './services/api';
+import { patientApi } from './services/api';
 
 function LoginPage() {
   const [selectedPatient, setSelectedPatient] = useState('');
@@ -76,12 +77,16 @@ function DashboardPage() {
     day: number;
     phase: string;
   } | null>(null);
+  const [patientProfile, setPatientProfile] = React.useState<{
+    fullName?: string;
+    patientId: string;
+  } | null>(null);
   const [generating, setGenerating] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [selectedMode, setSelectedMode] = React.useState<QuestionnaireMode>('drug-module');
 
   React.useEffect(() => {
     loadTreatmentInfo();
+    loadPatientProfile();
   }, []);
 
   const loadTreatmentInfo = async () => {
@@ -99,6 +104,18 @@ function DashboardPage() {
       console.error('Error loading treatment info:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadPatientProfile = async () => {
+    try {
+      const response = await patientApi.getProfile();
+      setPatientProfile({
+        fullName: response.data.patient.fullName,
+        patientId: response.data.patient.patientId
+      });
+    } catch (error) {
+      console.error('Error loading patient profile:', error);
     }
   };
 
@@ -121,7 +138,7 @@ function DashboardPage() {
   const handleStartQuestionnaire = async () => {
     try {
       setGenerating(true);
-      const response = await patientApi.generateQuestionnaire(selectedMode);
+      const response = await patientApi.generateQuestionnaire('drug-module');
       const questionnaireId = response.data.questionnaire.questionnaireId;
       navigate(`/questionnaire/${questionnaireId}`);
     } catch (error: any) {
@@ -139,7 +156,14 @@ function DashboardPage() {
           <div className="flex justify-between items-center h-16">
             <div>
               <h1 className="text-xl font-bold text-gray-900">Patient Portal</h1>
-              <p className="text-xs text-gray-500">Patient ID: {patientId}</p>
+              {patientProfile?.fullName ? (
+                <>
+                  <p className="text-sm text-gray-900 font-medium">{patientProfile.fullName}</p>
+                  <p className="text-xs text-gray-500">ID: {patientId}</p>
+                </>
+              ) : (
+                <p className="text-xs text-gray-500">Patient ID: {patientId}</p>
+              )}
             </div>
             <button
               onClick={handleLogout}
@@ -158,59 +182,86 @@ function DashboardPage() {
           </div>
         ) : (
           <>
-            {/* Mode Selector */}
-            <div className="mb-6 bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Questionnaire Generation Mode (Demo)
-              </label>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setSelectedMode('drug-module')}
-                  className={`flex-1 px-4 py-3 rounded-lg border-2 transition text-left ${
-                    selectedMode === 'drug-module'
-                      ? 'bg-teal-50 border-teal-600'
-                      : 'bg-white border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="font-semibold text-sm">Drug-Module</div>
-                  <div className="text-xs text-gray-600 mt-1">Better safety coverage (Recommended)</div>
-                </button>
-                <button
-                  onClick={() => setSelectedMode('regimen')}
-                  className={`flex-1 px-4 py-3 rounded-lg border-2 transition text-left ${
-                    selectedMode === 'regimen'
-                      ? 'bg-blue-50 border-blue-600'
-                      : 'bg-white border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="font-semibold text-sm">Regimen-Phase</div>
-                  <div className="text-xs text-gray-600 mt-1">Lower question burden (Legacy)</div>
-                </button>
+            {/* Treatment Timeline Card */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">Current Treatment</h3>
+                  <p className="text-2xl font-bold text-gray-900">{treatmentInfo?.regimen || 'Loading...'}</p>
+                  <p className="text-sm text-gray-600 mt-1">Cycle {treatmentInfo?.cycle || '-'}, Day {treatmentInfo?.day || '-'}</p>
+                </div>
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                  {treatmentInfo?.phase || 'Loading...'}
+                </span>
+              </div>
+
+              {/* Timeline Visualization */}
+              <div className="mt-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-gray-500">Treatment Cycle Timeline</span>
+                </div>
+                <div className="relative">
+                  {/* Timeline bar */}
+                  <div className="flex items-center gap-1">
+                    {[
+                      { phase: 'Pre-Session', color: 'bg-purple-500', label: 'Pre' },
+                      { phase: 'Post-Session', color: 'bg-pink-500', label: 'Post' },
+                      { phase: 'Nadir Window', color: 'bg-red-500', label: 'Nadir' },
+                      { phase: 'Recovery', color: 'bg-yellow-500', label: 'Adjustment' },
+                      { phase: 'Inter-Cycle', color: 'bg-green-500', label: 'Inter' }
+                    ].map((item) => {
+                      const isActive = treatmentInfo?.phase === item.phase;
+                      return (
+                        <div key={item.phase} className="flex-1">
+                          <div
+                            className={`h-8 rounded transition-all ${
+                              isActive
+                                ? `${item.color} ring-2 ring-offset-2 ring-blue-400`
+                                : 'bg-gray-200'
+                            }`}
+                          />
+                          <p className={`text-xs text-center mt-2 ${
+                            isActive ? 'font-semibold text-gray-900' : 'text-gray-500'
+                          }`}>
+                            {item.label}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Current Treatment</h3>
-                <p className="text-2xl font-bold text-gray-900">{treatmentInfo?.regimen || 'Loading...'}</p>
-                <p className="text-sm text-gray-600 mt-1">Cycle {treatmentInfo?.cycle || '-'}, Day {treatmentInfo?.day || '-'}</p>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Treatment Phase</h3>
-                <p className="text-2xl font-bold text-blue-600">{treatmentInfo?.phase || 'Loading...'}</p>
-              </div>
-
+            <div className="grid gap-6 md:grid-cols-2">
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                 <h3 className="text-sm font-medium text-gray-500 mb-2">Next Action</h3>
-                <p className="text-sm text-gray-900">Complete your symptom questionnaire</p>
+                <p className="text-sm text-gray-900 mb-4">Complete your symptom questionnaire</p>
                 <button
                   onClick={handleStartQuestionnaire}
                   disabled={generating}
-                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition transform hover:scale-[1.02]"
                 >
                   {generating ? 'Generating...' : 'Start Questionnaire'}
                 </button>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <h3 className="text-sm font-medium text-gray-500 mb-2">Quick Info</h3>
+                <div className="space-y-3 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span className="text-blue-600">📋</span>
+                    <span>Personalized symptom tracking</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-600">📊</span>
+                    <span>Monitor trends over time</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-purple-600">🔔</span>
+                    <span>Receive care notifications</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -251,7 +302,8 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/questionnaire/:questionnaireId" element={<QuestionnairePage />} />
-        <Route path="/results" element={<ResultsPage />} />
+        <Route path="/review/:questionnaireId" element={<ReviewPage />} />
+        <Route path="/results/:questionnaireId" element={<ResultsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

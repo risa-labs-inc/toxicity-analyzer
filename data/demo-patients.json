@@ -1,10 +1,10 @@
 {
-  "version": "1.1",
-  "last_sync": "2025-12-20T12:00:00Z",
+  "version": "1.2",
+  "last_sync": "2025-12-22T12:00:00Z",
   "patients": [
     {
       "patient_id": "P001",
-      "profile": { "age": 45, "bmi": 24.2, "comorbidities": ["None"] },
+      "profile": { "name": "Sarah Johnson", "age": 45, "gender": "female", "ethnicity": "White", "bmi": 24.2, "comorbidities": ["None"] },
       "regimen": {
         "name": "AC-T",
         "current_phase": "AC",
@@ -19,7 +19,7 @@
     },
     {
       "patient_id": "P002",
-      "profile": { "age": 58, "bmi": 28.5, "comorbidities": ["Diabetes Type II"] },
+      "profile": { "name": "Maria Garcia", "age": 58, "gender": "female", "ethnicity": "Hispanic/Latino", "bmi": 28.5, "comorbidities": ["Diabetes Type II"] },
       "regimen": {
         "name": "AC-T",
         "current_phase": "T",
@@ -34,7 +34,7 @@
     },
     {
       "patient_id": "P003",
-      "profile": { "age": 65, "bmi": 22.0, "comorbidities": ["Hypertension"] },
+      "profile": { "name": "Jennifer Lee", "age": 65, "gender": "female", "ethnicity": "Asian", "bmi": 22.0, "comorbidities": ["Hypertension"] },
       "regimen": {
         "name": "AC-T",
         "current_phase": "T",
@@ -50,7 +50,7 @@
     },
     {
       "patient_id": "P004",
-      "profile": { "age": 52, "bmi": 26.1, "comorbidities": ["None"] },
+      "profile": { "name": "Emily Brown", "age": 52, "gender": "female", "ethnicity": "Black/African American", "bmi": 26.1, "comorbidities": ["None"] },
       "regimen": {
         "name": "TC",
         "drugs": ["Docetaxel", "Cyclophosphamide"],
@@ -64,7 +64,7 @@
     },
     {
       "patient_id": "P005",
-      "profile": { "age": 70, "bmi": 23.5, "comorbidities": ["Heart Disease"] },
+      "profile": { "name": "Linda Wilson", "age": 70, "gender": "female", "ethnicity": "White", "bmi": 23.5, "comorbidities": ["Heart Disease"] },
       "regimen": {
         "name": "TC",
         "drugs": ["Docetaxel", "Cyclophosphamide"],
@@ -78,7 +78,7 @@
     },
     {
       "patient_id": "P006",
-      "profile": { "age": 48, "bmi": 30.2, "comorbidities": ["None"] },
+      "profile": { "name": "Patricia Davis", "age": 48, "gender": "female", "ethnicity": "Hispanic/Latino", "bmi": 30.2, "comorbidities": ["None"] },
       "regimen": {
         "name": "TC",
         "drugs": ["Docetaxel", "Cyclophosphamide"],
@@ -90,7 +90,7 @@
     },
     {
       "patient_id": "P007",
-      "profile": { "age": 55, "bmi": 25.0, "comorbidities": ["None"] },
+      "profile": { "name": "Susan Martinez", "age": 55, "gender": "female", "ethnicity": "Hispanic/Latino", "bmi": 25.0, "comorbidities": ["None"] },
       "regimen": {
         "name": "T-DM1",
         "drugs": ["Trastuzumab Emtansine"],
@@ -104,7 +104,7 @@
     },
     {
       "patient_id": "P008",
-      "profile": { "age": 62, "bmi": 27.4, "comorbidities": ["Hypertension"] },
+      "profile": { "name": "Nancy Anderson", "age": 62, "gender": "female", "ethnicity": "White", "bmi": 27.4, "comorbidities": ["Hypertension"] },
       "regimen": {
         "name": "T-DM1",
         "drugs": ["Trastuzumab Emtansine"],
@@ -118,7 +118,7 @@
     },
     {
       "patient_id": "P009",
-      "profile": { "age": 41, "bmi": 22.8, "comorbidities": ["None"] },
+      "profile": { "name": "Jessica Taylor", "age": 41, "gender": "female", "ethnicity": "Asian", "bmi": 22.8, "comorbidities": ["None"] },
       "regimen": {
         "name": "T-DM1",
         "drugs": ["Trastuzumab Emtansine"],
@@ -130,7 +130,7 @@
     },
     {
       "patient_id": "P010",
-      "profile": { "age": 67, "bmi": 21.5, "comorbidities": ["None"] },
+      "profile": { "name": "Karen Thomas", "age": 67, "gender": "female", "ethnicity": "White", "bmi": 21.5, "comorbidities": ["None"] },
       "regimen": {
         "name": "Capecitabine",
         "drugs": ["Capecitabine"],
@@ -144,7 +144,7 @@
     },
     {
       "patient_id": "P011",
-      "profile": { "age": 50, "bmi": 26.5, "comorbidities": ["None"] },
+      "profile": { "name": "Lisa Jackson", "age": 50, "gender": "female", "ethnicity": "Black/African American", "bmi": 26.5, "comorbidities": ["None"] },
       "regimen": {
         "name": "Capecitabine",
         "drugs": ["Capecitabine"],
@@ -158,7 +158,7 @@
     },
     {
       "patient_id": "P012",
-      "profile": { "age": 59, "bmi": 29.0, "comorbidities": ["Diabetes Type II"] },
+      "profile": { "name": "Betty White", "age": 59, "gender": "female", "ethnicity": "White", "bmi": 29.0, "comorbidities": ["Diabetes Type II"] },
       "regimen": {
         "name": "Capecitabine",
         "drugs": ["Capecitabine"],
@@ -173,7 +173,7 @@
     },
     {
       "patient_id": "P013",
-      "profile": { "age": 54, "bmi": 24.8, "comorbidities": ["None"] },
+      "profile": { "name": "Helen Moore", "age": 54, "gender": "female", "ethnicity": "White", "bmi": 24.8, "comorbidities": ["None"] },
       "regimen": {
         "name": "Pembrolizumab",
         "drugs": ["Pembrolizumab", "Paclitaxel", "Carboplatin"],
@@ -187,7 +187,7 @@
     },
     {
       "patient_id": "P014",
-      "profile": { "age": 49, "bmi": 23.1, "comorbidities": ["COPD"] },
+      "profile": { "name": "Sandra Martin", "age": 49, "gender": "female", "ethnicity": "Hispanic/Latino", "bmi": 23.1, "comorbidities": ["COPD"] },
       "regimen": {
         "name": "Pembrolizumab",
         "drugs": ["Pembrolizumab"],
@@ -201,7 +201,7 @@
     },
     {
       "patient_id": "P015",
-      "profile": { "age": 61, "bmi": 27.0, "comorbidities": ["None"] },
+      "profile": { "name": "Donna Thompson", "age": 61, "gender": "female", "ethnicity": "Black/African American", "bmi": 27.0, "comorbidities": ["None"] },
       "regimen": {
         "name": "Pembrolizumab",
         "drugs": ["Pembrolizumab"],
@@ -216,7 +216,7 @@
     },
     {
       "patient_id": "P016",
-      "profile": { "age": 53, "bmi": 25.6, "comorbidities": ["None"] },
+      "profile": { "name": "Michelle Robinson", "age": 53, "gender": "female", "ethnicity": "Black/African American", "bmi": 25.6, "comorbidities": ["None"] },
       "regimen": {
         "name": "AC-T",
         "current_phase": "AC",
@@ -232,7 +232,7 @@
     },
     {
       "patient_id": "P017",
-      "profile": { "age": 57, "bmi": 28.3, "comorbidities": ["Hypertension"] },
+      "profile": { "name": "Carol Rodriguez", "age": 57, "gender": "female", "ethnicity": "Hispanic/Latino", "bmi": 28.3, "comorbidities": ["Hypertension"] },
       "regimen": {
         "name": "TC",
         "drugs": ["Docetaxel", "Cyclophosphamide"],

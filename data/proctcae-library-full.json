@@ -1,0 +1,2161 @@
+{
+  "version": "1.0-complete",
+  "source": "NCI PRO-CTCAE® Item Library Version 1.0 (Complete 78 Symptoms + Critical Safety Items)",
+  "last_updated": "2025-12-22",
+  "description": "Complete PRO-CTCAE library with all 78 validated symptom terms (118 items) plus 4 critical safety monitoring items for chemotherapy (3 items)",
+  "total_symptoms": 82,
+  "total_items": 121,
+  "items": [
+    {
+      "item_number": 1,
+      "symptom_term": "Abdominal pain",
+      "items": [
+        {
+          "item_code": "ABDOMINAL_PAIN_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have PAIN IN THE ABDOMEN (BELLY AREA)?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "ABDOMINAL_PAIN_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PAIN IN THE ABDOMEN (BELLY AREA) at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "ABDOMINAL_PAIN_INTERF",
+          "symptom_category": "gastrointestinal",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did PAIN IN THE ABDOMEN (BELLY AREA) INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 2,
+      "symptom_term": "Alopecia",
+      "items": [
+        {
+          "item_code": "ALOPECIA_PRESENT",
+          "symptom_category": "dermatologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have HAIR LOSS?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 3,
+      "symptom_term": "Anorgasmia",
+      "items": [
+        {
+          "item_code": "ANORGASMIA_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your INABILITY TO HAVE AN ORGASM at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 4,
+      "symptom_term": "Anorexia",
+      "items": [
+        {
+          "item_code": "ANOREXIA_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DECREASED APPETITE at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "ANOREXIA_INTERF",
+          "symptom_category": "gastrointestinal",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did DECREASED APPETITE INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 5,
+      "symptom_term": "Anxiety",
+      "items": [
+        {
+          "item_code": "ANXIETY_FREQ",
+          "symptom_category": "psychological",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you feel ANXIOUS?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "ANXIETY_SEV",
+          "symptom_category": "psychological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your ANXIETY at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "ANXIETY_INTERF",
+          "symptom_category": "psychological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did ANXIETY INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 6,
+      "symptom_term": "Arthralgia",
+      "items": [
+        {
+          "item_code": "ARTHRALGIA_FREQ",
+          "symptom_category": "musculoskeletal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have ACHING JOINTS?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "ARTHRALGIA_SEV",
+          "symptom_category": "musculoskeletal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your ACHING JOINTS at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "ARTHRALGIA_INTERF",
+          "symptom_category": "musculoskeletal",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did ACHING JOINTS INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 7,
+      "symptom_term": "Bloating",
+      "items": [
+        {
+          "item_code": "BLOATING_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have BLOATING OF THE ABDOMEN (BELLY)?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "BLOATING_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your BLOATING OF THE ABDOMEN (BELLY) at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 8,
+      "symptom_term": "Blurred vision",
+      "items": [
+        {
+          "item_code": "BLURRED_VISION_SEV",
+          "symptom_category": "visual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your BLURRY VISION at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "BLURRED_VISION_INTERF",
+          "symptom_category": "visual",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did BLURRY VISION INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 9,
+      "symptom_term": "Body odor",
+      "items": [
+        {
+          "item_code": "BODY_ODOR_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your BODY ODOR at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 10,
+      "symptom_term": "Bruising",
+      "items": [
+        {
+          "item_code": "BRUISING_SEV",
+          "symptom_category": "hematologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your BRUISING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 11,
+      "symptom_term": "Cheilitis",
+      "items": [
+        {
+          "item_code": "CHEILITIS_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your LIP INFLAMMATION at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 12,
+      "symptom_term": "Chills",
+      "items": [
+        {
+          "item_code": "CHILLS_SEV",
+          "symptom_category": "constitutional",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your CHILLS at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 13,
+      "symptom_term": "Concentration impairment",
+      "items": [
+        {
+          "item_code": "CONCENTRATION_SEV",
+          "symptom_category": "neurological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PROBLEMS WITH CONCENTRATION at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "CONCENTRATION_INTERF",
+          "symptom_category": "neurological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did PROBLEMS WITH CONCENTRATION INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 14,
+      "symptom_term": "Constipation",
+      "items": [
+        {
+          "item_code": "CONSTIPATION_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your CONSTIPATION at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 15,
+      "symptom_term": "Cough",
+      "items": [
+        {
+          "item_code": "COUGH_SEV",
+          "symptom_category": "pulmonary",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your COUGH at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "COUGH_INTERF",
+          "symptom_category": "pulmonary",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did COUGH INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 16,
+      "symptom_term": "Delayed orgasm",
+      "items": [
+        {
+          "item_code": "DELAYED_ORGASM_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DELAYED ORGASM at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 17,
+      "symptom_term": "Depression",
+      "items": [
+        {
+          "item_code": "DEPRESSION_FREQ",
+          "symptom_category": "psychological",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have SAD OR UNHAPPY FEELINGS?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "DEPRESSION_SEV",
+          "symptom_category": "psychological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your SAD OR UNHAPPY FEELINGS at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "DEPRESSION_INTERF",
+          "symptom_category": "psychological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did SAD OR UNHAPPY FEELINGS INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 18,
+      "symptom_term": "Dermatitis radiation",
+      "items": [
+        {
+          "item_code": "DERMATITIS_RAD_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your RADIATION SKIN REACTION at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 19,
+      "symptom_term": "Diarrhea",
+      "items": [
+        {
+          "item_code": "DIARRHEA_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have LOOSE OR WATERY STOOLS (BOWEL MOVEMENTS)?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 20,
+      "symptom_term": "Dizziness",
+      "items": [
+        {
+          "item_code": "DIZZINESS_SEV",
+          "symptom_category": "neurological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DIZZINESS at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "DIZZINESS_INTERF",
+          "symptom_category": "neurological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did DIZZINESS INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 21,
+      "symptom_term": "Dry mouth",
+      "items": [
+        {
+          "item_code": "DRY_MOUTH_SEV",
+          "symptom_category": "oral",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DRY MOUTH at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 22,
+      "symptom_term": "Dry skin",
+      "items": [
+        {
+          "item_code": "DRY_SKIN_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DRY SKIN at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 23,
+      "symptom_term": "Dysgeusia",
+      "items": [
+        {
+          "item_code": "DYSGEUSIA_SEV",
+          "symptom_category": "oral",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PROBLEMS WITH TASTING FOOD OR DRINK at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 24,
+      "symptom_term": "Dyspepsia",
+      "items": [
+        {
+          "item_code": "DYSPEPSIA_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have HEARTBURN?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "DYSPEPSIA_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your HEARTBURN at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 25,
+      "symptom_term": "Dysphagia",
+      "items": [
+        {
+          "item_code": "DYSPHAGIA_SEV",
+          "symptom_category": "oral",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DIFFICULTY SWALLOWING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 26,
+      "symptom_term": "Dyspareunia",
+      "items": [
+        {
+          "item_code": "DYSPAREUNIA_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PAIN OR DISCOMFORT WITH VAGINAL PENETRATION OR INTERCOURSE at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 27,
+      "symptom_term": "Dyspnea",
+      "items": [
+        {
+          "item_code": "DYSPNEA_SEV",
+          "symptom_category": "pulmonary",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your SHORTNESS OF BREATH at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "DYSPNEA_INTERF",
+          "symptom_category": "pulmonary",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did SHORTNESS OF BREATH INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 28,
+      "symptom_term": "Edema limbs",
+      "items": [
+        {
+          "item_code": "EDEMA_LIMBS_SEV",
+          "symptom_category": "constitutional",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your SWELLING IN YOUR ARMS OR LEGS at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 29,
+      "symptom_term": "Ejaculation disorder",
+      "items": [
+        {
+          "item_code": "EJACULATION_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your EJACULATION PROBLEMS at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 30,
+      "symptom_term": "Epistaxis",
+      "items": [
+        {
+          "item_code": "EPISTAXIS_SEV",
+          "symptom_category": "hematologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your NOSEBLEEDS at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 31,
+      "symptom_term": "Erectile dysfunction",
+      "items": [
+        {
+          "item_code": "ERECTILE_DYSFUNCTION_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PROBLEMS HAVING AN ERECTION at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 32,
+      "symptom_term": "Fatigue",
+      "items": [
+        {
+          "item_code": "FATIGUE_SEV",
+          "symptom_category": "constitutional",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your FATIGUE, TIREDNESS, OR LACK OF ENERGY at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "FATIGUE_INTERF",
+          "symptom_category": "constitutional",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did FATIGUE, TIREDNESS, OR LACK OF ENERGY INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 33,
+      "symptom_term": "Fecal incontinence",
+      "items": [
+        {
+          "item_code": "FECAL_INCONTINENCE_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have LOSS OF CONTROL OF YOUR BOWELS?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 34,
+      "symptom_term": "Flashing lights",
+      "items": [
+        {
+          "item_code": "FLASHING_LIGHTS_PRESENT",
+          "symptom_category": "visual",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you see FLASHING LIGHTS?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 35,
+      "symptom_term": "Flatulence",
+      "items": [
+        {
+          "item_code": "FLATULENCE_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have GAS?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 36,
+      "symptom_term": "Floaters",
+      "items": [
+        {
+          "item_code": "FLOATERS_PRESENT",
+          "symptom_category": "visual",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you see SPOTS OR FLOATERS IN YOUR VISION?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 37,
+      "symptom_term": "Gynecomastia",
+      "items": [
+        {
+          "item_code": "GYNECOMASTIA_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your BREAST ENLARGEMENT OR TENDERNESS at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 38,
+      "symptom_term": "Headache",
+      "items": [
+        {
+          "item_code": "HEADACHE_FREQ",
+          "symptom_category": "neurological",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have a HEADACHE?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "HEADACHE_SEV",
+          "symptom_category": "neurological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your HEADACHE at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "HEADACHE_INTERF",
+          "symptom_category": "neurological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did HEADACHE INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 39,
+      "symptom_term": "Hiccups",
+      "items": [
+        {
+          "item_code": "HICCUPS_FREQ",
+          "symptom_category": "pulmonary",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have HICCUPS?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 40,
+      "symptom_term": "Hoarseness",
+      "items": [
+        {
+          "item_code": "HOARSENESS_SEV",
+          "symptom_category": "pulmonary",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your HOARSENESS at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 41,
+      "symptom_term": "Hot flashes",
+      "items": [
+        {
+          "item_code": "HOT_FLASHES_FREQ",
+          "symptom_category": "constitutional",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have HOT FLASHES?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "HOT_FLASHES_SEV",
+          "symptom_category": "constitutional",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your HOT FLASHES at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "HOT_FLASHES_INTERF",
+          "symptom_category": "constitutional",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did HOT FLASHES INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 42,
+      "symptom_term": "Hyperhidrosis",
+      "items": [
+        {
+          "item_code": "HYPERHIDROSIS_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your INCREASED SWEATING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 43,
+      "symptom_term": "Hypohidrosis",
+      "items": [
+        {
+          "item_code": "HYPOHIDROSIS_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your DECREASED SWEATING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 44,
+      "symptom_term": "Injection site reaction",
+      "items": [
+        {
+          "item_code": "INJECTION_SITE_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PAIN OR SWELLING AT INJECTION SITE at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 45,
+      "symptom_term": "Insomnia",
+      "items": [
+        {
+          "item_code": "INSOMNIA_SEV",
+          "symptom_category": "neurological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your INSOMNIA (INCLUDING DIFFICULTY FALLING ASLEEP, STAYING ASLEEP, OR WAKING UP EARLY) at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "INSOMNIA_INTERF",
+          "symptom_category": "neurological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did INSOMNIA (INCLUDING DIFFICULTY FALLING ASLEEP, STAYING ASLEEP, OR WAKING UP EARLY) INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 46,
+      "symptom_term": "Irregular menstruation",
+      "items": [
+        {
+          "item_code": "IRREGULAR_MENSTRUATION_PRESENT",
+          "symptom_category": "sexual",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have IRREGULAR MENSTRUAL BLEEDING (PERIODS)?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 47,
+      "symptom_term": "Libido decreased",
+      "items": [
+        {
+          "item_code": "LIBIDO_DECREASED_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your LOSS OR LACK OF INTEREST IN SEX at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 48,
+      "symptom_term": "Memory impairment",
+      "items": [
+        {
+          "item_code": "MEMORY_SEV",
+          "symptom_category": "neurological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PROBLEMS WITH MEMORY at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "MEMORY_INTERF",
+          "symptom_category": "neurological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did PROBLEMS WITH MEMORY INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 49,
+      "symptom_term": "Mucositis oral",
+      "items": [
+        {
+          "item_code": "MUCOSITIS_ORAL_SEV",
+          "symptom_category": "oral",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your MOUTH OR THROAT SORES at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "MUCOSITIS_ORAL_INTERF",
+          "symptom_category": "oral",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did MOUTH OR THROAT SORES INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 50,
+      "symptom_term": "Myalgia",
+      "items": [
+        {
+          "item_code": "MYALGIA_FREQ",
+          "symptom_category": "musculoskeletal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have ACHING MUSCLES?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "MYALGIA_SEV",
+          "symptom_category": "musculoskeletal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your ACHING MUSCLES at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "MYALGIA_INTERF",
+          "symptom_category": "musculoskeletal",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did ACHING MUSCLES INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 51,
+      "symptom_term": "Nail discoloration",
+      "items": [
+        {
+          "item_code": "NAIL_DISCOLORATION_PRESENT",
+          "symptom_category": "dermatologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have CHANGES IN NAIL COLOR?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 52,
+      "symptom_term": "Nail loss",
+      "items": [
+        {
+          "item_code": "NAIL_LOSS_PRESENT",
+          "symptom_category": "dermatologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have NAIL LOSS?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 53,
+      "symptom_term": "Nail ridging",
+      "items": [
+        {
+          "item_code": "NAIL_RIDGING_PRESENT",
+          "symptom_category": "dermatologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have RIDGES IN NAILS?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 54,
+      "symptom_term": "Nausea",
+      "items": [
+        {
+          "item_code": "NAUSEA_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have NAUSEA?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "NAUSEA_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your NAUSEA at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 55,
+      "symptom_term": "Pain",
+      "items": [
+        {
+          "item_code": "PAIN_FREQ",
+          "symptom_category": "pain",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have GENERAL PAIN?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "PAIN_SEV",
+          "symptom_category": "pain",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your GENERAL PAIN at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "PAIN_INTERF",
+          "symptom_category": "pain",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did GENERAL PAIN INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 56,
+      "symptom_term": "Palmar-plantar erythrodysesthesia syndrome",
+      "items": [
+        {
+          "item_code": "HAND_FOOT_SYNDROME_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your REDNESS, PAIN, SWELLING, OR NUMBNESS OF HANDS OR FEET at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "HAND_FOOT_SYNDROME_INTERF",
+          "symptom_category": "dermatologic",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did REDNESS, PAIN, SWELLING, OR NUMBNESS OF HANDS OR FEET INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 57,
+      "symptom_term": "Palpitations",
+      "items": [
+        {
+          "item_code": "PALPITATIONS_FREQ",
+          "symptom_category": "cardiac",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you feel a POUNDING OR RACING HEARTBEAT?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "PALPITATIONS_SEV",
+          "symptom_category": "cardiac",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your POUNDING OR RACING HEARTBEAT at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 58,
+      "symptom_term": "Peripheral sensory neuropathy",
+      "items": [
+        {
+          "item_code": "NEUROPATHY_SEV",
+          "symptom_category": "neurological",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your NUMBNESS OR TINGLING IN HANDS OR FEET at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "NEUROPATHY_INTERF",
+          "symptom_category": "neurological",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did NUMBNESS OR TINGLING IN HANDS OR FEET INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 59,
+      "symptom_term": "Photosensitivity",
+      "items": [
+        {
+          "item_code": "PHOTOSENSITIVITY_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your SKIN SENSITIVITY TO SUNLIGHT at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 60,
+      "symptom_term": "Pruritus",
+      "items": [
+        {
+          "item_code": "PRURITUS_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your ITCHING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 61,
+      "symptom_term": "Rash acneiform",
+      "items": [
+        {
+          "item_code": "RASH_ACNE_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your ACNE OR PIMPLES at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 62,
+      "symptom_term": "Rash maculo-papular",
+      "items": [
+        {
+          "item_code": "RASH_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your SKIN RASH at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 63,
+      "symptom_term": "Skin hyperpigmentation",
+      "items": [
+        {
+          "item_code": "SKIN_HYPERPIGMENTATION_PRESENT",
+          "symptom_category": "dermatologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have DARKENING OF THE SKIN?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 64,
+      "symptom_term": "Skin ulceration",
+      "items": [
+        {
+          "item_code": "SKIN_ULCER_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your SKIN SORES OR ULCERS at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 65,
+      "symptom_term": "Striae",
+      "items": [
+        {
+          "item_code": "STRIAE_PRESENT",
+          "symptom_category": "dermatologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have STRETCH MARKS?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 66,
+      "symptom_term": "Tinnitus",
+      "items": [
+        {
+          "item_code": "TINNITUS_SEV",
+          "symptom_category": "auditory",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your RINGING IN EARS at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 67,
+      "symptom_term": "Urine discoloration",
+      "items": [
+        {
+          "item_code": "URINE_DISCOLORATION_PRESENT",
+          "symptom_category": "genitourinary",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have CHANGES IN URINE COLOR?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 68,
+      "symptom_term": "Urinary frequency",
+      "items": [
+        {
+          "item_code": "URINARY_FREQUENCY_FREQ",
+          "symptom_category": "genitourinary",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, were there times when you had to URINATE FREQUENTLY?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "URINARY_FREQUENCY_INTERF",
+          "symptom_category": "genitourinary",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did FREQUENT URINATION INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 69,
+      "symptom_term": "Urinary incontinence",
+      "items": [
+        {
+          "item_code": "URINARY_INCONTINENCE_FREQ",
+          "symptom_category": "genitourinary",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have LOSS OF CONTROL OF URINE (LEAKING)?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 70,
+      "symptom_term": "Urinary tract pain",
+      "items": [
+        {
+          "item_code": "URINARY_TRACT_PAIN_SEV",
+          "symptom_category": "genitourinary",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your PAIN OR BURNING WITH URINATION at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 71,
+      "symptom_term": "Urinary urgency",
+      "items": [
+        {
+          "item_code": "URINARY_URGENCY_FREQ",
+          "symptom_category": "genitourinary",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you feel an URGE TO URINATE ALL OF A SUDDEN?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "URINARY_URGENCY_INTERF",
+          "symptom_category": "genitourinary",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did SUDDEN URGES TO URINATE INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 72,
+      "symptom_term": "Urticaria",
+      "items": [
+        {
+          "item_code": "URTICARIA_SEV",
+          "symptom_category": "dermatologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your HIVES at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 73,
+      "symptom_term": "Vaginal discharge",
+      "items": [
+        {
+          "item_code": "VAGINAL_DISCHARGE_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your VAGINAL DISCHARGE (NOT MENSTRUAL BLEEDING) at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 74,
+      "symptom_term": "Vaginal dryness",
+      "items": [
+        {
+          "item_code": "VAGINAL_DRYNESS_SEV",
+          "symptom_category": "sexual",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your VAGINAL DRYNESS at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 75,
+      "symptom_term": "Voice alteration",
+      "items": [
+        {
+          "item_code": "VOICE_ALTERATION_SEV",
+          "symptom_category": "pulmonary",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your VOICE CHANGES at their WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 76,
+      "symptom_term": "Vomiting",
+      "items": [
+        {
+          "item_code": "VOMITING_FREQ",
+          "symptom_category": "gastrointestinal",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have VOMITING?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "VOMITING_SEV",
+          "symptom_category": "gastrointestinal",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your VOMITING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 77,
+      "symptom_term": "Watering eyes",
+      "items": [
+        {
+          "item_code": "WATERING_EYES_FREQ",
+          "symptom_category": "visual",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have WATERY OR TEARING EYES?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 78,
+      "symptom_term": "Wheezing",
+      "items": [
+        {
+          "item_code": "WHEEZING_SEV",
+          "symptom_category": "pulmonary",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your WHEEZING (WHISTLING NOISE IN THE CHEST WITH BREATHING) at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 79,
+      "symptom_term": "Fever",
+      "is_critical_safety": true,
+      "items": [
+        {
+          "item_code": "FEVER_PRESENT",
+          "symptom_category": "constitutional",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have any FEVER (temperature over 100.4°F or 38°C)?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        },
+        {
+          "item_code": "FEVER_SEV",
+          "symptom_category": "constitutional",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your FEVER at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 80,
+      "symptom_term": "Chest pain",
+      "is_critical_safety": true,
+      "items": [
+        {
+          "item_code": "CHEST_PAIN_FREQ",
+          "symptom_category": "cardiac",
+          "attribute": "frequency",
+          "question_text": "In the last 7 days, how OFTEN did you have CHEST PAIN?",
+          "response_type": "frequency_5pt",
+          "response_options": [
+            {"value": 0, "label": "Never"},
+            {"value": 1, "label": "Rarely"},
+            {"value": 2, "label": "Occasionally"},
+            {"value": 3, "label": "Frequently"},
+            {"value": 4, "label": "Almost constantly"}
+          ]
+        },
+        {
+          "item_code": "CHEST_PAIN_SEV",
+          "symptom_category": "cardiac",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of your CHEST PAIN at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        },
+        {
+          "item_code": "CHEST_PAIN_INTERF",
+          "symptom_category": "cardiac",
+          "attribute": "interference",
+          "question_text": "In the last 7 days, how much did CHEST PAIN INTERFERE with your usual or daily activities?",
+          "response_type": "interference_5pt",
+          "response_options": [
+            {"value": 0, "label": "Not at all"},
+            {"value": 1, "label": "A little bit"},
+            {"value": 2, "label": "Somewhat"},
+            {"value": 3, "label": "Quite a bit"},
+            {"value": 4, "label": "Very much"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 81,
+      "symptom_term": "Bleeding",
+      "is_critical_safety": true,
+      "items": [
+        {
+          "item_code": "BLEEDING_PRESENT",
+          "symptom_category": "hematologic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you have any UNUSUAL BLEEDING (other than minor cuts)?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        },
+        {
+          "item_code": "BLEEDING_SEV",
+          "symptom_category": "hematologic",
+          "attribute": "severity",
+          "question_text": "In the last 7 days, what was the SEVERITY of any UNUSUAL BLEEDING at its WORST?",
+          "response_type": "severity_5pt",
+          "response_options": [
+            {"value": 0, "label": "None"},
+            {"value": 1, "label": "Mild"},
+            {"value": 2, "label": "Moderate"},
+            {"value": 3, "label": "Severe"},
+            {"value": 4, "label": "Very severe"}
+          ]
+        }
+      ]
+    },
+    {
+      "item_number": 82,
+      "symptom_term": "Jaundice",
+      "is_critical_safety": true,
+      "items": [
+        {
+          "item_code": "JAUNDICE_PRESENT",
+          "symptom_category": "hepatic",
+          "attribute": "present",
+          "question_text": "In the last 7 days, did you notice YELLOWING OF YOUR SKIN OR EYES (JAUNDICE)?",
+          "response_type": "present_2pt",
+          "response_options": [
+            {"value": 0, "label": "No"},
+            {"value": 1, "label": "Yes"}
+          ]
+        }
+      ]
+    }
+  ]
+}

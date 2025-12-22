@@ -78,6 +78,7 @@ export class PatientRepository {
     return {
       patientId: row.patient_id,
       firebaseUid: row.firebase_uid,
+      fullName: row.full_name,
       medicalRecordNumber: row.medical_record_number,
       dateOfBirth: row.date_of_birth,
       gender: row.gender,

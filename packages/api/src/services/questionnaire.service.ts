@@ -212,8 +212,15 @@ export class QuestionnaireService {
       conditionalTriggered: branchingEval.shouldBranch,
     });
 
-    // Return branching questions if triggered
-    const branchingQuestions = branchingEval.targetQuestion
+    // Filter out branching questions that are already in the questionnaire
+    // or have already been answered
+    const selectedItemIds = new Set(questionnaire.selectedItems || []);
+    const existingResponses = await this.responseRepo.findByQuestionnaireId(questionnaireId);
+    const answeredItemIds = new Set(existingResponses.map(r => r.itemId));
+
+    const branchingQuestions = branchingEval.targetQuestion &&
+      !selectedItemIds.has(branchingEval.targetQuestion.itemId) &&
+      !answeredItemIds.has(branchingEval.targetQuestion.itemId)
       ? [branchingEval.targetQuestion]
       : [];
 

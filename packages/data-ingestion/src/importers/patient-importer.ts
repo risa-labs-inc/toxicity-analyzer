@@ -5,7 +5,10 @@ import { getDataPath } from '../db-connection';
 interface DemoPatient {
   patient_id: string;
   profile: {
+    name?: string;
     age: number;
+    gender?: string;
+    ethnicity?: string;
     bmi: number;
     comorbidities: string[];
   };
@@ -47,12 +50,20 @@ export async function importPatients(db: Knex): Promise<void> {
   let imported = 0;
 
   for (const patient of data.patients as DemoPatient[]) {
+    // Calculate date_of_birth from age
+    const today = new Date();
+    const birthYear = today.getFullYear() - patient.profile.age;
+    const dateOfBirth = new Date(birthYear, today.getMonth(), today.getDate());
+
     // Create patient record
     const [patientRecord] = await db('patients')
       .insert({
         firebase_uid: patient.patient_id, // Use patient_id as firebase_uid for demo
         medical_record_number: patient.patient_id,
-        gender: 'female', // Breast cancer patients
+        full_name: patient.profile.name || null,
+        date_of_birth: dateOfBirth,
+        gender: patient.profile.gender || 'female',
+        ethnicity: patient.profile.ethnicity || null,
         comorbidities: JSON.stringify(patient.profile.comorbidities),
         ecog_baseline: patient.functional_status.ecog,
         enrollment_date: new Date('2025-01-01'),

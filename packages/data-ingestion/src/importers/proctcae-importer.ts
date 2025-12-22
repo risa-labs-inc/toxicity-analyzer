@@ -12,7 +12,7 @@ interface ProCTCAEItem {
 }
 
 export async function importProCTCAE(db: Knex): Promise<void> {
-  const filePath = getDataPath('proctcae-library.json');
+  const filePath = getDataPath('proctcae-library-full.json');
 
   if (!fs.existsSync(filePath)) {
     throw new Error(`PRO-CTCAE library file not found at: ${filePath}`);
@@ -20,7 +20,7 @@ export async function importProCTCAE(db: Knex): Promise<void> {
 
   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
-  console.log(`   Loading ${data.items.length} symptom terms...`);
+  console.log(`   Loading ${data.items.length} symptom terms (${data.total_items} items total)...`);
 
   // Flatten all items from all symptom terms
   const allItems: ProCTCAEItem[] = [];
@@ -35,8 +35,14 @@ export async function importProCTCAE(db: Knex): Promise<void> {
   // Check if data already exists
   const existingCount = await db('proctcae_items').count('* as count').first();
   if (existingCount && Number(existingCount.count) > 0) {
-    console.log(`   ⚠️  ${existingCount.count} items already exist. Skipping import.`);
-    return;
+    // If we have less than 100 items, it's the old curated subset - delete and reimport
+    if (Number(existingCount.count) < 100) {
+      console.log(`   ⚠️  Found old library with ${existingCount.count} items. Deleting and reimporting full library...`);
+      await db('proctcae_items').del();
+    } else {
+      console.log(`   ✓ Full library already exists with ${existingCount.count} items. Skipping import.`);
+      return;
+    }
   }
 
   // Insert all items

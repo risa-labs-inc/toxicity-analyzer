@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { patientApi } from '../services/api';
 
 interface Question {
@@ -15,9 +15,11 @@ interface Question {
 export default function QuestionnairePage() {
   const { questionnaireId } = useParams<{ questionnaireId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [responses, setResponses] = useState<Map<string, { value: number; label: string }>>(new Map());
+  const [selectedOption, setSelectedOption] = useState<{ value: number; label: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,6 +27,26 @@ export default function QuestionnairePage() {
   useEffect(() => {
     loadQuestionnaire();
   }, [questionnaireId]);
+
+  // Handle edit mode - jump to specific question and pre-select existing response
+  useEffect(() => {
+    if (questions.length > 0) {
+      const searchParams = new URLSearchParams(location.search);
+      const editItemId = searchParams.get('edit');
+
+      if (editItemId) {
+        const questionIndex = questions.findIndex(q => q.itemId === editItemId);
+        if (questionIndex !== -1) {
+          setCurrentIndex(questionIndex);
+          // Pre-select existing response if available
+          const existingResponse = responses.get(editItemId);
+          if (existingResponse) {
+            setSelectedOption(existingResponse);
+          }
+        }
+      }
+    }
+  }, [questions, location.search]);
 
   const loadQuestionnaire = async () => {
     try {
@@ -40,20 +62,32 @@ export default function QuestionnairePage() {
     }
   };
 
-  const handleResponse = async (value: number, label: string) => {
+  // Handle option selection (without submitting)
+  const handleSelectOption = (value: number, label: string) => {
+    setSelectedOption({ value, label });
+  };
+
+  // Handle "Next" button - submits response and advances
+  const handleNext = async () => {
+    if (!selectedOption) return;
+
     const currentQuestion = questions[currentIndex];
+    const searchParams = new URLSearchParams(location.search);
+    const editItemId = searchParams.get('edit');
 
     try {
+      setSubmitting(true);
+
       // Save response locally
       const newResponses = new Map(responses);
-      newResponses.set(currentQuestion.itemId, { value, label });
+      newResponses.set(currentQuestion.itemId, { value: selectedOption.value, label: selectedOption.label });
       setResponses(newResponses);
 
       // Submit to API
       const result = await patientApi.submitResponse(questionnaireId!, {
         itemId: currentQuestion.itemId,
-        responseValue: value,
-        responseLabel: label,
+        responseValue: selectedOption.value,
+        responseLabel: selectedOption.label,
       });
 
       let newQuestions = [...questions];
@@ -64,33 +98,35 @@ export default function QuestionnairePage() {
         newQuestions = newQuestions.filter(q => !skipIds.has(q.itemId));
       }
 
-      // Add branching questions if any
+      // Add branching questions if any (filter out duplicates)
       if (result.data.branchingQuestions && result.data.branchingQuestions.length > 0) {
-        newQuestions.splice(currentIndex + 1, 0, ...result.data.branchingQuestions);
+        const existingItemIds = new Set(newQuestions.map(q => q.itemId));
+        const uniqueBranchingQuestions = result.data.branchingQuestions.filter(
+          (bq: Question) => !existingItemIds.has(bq.itemId)
+        );
+        if (uniqueBranchingQuestions.length > 0) {
+          newQuestions.splice(currentIndex + 1, 0, ...uniqueBranchingQuestions);
+        }
       }
 
       setQuestions(newQuestions);
 
-      // Move to next question or complete
-      if (currentIndex < newQuestions.length - 1) {
-        setCurrentIndex(currentIndex + 1);
+      // If in edit mode, go back to review page
+      if (editItemId) {
+        navigate(`/review/${questionnaireId}`);
       } else {
-        await completeQuestionnaire();
+        // Move to next question or go to review page
+        if (currentIndex < newQuestions.length - 1) {
+          setCurrentIndex(currentIndex + 1);
+          setSelectedOption(null); // Clear selection for next question
+        } else {
+          // Navigate to review page instead of completing
+          navigate(`/review/${questionnaireId}`);
+        }
       }
     } catch (err: any) {
       console.error('Error submitting response:', err);
       setError(err.response?.data?.message || 'Failed to submit response');
-    }
-  };
-
-  const completeQuestionnaire = async () => {
-    try {
-      setSubmitting(true);
-      await patientApi.completeQuestionnaire(questionnaireId!);
-      navigate('/results');
-    } catch (err: any) {
-      console.error('Error completing questionnaire:', err);
-      setError(err.response?.data?.message || 'Failed to complete questionnaire');
     } finally {
       setSubmitting(false);
     }
@@ -189,19 +225,41 @@ export default function QuestionnairePage() {
 
           {/* Response Options */}
           <div className="space-y-3">
-            {currentQuestion.responseOptions.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleResponse(option.value, option.label)}
-                disabled={submitting}
-                className="w-full text-left px-6 py-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-900">{option.label}</span>
-                  <span className="text-gray-400">→</span>
-                </div>
-              </button>
-            ))}
+            {currentQuestion.responseOptions.map((option) => {
+              const isSelected = selectedOption?.value === option.value;
+              return (
+                <button
+                  key={option.value}
+                  onClick={() => handleSelectOption(option.value, option.label)}
+                  disabled={submitting}
+                  className={`w-full text-left px-6 py-4 border-2 rounded-xl transition-all duration-200 ${
+                    isSelected
+                      ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
+                      : 'border-gray-200 hover:border-blue-300 hover:bg-blue-25'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-gray-900">{option.label}</span>
+                    {isSelected && (
+                      <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Next Button */}
+          <div className="mt-6">
+            <button
+              onClick={handleNext}
+              disabled={!selectedOption || submitting}
+              className="w-full px-6 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+            >
+              {submitting ? 'Saving...' : (currentIndex === questions.length - 1 ? 'Review Answers' : 'Next →')}
+            </button>
           </div>
         </div>
 

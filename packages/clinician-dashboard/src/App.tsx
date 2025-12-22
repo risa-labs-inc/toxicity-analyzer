@@ -2,7 +2,63 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { clinicianApi } from './services/api';
 import { QuestionnaireProvider, useQuestionnaire } from './contexts/QuestionnaireContext';
-import { ModeSelector } from './components/ModeSelector';
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+// Calculate age from date of birth
+function calculateAge(dateOfBirth: Date | string | undefined): number {
+  if (!dateOfBirth) return 0;
+  const today = new Date();
+  const birthDate = new Date(dateOfBirth);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+// Format gender for display
+function formatGender(gender: string | undefined): string {
+  if (!gender) return 'Not specified';
+  const genderMap: Record<string, string> = {
+    'male': 'Male',
+    'female': 'Female',
+    'other': 'Other',
+    'prefer_not_to_say': 'Prefer not to say'
+  };
+  return genderMap[gender] || gender;
+}
+
+// Format treatment intent
+function formatTreatmentIntent(intent: string | undefined): string {
+  if (!intent) return '';
+  const intentMap: Record<string, string> = {
+    'curative': 'Curative',
+    'adjuvant': 'Adjuvant',
+    'neoadjuvant': 'Neoadjuvant',
+    'palliative': 'Palliative'
+  };
+  return intentMap[intent] || intent;
+}
+
+// Format phase for clinician dashboard (Hospital Protocol Language)
+function formatPhaseForClinician(phase: string): string {
+  const phaseMap: Record<string, string> = {
+    'pre_session': 'Pre-Treatment Assessment',
+    'post_session': 'Immediate Post-Infusion',
+    'recovery': 'Peak Toxicity Period',
+    'nadir': 'Myelosuppression Nadir',
+    'inter_cycle': 'Recovery/Inter-Cycle'
+  };
+  return phaseMap[phase] || phase;
+}
+
+// ============================================
+// COMPONENTS
+// ============================================
 
 function LoginPage() {
   const [clinicianId, setClinicianId] = useState('');
@@ -64,7 +120,6 @@ function LoginPage() {
 function TriagePage() {
   const clinicianId = localStorage.getItem('clinicianId');
   const navigate = useNavigate();
-  const { mode, setMode } = useQuestionnaire();
   const [stats, setStats] = React.useState({
     totalPatients: 0,
     emergencyCount: 0,
@@ -173,11 +228,6 @@ function TriagePage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Mode Selector */}
-        <div className="mb-8">
-          <ModeSelector initialMode={mode} onChange={setMode} />
-        </div>
-
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Patient Queue Statistics</h2>
           <div className="grid gap-6 md:grid-cols-4">
@@ -410,36 +460,160 @@ function PatientDetailPage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Patient Header Card with Demographics */}
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Patient: {patient.firebaseUid}
-          </h2>
+          {/* Header Row: Patient Name/ID + Status Badge */}
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Patient {patient.firebaseUid}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                MRN: {patient.medicalRecordNumber || 'N/A'} •
+                Enrolled: {new Date(patient.enrollmentDate).toLocaleDateString()}
+              </p>
+            </div>
+            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+              patient.status === 'active' ? 'bg-green-100 text-green-800' :
+              patient.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+              'bg-gray-100 text-gray-600'
+            }`}>
+              {patient.status.toUpperCase()}
+            </span>
+          </div>
 
-          {timeline && (
-            <div className="grid md:grid-cols-3 gap-4">
-              <div>
-                <p className="text-sm text-gray-600">Regimen</p>
-                <p className="text-lg font-semibold">{timeline.regimenName}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Current Cycle</p>
-                <p className="text-lg font-semibold">Cycle {timeline.currentCycle}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Treatment Day</p>
-                <p className="text-lg font-semibold">Day {timeline.treatmentDay}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Phase</p>
-                <p className="text-lg font-semibold">{timeline.phase}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Nadir Window</p>
-                <p className="text-lg font-semibold">{timeline.inNadirWindow ? 'Yes' : 'No'}</p>
+          {/* Demographics Grid */}
+          <div className="grid grid-cols-4 gap-4 mb-6">
+            <div>
+              <p className="text-xs font-medium text-gray-500 mb-1">Age</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {calculateAge(patient.dateOfBirth)} years
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 mb-1">Gender</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {formatGender(patient.gender)}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 mb-1">Ethnicity</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {patient.ethnicity || 'Not specified'}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-gray-500 mb-1">ECOG Status</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {patient.ecogBaseline !== null && patient.ecogBaseline !== undefined ? patient.ecogBaseline : 'N/A'}
+              </p>
+            </div>
+          </div>
+
+          {/* Comorbidities Section */}
+          {patient.comorbidities && patient.comorbidities.length > 0 && (
+            <div className="border-t border-gray-200 pt-4">
+              <p className="text-xs font-medium text-gray-500 mb-2">Comorbidities</p>
+              <div className="flex flex-wrap gap-2">
+                {patient.comorbidities.map((comorbidity: any, idx: number) => (
+                  <span
+                    key={idx}
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      comorbidity.severity === 'severe' ? 'bg-red-100 text-red-800' :
+                      comorbidity.severity === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    {comorbidity.condition}
+                    {comorbidity.controlled && ' ✓'}
+                  </span>
+                ))}
               </div>
             </div>
           )}
         </div>
+
+        {/* Treatment Timeline Card */}
+        {timeline && (
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Current Treatment</h3>
+                <p className="text-2xl font-bold text-gray-900">{timeline.regimenName || 'Loading...'}</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Cycle {timeline.currentCycle || '-'}, Day {timeline.treatmentDay || '-'}
+                  {timeline.treatmentIntent && ` • ${formatTreatmentIntent(timeline.treatmentIntent)}`}
+                </p>
+              </div>
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                {formatPhaseForClinician(timeline.phase || '')}
+              </span>
+            </div>
+
+            {/* Visual Timeline */}
+            <div className="mt-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium text-gray-500">Treatment Cycle Timeline</span>
+                <span className="text-xs text-gray-500">Day {timeline.treatmentDay || '-'} of {timeline.cycleLengthDays || '21'}</span>
+              </div>
+              <div className="relative">
+                <div className="flex items-center gap-1">
+                  {[
+                    { phase: 'Pre-Treatment Assessment', backendKey: 'pre_session', color: 'bg-purple-500', label: 'Pre-Tx' },
+                    { phase: 'Immediate Post-Infusion', backendKey: 'post_session', color: 'bg-pink-500', label: 'Post-Inf' },
+                    { phase: 'Peak Toxicity Period', backendKey: 'recovery', color: 'bg-yellow-500', label: 'Peak Tox' },
+                    { phase: 'Myelosuppression Nadir', backendKey: 'nadir', color: 'bg-red-500', label: 'Nadir' },
+                    { phase: 'Recovery/Inter-Cycle', backendKey: 'inter_cycle', color: 'bg-green-500', label: 'Recovery' }
+                  ].map((item) => {
+                    const isActive = timeline.phase === item.backendKey;
+                    return (
+                      <div key={item.backendKey} className="flex-1">
+                        <div
+                          className={`h-8 rounded transition-all ${
+                            isActive
+                              ? `${item.color} ring-2 ring-offset-2 ring-blue-400`
+                              : 'bg-gray-200'
+                          }`}
+                        />
+                        <p className={`text-xs text-center mt-2 ${
+                          isActive ? 'font-semibold text-gray-900' : 'text-gray-500'
+                        }`}>
+                          {item.label}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Treatment Info */}
+            <div className="mt-6 grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+              <div>
+                <p className="text-xs text-gray-500">Total Planned Cycles</p>
+                <p className="text-sm font-semibold text-gray-900">
+                  {timeline.totalPlannedCycles || 'N/A'}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Next Infusion</p>
+                <p className="text-sm font-semibold text-gray-900">
+                  {timeline.nextInfusionDate
+                    ? new Date(timeline.nextInfusionDate).toLocaleDateString()
+                    : 'Not scheduled'}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">In Nadir Window</p>
+                <p className={`text-sm font-semibold ${
+                  timeline.inNadirWindow ? 'text-red-600' : 'text-green-600'
+                }`}>
+                  {timeline.inNadirWindow ? 'Yes - Critical Period' : 'No'}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {activeAlerts && activeAlerts.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">

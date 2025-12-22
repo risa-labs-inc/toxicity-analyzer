@@ -298,6 +298,60 @@ router.post(
 );
 
 /**
+ * GET /api/v1/patient/questionnaires/:id/responses
+ * Get all responses for a questionnaire
+ */
+router.get(
+  '/questionnaires/:id/responses',
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const db = getDb();
+    const responseRepo = new ResponseRepository(db);
+
+    // Verify questionnaire belongs to patient
+    const questionnaire = await db('questionnaires')
+      .where('questionnaire_id', req.params.id)
+      .first();
+
+    if (!questionnaire) {
+      res.status(404).json({
+        error: 'Not Found',
+        message: 'Questionnaire not found',
+      });
+      return;
+    }
+
+    if (questionnaire.patient_id !== req.user!.patientId) {
+      res.status(403).json({
+        error: 'Forbidden',
+        message: 'Cannot access other patient questionnaires',
+      });
+      return;
+    }
+
+    // Get all responses for this questionnaire
+    const responses = await db('questionnaire_responses as r')
+      .join('proctcae_items as pi', 'r.item_id', 'pi.item_id')
+      .where('r.questionnaire_id', req.params.id)
+      .select(
+        'r.item_id as itemId',
+        'pi.item_code as itemCode',
+        'pi.symptom_category as symptomCategory',
+        'pi.attribute',
+        'pi.question_text as questionText',
+        'r.response_value as responseValue',
+        'r.response_label as responseLabel',
+        'r.created_at as submittedAt'
+      )
+      .orderBy('r.created_at', 'asc');
+
+    res.json({
+      responses,
+      count: responses.length,
+    });
+  })
+);
+
+/**
  * POST /api/v1/patient/questionnaires/:id/responses
  * Submit response to question
  */

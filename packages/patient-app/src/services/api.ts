@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1';
+// Use production API URL (can be overridden with VITE_API_URL env var)
+const API_BASE_URL =
+  typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_URL
+    ? (import.meta as any).env.VITE_API_URL
+    : 'https://toxicity-analyzer-api-4tebejtipa-uc.a.run.app/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -41,6 +45,10 @@ export const patientApi = {
     responseValue: number;
     responseLabel: string;
   }) => api.post(`/patient/questionnaires/${questionnaireId}/responses`, data),
+
+  // Get all responses for a questionnaire
+  getQuestionnaireResponses: (questionnaireId: string) =>
+    api.get(`/patient/questionnaires/${questionnaireId}/responses`),
 
   // Complete questionnaire
   completeQuestionnaire: (questionnaireId: string) =>

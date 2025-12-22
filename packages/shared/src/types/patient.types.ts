@@ -5,6 +5,7 @@
 export interface Patient {
   patientId: string;
   firebaseUid: string;
+  fullName?: string;
   medicalRecordNumber?: string; // Encrypted in DB
   dateOfBirth?: Date;            // Encrypted in DB
   gender?: 'male' | 'female' | 'other' | 'prefer_not_to_say';
