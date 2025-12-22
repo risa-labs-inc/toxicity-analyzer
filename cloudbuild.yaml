@@ -1,20 +1,56 @@
-# Cloud Build configuration for API image build
-# Builds Docker image and pushes to GCR
+# Cloud Build configuration for Toxicity Analyzer API
+# Based on GHMonitoring's successful deployment pattern
 
 steps:
-  # Build Docker image from root (monorepo context)
+  # Step 1: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build',
-      '-t', 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest',
-      '-f', 'packages/api/Dockerfile',
-      '.'
-    ]
+    id: 'Build'
+    args:
+      - 'build'
+      - '--no-cache'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
+      - '.'
+      - '-f'
+      - 'Dockerfile'
 
-# Cloud Build will automatically push images listed here
-images:
-  - 'gcr.io/$PROJECT_ID/toxicity-analyzer-api:latest'
+  # Step 2: Push Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
 
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: 'Deploy'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'services'
+      - 'update'
+      - 'toxicity-analyzer-api'
+      - '--platform=managed'
+      - '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
+      - '--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=${COMMIT_SHA},gcb-build-id=${BUILD_ID}'
+      - '--region=us-central1'
+      - '--quiet'
+
+# Substitutions
+substitutions:
+  _SERVICE_NAME: toxicity-analyzer-api
+  _DEPLOY_REGION: us-central1
+
+# Build options
 options:
-  machineType: 'N1_HIGHCPU_8'
   logging: CLOUD_LOGGING_ONLY
+  substitutionOption: ALLOW_LOOSE
+
+# Tag the build
+tags:
+  - 'gcp-cloud-build-deploy-cloud-run'
+  - 'toxicity-analyzer-api'
+
+# Images to push
+images:
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
