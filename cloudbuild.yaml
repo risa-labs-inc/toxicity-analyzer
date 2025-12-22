@@ -34,6 +34,18 @@ steps:
       - '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
       - '--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=${COMMIT_SHA},gcb-build-id=${BUILD_ID}'
       - '--region=us-central1'
+      - '--cpu=2'
+      - '--memory=2Gi'
+      - '--min-instances=0'
+      - '--max-instances=10'
+      - '--concurrency=80'
+      - '--execution-environment=gen2'
+      - '--set-env-vars=NODE_ENV=production,PORT=8080,DB_HOST=/cloudsql/${PROJECT_ID}:us-central1:toxicity-analyzer-db,DB_PORT=5432,DB_NAME=toxicity_analyzer,FIREBASE_PROJECT_ID=${PROJECT_ID},LOG_LEVEL=info'
+      - '--set-secrets=DB_USER=DB_USER:latest,DB_PASSWORD=DB_PASSWORD:latest'
+      - '--set-cloudsql-instances=${PROJECT_ID}:us-central1:toxicity-analyzer-db'
+      - '--vpc-connector=toxicity-connector'
+      - '--vpc-egress=private-ranges-only'
+      - '--allow-unauthenticated'
       - '--quiet'
 
 # Substitutions
