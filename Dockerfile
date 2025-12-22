@@ -25,6 +25,9 @@ RUN npm run build --workspace=packages/shared
 RUN npm run build --workspace=packages/intelligence-layer
 RUN npm run build --workspace=packages/api
 
+# Compile knexfile.ts separately (it's outside src/ directory)
+RUN npx tsc packages/api/knexfile.ts --outDir packages/api --esModuleInterop --resolveJsonModule --module commonjs
+
 # Expose Cloud Run port
 EXPOSE 8080
 
