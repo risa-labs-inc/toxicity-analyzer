@@ -40,14 +40,8 @@ export async function importPatients(db: Knex): Promise<void> {
 
   console.log(`   Loading ${data.patients.length} demo patients...`);
 
-  // Check if data already exists
-  const existingCount = await db('patients').count('* as count').first();
-  if (existingCount && Number(existingCount.count) > 0) {
-    console.log(`   ⚠️  ${existingCount.count} patients already exist. Skipping import.`);
-    return;
-  }
-
   let imported = 0;
+  let updated = 0;
 
   for (const patient of data.patients as DemoPatient[]) {
     // Calculate date_of_birth from age
@@ -55,60 +49,90 @@ export async function importPatients(db: Knex): Promise<void> {
     const birthYear = today.getFullYear() - patient.profile.age;
     const dateOfBirth = new Date(birthYear, today.getMonth(), today.getDate());
 
-    // Create patient record
-    const [patientRecord] = await db('patients')
-      .insert({
-        firebase_uid: patient.patient_id, // Use patient_id as firebase_uid for demo
-        medical_record_number: patient.patient_id,
-        full_name: patient.profile.name || null,
-        date_of_birth: dateOfBirth,
-        gender: patient.profile.gender || 'female',
-        ethnicity: patient.profile.ethnicity || null,
-        comorbidities: JSON.stringify(patient.profile.comorbidities),
-        ecog_baseline: patient.functional_status.ecog,
-        enrollment_date: new Date('2025-01-01'),
-        status: 'active',
-      })
-      .returning('*');
-
-    // Get regimen by code
-    const regimen = await db('regimens')
-      .where('regimen_code', patient.regimen.name)
+    // Check if patient already exists
+    const existingPatient = await db('patients')
+      .where('medical_record_number', patient.patient_id)
       .first();
 
-    if (!regimen) {
-      console.warn(`   ⚠️  Regimen not found: ${patient.regimen.name} for patient ${patient.patient_id}`);
-      continue;
+    let patientRecord;
+
+    if (existingPatient) {
+      // Update existing patient with new demographic data
+      console.log(`   ↻ Updating patient ${patient.patient_id} with demographics...`);
+      [patientRecord] = await db('patients')
+        .where('patient_id', existingPatient.patient_id)
+        .update({
+          full_name: patient.profile.name || null,
+          date_of_birth: dateOfBirth,
+          gender: patient.profile.gender || 'female',
+          ethnicity: patient.profile.ethnicity || null,
+          comorbidities: JSON.stringify(patient.profile.comorbidities),
+          ecog_baseline: patient.functional_status.ecog,
+        })
+        .returning('*');
+      updated++;
+    } else {
+      // Create new patient record
+      [patientRecord] = await db('patients')
+        .insert({
+          firebase_uid: patient.patient_id, // Use patient_id as firebase_uid for demo
+          medical_record_number: patient.patient_id,
+          full_name: patient.profile.name || null,
+          date_of_birth: dateOfBirth,
+          gender: patient.profile.gender || 'female',
+          ethnicity: patient.profile.ethnicity || null,
+          comorbidities: JSON.stringify(patient.profile.comorbidities),
+          ecog_baseline: patient.functional_status.ecog,
+          enrollment_date: new Date('2025-01-01'),
+          status: 'active',
+        })
+        .returning('*');
+      imported++;
     }
 
-    // Create treatment record
-    const [treatment] = await db('patient_treatments')
-      .insert({
-        patient_id: patientRecord.patient_id,
-        regimen_id: regimen.regimen_id,
-        start_date: new Date('2025-10-01'), // Demo start date
-        total_planned_cycles: 6,
-        current_cycle: patient.regimen.cycle_number,
-        treatment_intent: 'adjuvant',
-        status: 'active',
-      })
-      .returning('*');
+    // Only create treatment and cycle records for new patients
+    // Existing patients already have treatment data
+    if (!existingPatient) {
+      // Get regimen by code
+      const regimen = await db('regimens')
+        .where('regimen_code', patient.regimen.name)
+        .first();
 
-    // Create current cycle record
-    await db('treatment_cycles').insert({
-      treatment_id: treatment.treatment_id,
-      cycle_number: patient.regimen.cycle_number,
-      infusion_date: new Date(patient.regimen.last_infusion_date),
-      planned_next_infusion: new Date(
-        new Date(patient.regimen.last_infusion_date).getTime() +
-        regimen.standard_cycle_length_days * 24 * 60 * 60 * 1000
-      ),
-      completed: false,
-    });
+      if (!regimen) {
+        console.warn(`   ⚠️  Regimen not found: ${patient.regimen.name} for patient ${patient.patient_id}`);
+        continue;
+      }
 
-    imported++;
-    console.log(`   ✓ ${patient.patient_id}: ${patient.regimen.name} - Cycle ${patient.regimen.cycle_number}`);
+      // Create treatment record
+      const [treatment] = await db('patient_treatments')
+        .insert({
+          patient_id: patientRecord.patient_id,
+          regimen_id: regimen.regimen_id,
+          start_date: new Date('2025-10-01'), // Demo start date
+          total_planned_cycles: 6,
+          current_cycle: patient.regimen.cycle_number,
+          treatment_intent: 'adjuvant',
+          status: 'active',
+        })
+        .returning('*');
+
+      // Create current cycle record
+      await db('treatment_cycles').insert({
+        treatment_id: treatment.treatment_id,
+        cycle_number: patient.regimen.cycle_number,
+        infusion_date: new Date(patient.regimen.last_infusion_date),
+        planned_next_infusion: new Date(
+          new Date(patient.regimen.last_infusion_date).getTime() +
+          regimen.standard_cycle_length_days * 24 * 60 * 60 * 1000
+        ),
+        completed: false,
+      });
+
+      console.log(`   ✓ ${patient.patient_id}: ${patient.regimen.name} - Cycle ${patient.regimen.cycle_number}`);
+    } else {
+      console.log(`   ✓ ${patient.patient_id}: Demographics updated`);
+    }
   }
 
-  console.log(`   ✅ Imported ${imported} patients with treatment data`);
+  console.log(`   ✅ Imported ${imported} new patients, updated ${updated} existing patients`);
 }
