@@ -1,5 +1,5 @@
 import knex, { Knex } from 'knex';
-import knexConfig from '../../knexfile';
+import path from 'path';
 
 let dbInstance: Knex | null = null;
 
@@ -14,7 +14,11 @@ let dbInstance: Knex | null = null;
 export function getDb(): Knex {
   if (!dbInstance) {
     const env = process.env.NODE_ENV || 'development';
-    const config = knexConfig[env];
+
+    // Load knexfile at runtime
+    const knexfilePath = path.join(__dirname, '../../knexfile.js');
+    const knexConfig = require(knexfilePath);
+    const config = knexConfig.default?.[env] || knexConfig[env];
 
     if (!config) {
       throw new Error(`No Knex configuration found for environment: ${env}`);
