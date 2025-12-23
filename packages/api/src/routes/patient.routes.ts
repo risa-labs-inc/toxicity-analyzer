@@ -329,6 +329,7 @@ router.get(
     }
 
     // Get all responses for this questionnaire
+    // Order by item_code to maintain stable ordering even when responses are updated
     const responses = await db('questionnaire_responses as r')
       .join('proctcae_items as pi', 'r.item_id', 'pi.item_id')
       .where('r.questionnaire_id', req.params.id)
@@ -342,7 +343,7 @@ router.get(
         'r.response_label as responseLabel',
         'r.created_at as submittedAt'
       )
-      .orderBy('r.created_at', 'asc');
+      .orderBy('pi.item_code', 'asc');
 
     res.json({
       responses,

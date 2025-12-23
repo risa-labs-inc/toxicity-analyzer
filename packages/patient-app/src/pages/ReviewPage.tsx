@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { patientApi } from '../services/api';
 
 interface QuestionResponse {
@@ -15,6 +15,7 @@ interface QuestionResponse {
 export default function ReviewPage() {
   const { questionnaireId } = useParams<{ questionnaireId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [responses, setResponses] = useState<QuestionResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -22,7 +23,7 @@ export default function ReviewPage() {
 
   useEffect(() => {
     loadResponses();
-  }, [questionnaireId]);
+  }, [questionnaireId, location]);
 
   const loadResponses = async () => {
     try {
@@ -148,7 +149,7 @@ export default function ReviewPage() {
               disabled={submitting}
               className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-gray-700 bg-gray-100 rounded-lg sm:rounded-xl hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium min-h-[44px]"
             >
-              ← Go Back
+              ↻ Retake Assessment
             </button>
             <button
               onClick={handleSubmit}
