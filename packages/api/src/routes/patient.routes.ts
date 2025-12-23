@@ -382,6 +382,7 @@ router.post(
       response: result.response,
       branchingQuestions: result.branchingQuestions,
       skipItemIds: result.skipItemIds,
+      invalidatedItemIds: result.invalidatedItemIds,
       message: 'Response submitted successfully',
     });
   })

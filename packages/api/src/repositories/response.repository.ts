@@ -23,6 +23,50 @@ export class ResponseRepository {
   }
 
   /**
+   * Upsert questionnaire response (update if exists, insert if not)
+   * Uses PostgreSQL's ON CONFLICT to properly handle upserts
+   */
+  async upsertResponse(response: Omit<QuestionnaireResponse, 'responseId' | 'createdAt'>): Promise<QuestionnaireResponse> {
+    // First, delete any existing responses for this questionnaire + item_id combination
+    // This ensures we don't have duplicates
+    await this.db('questionnaire_responses')
+      .where({
+        questionnaire_id: response.questionnaireId,
+        item_id: response.itemId,
+      })
+      .delete();
+
+    // Then insert the new response
+    const [row] = await this.db('questionnaire_responses')
+      .insert({
+        questionnaire_id: response.questionnaireId,
+        item_id: response.itemId,
+        response_value: response.responseValue,
+        response_label: response.responseLabel,
+        conditional_triggered: response.conditionalTriggered,
+      })
+      .returning('*');
+
+    return this.mapToResponse(row);
+  }
+
+  /**
+   * Delete responses by item IDs
+   */
+  async deleteResponses(questionnaireId: string, itemIds: string[]): Promise<number> {
+    if (itemIds.length === 0) {
+      return 0;
+    }
+
+    const deletedCount = await this.db('questionnaire_responses')
+      .where('questionnaire_id', questionnaireId)
+      .whereIn('item_id', itemIds)
+      .delete();
+
+    return deletedCount;
+  }
+
+  /**
    * Get all responses for questionnaire
    */
   async findByQuestionnaireId(questionnaireId: string): Promise<QuestionnaireResponse[]> {
