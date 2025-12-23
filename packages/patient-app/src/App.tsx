@@ -9,7 +9,24 @@ function LoginPage() {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const patients = Array.from({ length: 15 }, (_, i) => `P${String(i + 1).padStart(3, '0')}`);
+  // Demo patients with names and IDs
+  const patients = [
+    { id: 'P001', name: 'Sarah Johnson' },
+    { id: 'P002', name: 'Michael Chen' },
+    { id: 'P003', name: 'Emily Rodriguez' },
+    { id: 'P004', name: 'James Wilson' },
+    { id: 'P005', name: 'Maria Garcia' },
+    { id: 'P006', name: 'David Lee' },
+    { id: 'P007', name: 'Susan Martinez' },
+    { id: 'P008', name: 'Robert Taylor' },
+    { id: 'P009', name: 'Jennifer Anderson' },
+    { id: 'P010', name: 'William Brown' },
+    { id: 'P011', name: 'Linda Davis' },
+    { id: 'P012', name: 'Christopher White' },
+    { id: 'P013', name: 'Patricia Harris' },
+    { id: 'P014', name: 'Daniel Clark' },
+    { id: 'P015', name: 'Nicole Moore' },
+  ];
 
   const handleLogin = () => {
     if (selectedPatient) {
@@ -41,9 +58,9 @@ function LoginPage() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             >
               <option value="">Choose your ID...</option>
-              {patients.map((id) => (
-                <option key={id} value={id}>
-                  {id}
+              {patients.map((patient) => (
+                <option key={patient.id} value={patient.id}>
+                  {patient.name} - {patient.id}
                 </option>
               ))}
             </select>
