@@ -42,6 +42,20 @@ function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        {/* Partner Logos */}
+        <div className="flex items-center justify-center gap-8 mb-8">
+          <img
+            src="/assets/mayo-clinic-logo.svg"
+            alt="Mayo Clinic"
+            className="h-12 w-auto"
+          />
+          <img
+            src="/assets/risa-logo.svg"
+            alt="RISA"
+            className="h-10 w-auto"
+          />
+        </div>
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Patient Portal</h1>
           <p className="text-gray-600">Toxicity Analyzer</p>
