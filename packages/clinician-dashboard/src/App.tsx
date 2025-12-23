@@ -60,6 +60,17 @@ function formatPhaseForClinician(phase: string): string {
 // COMPONENTS
 // ============================================
 
+// Protected Route wrapper - ensures user is logged in
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const clinicianId = localStorage.getItem('clinicianId');
+
+  if (!clinicianId) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
+
 function LoginPage() {
   const [clinicianId, setClinicianId] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -189,12 +200,20 @@ function TriagePage() {
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Error Loading Data</h2>
           <p className="text-gray-600 mb-6">{error}</p>
-          <button
-            onClick={loadTriageData}
-            className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
-          >
-            Retry
-          </button>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={loadTriageData}
+              className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+            >
+              Retry
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+            >
+              Go to Login
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -413,18 +432,31 @@ function PatientDetailPage() {
   }
 
   if (error) {
+    const handleLogout = () => {
+      localStorage.removeItem('clinicianId');
+      navigate('/');
+    };
+
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Error Loading Patient</h2>
           <p className="text-gray-600 mb-6">{error}</p>
-          <button
-            onClick={() => navigate('/triage')}
-            className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
-          >
-            Back to Triage
-          </button>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => navigate('/triage')}
+              className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+            >
+              Back to Triage
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+            >
+              Go to Login
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -689,8 +721,22 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/triage" element={<TriagePage />} />
-          <Route path="/patient/:patientId" element={<PatientDetailPage />} />
+          <Route
+            path="/triage"
+            element={
+              <ProtectedRoute>
+                <TriagePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/patient/:patientId"
+            element={
+              <ProtectedRoute>
+                <PatientDetailPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
