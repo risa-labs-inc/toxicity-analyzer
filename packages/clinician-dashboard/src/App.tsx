@@ -4,6 +4,7 @@ import { clinicianApi } from './services/api';
 import { QuestionnaireProvider, useQuestionnaire } from './contexts/QuestionnaireContext';
 import FilterBar, { FilterState } from './components/FilterBar';
 import PaginationControls from './components/PaginationControls';
+import { ToxicityTrendChart } from './components/ToxicityTrendChart';
 
 // ============================================
 // HELPER FUNCTIONS
@@ -72,7 +73,15 @@ function ContactPatientModal({
   onClose: () => void;
   patient: any;
 }) {
+  const [copySuccess, setCopySuccess] = React.useState(false);
+
   if (!isOpen) return null;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText('555-0123');
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -98,13 +107,10 @@ function ContactPatientModal({
             <div className="flex items-center justify-between">
               <p className="text-2xl font-bold text-teal-700">555-0123</p>
               <button
-                onClick={() => {
-                  navigator.clipboard.writeText('555-0123');
-                  alert('Phone number copied to clipboard');
-                }}
+                onClick={handleCopy}
                 className="px-3 py-1 text-xs font-medium text-teal-700 bg-white border border-teal-300 rounded hover:bg-teal-50 transition"
               >
-                Copy
+                {copySuccess ? 'Copied!' : 'Copy'}
               </button>
             </div>
           </div>
@@ -130,6 +136,121 @@ function ContactPatientModal({
             Call Now
           </a>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Confirmation Modal Component
+function ConfirmationModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  confirmColor = 'green'
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  confirmColor?: 'green' | 'red' | 'blue';
+}) {
+  if (!isOpen) return null;
+
+  const colorClasses = {
+    green: 'bg-green-600 hover:bg-green-700',
+    red: 'bg-red-600 hover:bg-red-700',
+    blue: 'bg-blue-600 hover:bg-blue-700'
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+        {/* Header */}
+        <div className="mb-4">
+          <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+        </div>
+
+        {/* Message */}
+        <div className="mb-6">
+          <p className="text-gray-700 leading-relaxed">{message}</p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
+          >
+            {cancelText}
+          </button>
+          <button
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+            className={`flex-1 px-4 py-3 text-white rounded-lg transition font-medium ${colorClasses[confirmColor]}`}
+          >
+            {confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Toast Notification Component
+function Toast({
+  isOpen,
+  message,
+  type = 'success',
+  onClose
+}: {
+  isOpen: boolean;
+  message: string;
+  type?: 'success' | 'error' | 'info';
+  onClose: () => void;
+}) {
+  React.useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const typeStyles = {
+    success: 'bg-green-600 border-green-700',
+    error: 'bg-red-600 border-red-700',
+    info: 'bg-blue-600 border-blue-700'
+  };
+
+  const icons = {
+    success: '✓',
+    error: '✕',
+    info: 'ℹ'
+  };
+
+  return (
+    <div className="fixed top-4 right-4 z-50 animate-fade-in">
+      <div className={`${typeStyles[type]} text-white px-6 py-4 rounded-lg shadow-2xl border-2 flex items-center gap-3 min-w-[300px]`}>
+        <span className="text-2xl font-bold">{icons[type]}</span>
+        <p className="flex-1 font-medium">{message}</p>
+        <button
+          onClick={onClose}
+          className="text-white hover:text-gray-200 text-xl leading-none"
+        >
+          ×
+        </button>
       </div>
     </div>
   );
@@ -230,10 +351,24 @@ function TriagePage() {
     search: ''
   });
 
-  // Tab and modal state
-  const [activeTab, setActiveTab] = React.useState<'active' | 'triaged'>('active');
+  // Tab and modal state - initialize from URL query param if present
+  const searchParams = new URLSearchParams(window.location.search);
+  const initialTab = (searchParams.get('tab') as 'active' | 'triaged') || 'active';
+  const [activeTab, setActiveTab] = React.useState<'active' | 'triaged'>(initialTab);
   const [contactModalOpen, setContactModalOpen] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState<any>(null);
+
+  // Confirmation modal state
+  const [confirmModalOpen, setConfirmModalOpen] = React.useState(false);
+  const [confirmModalData, setConfirmModalData] = React.useState<{
+    questionnaireId: string;
+    patientName: string;
+  } | null>(null);
+
+  // Toast notification state
+  const [toastOpen, setToastOpen] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState('');
+  const [toastType, setToastType] = React.useState<'success' | 'error' | 'info'>('success');
 
   const loadTriageData = React.useCallback(async (
     page: number,
@@ -350,20 +485,31 @@ function TriagePage() {
     loadTriageData(1, { severity: '', regimen: '', phase: '', search: '' }, tab);
   }, [loadTriageData]);
 
-  const handleMarkTriaged = async (questionnaireId: string, patientName: string) => {
+  const handleMarkTriaged = (questionnaireId: string, patientName: string) => {
+    setConfirmModalData({ questionnaireId, patientName });
+    setConfirmModalOpen(true);
+  };
+
+  const confirmMarkTriaged = async () => {
+    if (!confirmModalData) return;
+
     try {
-      const confirmed = window.confirm(
-        `Mark ${patientName} as triaged?\n\nThis will remove them from the active queue.`
-      );
+      await clinicianApi.markTriaged(confirmModalData.questionnaireId);
 
-      if (!confirmed) return;
+      // Switch to Triaged Cases tab and reload data
+      setActiveTab('triaged');
+      setCurrentPage(1);
+      loadTriageData(1, filters, 'triaged');
 
-      await clinicianApi.markTriaged(questionnaireId);
-      loadTriageData(currentPage, filters, activeTab);
-      alert('Patient marked as triaged successfully');
+      // Show success toast
+      setToastMessage(`${confirmModalData.patientName} has been marked as triaged`);
+      setToastType('success');
+      setToastOpen(true);
     } catch (err: any) {
       console.error('Error marking as triaged:', err);
-      alert(err.response?.data?.message || 'Failed to mark as triaged');
+      setToastMessage(err.response?.data?.message || 'Failed to mark as triaged');
+      setToastType('error');
+      setToastOpen(true);
     }
   };
 
@@ -618,7 +764,7 @@ function TriagePage() {
                       {/* Action Buttons - Full width on mobile */}
                       <div className="flex flex-col sm:flex-row gap-2">
                         <button
-                          onClick={() => navigate(`/patient/${patient.patientId}`)}
+                          onClick={() => navigate(`/patient/${patient.patientId}?from=${activeTab}`)}
                           className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition min-h-[44px]"
                         >
                           View Details
@@ -668,6 +814,26 @@ function TriagePage() {
         onClose={handleCloseContactModal}
         patient={selectedPatient}
       />
+
+      {/* Confirmation Modal for Mark as Triaged */}
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmMarkTriaged}
+        title="Mark Patient as Triaged"
+        message={`Mark ${confirmModalData?.patientName || 'this patient'} as triaged? They will be moved from the active queue to the triaged cases tab.`}
+        confirmText="Mark as Triaged"
+        cancelText="Cancel"
+        confirmColor="green"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toastOpen}
+        message={toastMessage}
+        type={toastType}
+        onClose={() => setToastOpen(false)}
+      />
     </div>
   );
 }
@@ -689,6 +855,19 @@ function PatientDetailPage() {
   const [patientData, setPatientData] = React.useState<any>(null);
   const [contactModalOpen, setContactModalOpen] = React.useState(false);
 
+  // Get source tab from URL query parameter
+  const searchParams = new URLSearchParams(window.location.search);
+  const sourceTab = searchParams.get('from') as 'active' | 'triaged' | null;
+  const isFromTriaged = sourceTab === 'triaged';
+
+  // Confirmation modal state
+  const [confirmModalOpen, setConfirmModalOpen] = React.useState(false);
+
+  // Toast notification state
+  const [toastOpen, setToastOpen] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState('');
+  const [toastType, setToastType] = React.useState<'success' | 'error' | 'info'>('success');
+
   React.useEffect(() => {
     loadPatientData();
   }, [patientId]);
@@ -704,6 +883,38 @@ function PatientDetailPage() {
       setError(err.response?.data?.message || 'Failed to load patient data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMarkTriaged = () => {
+    setConfirmModalOpen(true);
+  };
+
+  const confirmMarkTriaged = async () => {
+    if (!patientData?.recentQuestionnaires?.[0]) {
+      setToastMessage('No questionnaire found to mark as triaged');
+      setToastType('error');
+      setToastOpen(true);
+      return;
+    }
+
+    try {
+      await clinicianApi.markTriaged(patientData.recentQuestionnaires[0].questionnaire_id);
+
+      const patientName = patientData.patient?.fullName || patientData.patient?.firebaseUid || 'Patient';
+      setToastMessage(`${patientName} has been marked as triaged`);
+      setToastType('success');
+      setToastOpen(true);
+
+      // Navigate back to triage after a short delay
+      setTimeout(() => {
+        navigate('/triage');
+      }, 1500);
+    } catch (err: any) {
+      console.error('Error marking as triaged:', err);
+      setToastMessage(err.response?.data?.message || 'Failed to mark as triaged');
+      setToastType('error');
+      setToastOpen(true);
     }
   };
 
@@ -792,7 +1003,7 @@ function PatientDetailPage() {
           <div className="flex justify-between items-center h-16">
             <div>
               <button
-                onClick={() => navigate('/triage')}
+                onClick={() => navigate(sourceTab ? `/triage?tab=${sourceTab}` : '/triage')}
                 className="text-teal-600 hover:text-teal-700 flex items-center gap-2"
               >
                 ← Back to Triage
@@ -806,23 +1017,14 @@ function PatientDetailPage() {
               >
                 Contact Patient
               </button>
-              <button
-                onClick={async () => {
-                  const confirmed = window.confirm('Mark this patient as triaged?\n\nThis will remove them from the active queue.');
-                  if (!confirmed) return;
-
-                  try {
-                    await clinicianApi.markTriaged(patientData.recentQuestionnaires[0].questionnaire_id);
-                    alert('Patient marked as triaged successfully');
-                    navigate('/triage');
-                  } catch (err: any) {
-                    alert(err.response?.data?.message || 'Failed to mark as triaged');
-                  }
-                }}
-                className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition"
-              >
-                Mark as Triaged
-              </button>
+              {!isFromTriaged && (
+                <button
+                  onClick={handleMarkTriaged}
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition"
+                >
+                  Mark as Triaged
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -836,8 +1038,8 @@ function PatientDetailPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
                 {patient.fullName
-                  ? `${patient.fullName} - ${patient.patientId}`
-                  : `Patient ${patient.patientId}`}
+                  ? `${patient.fullName} - ${patient.firebaseUid}`
+                  : `Patient ${patient.firebaseUid}`}
               </h2>
               <p className="text-sm text-gray-500 mt-1">
                 MRN: {patient.medicalRecordNumber || 'N/A'} •
@@ -986,6 +1188,9 @@ function PatientDetailPage() {
           </div>
         )}
 
+        {/* Symptom Trend Visualization */}
+        {patientId && <ToxicityTrendChart patientId={patientId} />}
+
         {activeAlerts && activeAlerts.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Active Alerts</h3>
@@ -1055,7 +1260,32 @@ function PatientDetailPage() {
       <ContactPatientModal
         isOpen={contactModalOpen}
         onClose={() => setContactModalOpen(false)}
-        patient={patientData?.patient}
+        patient={{
+          ...patientData?.patient,
+          patientName: patientData?.patient?.fullName
+            ? `${patientData.patient.fullName} - ${patientData.patient.firebaseUid}`
+            : patientData?.patient?.firebaseUid || 'Unknown'
+        }}
+      />
+
+      {/* Confirmation Modal for Mark as Triaged */}
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmMarkTriaged}
+        title="Mark Patient as Triaged"
+        message={`Mark ${patientData?.patient?.fullName || patientData?.patient?.firebaseUid || 'this patient'} as triaged? They will be moved from the active queue to the triaged cases tab.`}
+        confirmText="Mark as Triaged"
+        cancelText="Cancel"
+        confirmColor="green"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toastOpen}
+        message={toastMessage}
+        type={toastType}
+        onClose={() => setToastOpen(false)}
       />
     </div>
   );
