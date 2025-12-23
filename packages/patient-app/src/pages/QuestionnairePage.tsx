@@ -26,6 +26,12 @@ export default function QuestionnairePage() {
 
   // Helper function to render question text with timeframe badge
   const renderQuestionText = (text: string) => {
+    // Helper to capitalize first letter
+    const capitalizeFirstLetter = (str: string) => {
+      if (!str) return str;
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
     // Check if question starts with "In the last 7 days"
     const timeframePattern = /^In the last (\d+) days?,?\s*/i;
     const match = text.match(timeframePattern);
@@ -40,12 +46,12 @@ export default function QuestionnairePage() {
             {timeframePart.replace(/,$/, '')}
           </span>
           <br />
-          <span>{remainingText}</span>
+          <span>{capitalizeFirstLetter(remainingText)}</span>
         </>
       );
     }
 
-    return text;
+    return capitalizeFirstLetter(text);
   };
 
   // Helper function to render assessment type badge with icon and tooltip
