@@ -28,16 +28,10 @@ function CustomTooltip({ active, payload, label }: TooltipProps<number, string>)
     return null;
   }
 
-  const date = new Date(label);
-
   return (
     <div className="bg-white px-4 py-3 rounded-lg shadow-lg border border-gray-200">
       <p className="text-sm font-semibold text-gray-900 mb-2">
-        {date.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        })}
+        Assessment #{label}
       </p>
       {payload.map((entry, index) => (
         <div key={index} className="flex items-center gap-2 text-sm">
@@ -72,12 +66,11 @@ function getGradeColor(grade: number): string {
 
 export function ToxicityTrendChart({ patientId }: ToxicityTrendChartProps) {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
-  const [timeRange, setTimeRange] = useState<'last-4-cycles' | 'all'>('last-4-cycles');
 
   const { data, loading, error } = useToxicityHistory({
     patientId,
     selectedSymptoms,
-    timeRange
+    timeRange: 'all'
   });
 
   // Debug logging
@@ -125,10 +118,7 @@ export function ToxicityTrendChart({ patientId }: ToxicityTrendChartProps) {
   if (data.symptoms.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-bold text-gray-900">Symptom Trends Over Time</h3>
-          <TimeRangeSelector value={timeRange} onChange={setTimeRange} />
-        </div>
+        <h3 className="text-xl font-bold text-gray-900 mb-6">Symptom Trends Over Time</h3>
         <div className="text-center py-12">
           <div className="text-gray-400 text-5xl mb-4">📊</div>
           <p className="text-gray-900 font-semibold mb-2">No Symptom Data</p>
@@ -163,10 +153,7 @@ export function ToxicityTrendChart({ patientId }: ToxicityTrendChartProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-        <h3 className="text-xl font-bold text-gray-900">Symptom Trends Over Time</h3>
-        <TimeRangeSelector value={timeRange} onChange={setTimeRange} />
-      </div>
+      <h3 className="text-xl font-bold text-gray-900 mb-6">Symptom Trends Over Time</h3>
 
       <div className="mb-6">
         <SymptomSelector
@@ -225,12 +212,9 @@ export function ToxicityTrendChart({ patientId }: ToxicityTrendChartProps) {
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
 
               <XAxis
-                dataKey="date"
-                tickFormatter={(date) => {
-                  const d = new Date(date);
-                  return `${d.getMonth() + 1}/${d.getDate()}`;
-                }}
+                dataKey="assessmentNumber"
                 tick={{ fontSize: 12 }}
+                label={{ value: 'Assessment', position: 'insideBottom', offset: -5, style: { fontSize: 12 } }}
               />
 
               <YAxis
@@ -246,22 +230,6 @@ export function ToxicityTrendChart({ patientId }: ToxicityTrendChartProps) {
                 wrapperStyle={{ fontSize: '14px' }}
                 formatter={(value) => formatSymptomName(value)}
               />
-
-              {/* Cycle markers */}
-              {data.cycleMarkers.map((marker, idx) => (
-                <ReferenceLine
-                  key={idx}
-                  x={marker.date.toISOString()}
-                  stroke="#666"
-                  strokeDasharray="3 3"
-                  label={{
-                    value: `C${marker.cycle}`,
-                    position: 'top',
-                    fill: '#666',
-                    fontSize: 11
-                  }}
-                />
-              ))}
 
               {/* Lines for each selected symptom */}
               {selectedSymptomInfo.map((symptom, idx) => (

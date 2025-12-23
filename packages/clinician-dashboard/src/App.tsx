@@ -406,6 +406,12 @@ function TriagePage() {
         const response = await clinicianApi.getTriageQueue('limit=1000');
         const { queue, statistics } = response.data;
 
+        // Calculate statistics from UNFILTERED data (statistics should not be affected by filters)
+        const unfilteredQueue = queue || [];
+        const unfilteredEmergencyCount = unfilteredQueue.filter((p: any) => p.severity === 'red').length;
+        const unfilteredUrgentCount = unfilteredQueue.filter((p: any) => p.severity === 'yellow').length;
+        const unfilteredRoutineCount = unfilteredQueue.filter((p: any) => p.severity === 'green').length;
+
         // CLIENT-SIDE FILTERING (temporary until backend is deployed)
         let filteredQueue = queue || [];
 
@@ -440,17 +446,13 @@ function TriagePage() {
         const endIndex = startIndex + limit;
         const paginatedQueue = filteredQueue.slice(startIndex, endIndex);
 
-        // Calculate statistics from filtered data
-        const emergencyCount = filteredQueue.filter((p: any) => p.severity === 'red').length;
-        const urgentCount = filteredQueue.filter((p: any) => p.severity === 'yellow').length;
-        const routineCount = filteredQueue.filter((p: any) => p.severity === 'green').length;
-
         setPatients(paginatedQueue);
+        // Use unfiltered statistics
         setStats({
-          totalPatients: totalFiltered,
-          emergencyCount,
-          urgentCount,
-          routineCount
+          totalPatients: unfilteredQueue.length,
+          emergencyCount: unfilteredEmergencyCount,
+          urgentCount: unfilteredUrgentCount,
+          routineCount: unfilteredRoutineCount
         });
 
         setCurrentPage(page);
@@ -609,34 +611,6 @@ function TriagePage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
-        <div className="mb-6 sm:mb-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Patient Queue Statistics</h2>
-          <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 lg:grid-cols-4">
-            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-1 sm:mb-2">Total Patients</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.totalPatients}</p>
-            </div>
-
-            <div className="bg-red-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-red-200">
-              <h3 className="text-xs sm:text-sm font-medium text-red-700 mb-1 sm:mb-2">Emergency</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-red-600">{stats.emergencyCount}</p>
-              <p className="text-xs text-red-600 mt-1">Within 30 min</p>
-            </div>
-
-            <div className="bg-yellow-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-yellow-200">
-              <h3 className="text-xs sm:text-sm font-medium text-yellow-700 mb-1 sm:mb-2">Urgent</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.urgentCount}</p>
-              <p className="text-xs text-yellow-600 mt-1">Within 24 hrs</p>
-            </div>
-
-            <div className="bg-green-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-green-200">
-              <h3 className="text-xs sm:text-sm font-medium text-green-700 mb-1 sm:mb-2">Routine</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.routineCount}</p>
-              <p className="text-xs text-green-600 mt-1">3-5 days</p>
-            </div>
-          </div>
-        </div>
-
         {/* Tab Navigation */}
         <div className="mb-6">
           <div className="border-b border-gray-200">
@@ -665,16 +639,47 @@ function TriagePage() {
                 }`}
               >
                 Triaged Cases
+                {activeTab === 'triaged' && stats.totalPatients > 0 && (
+                  <span className="ml-2 py-0.5 px-2 rounded-full text-xs bg-teal-100 text-teal-800">
+                    {stats.totalPatients}
+                  </span>
+                )}
               </button>
             </nav>
           </div>
         </div>
 
+        {/* Queue Statistics */}
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Queue Statistics</h2>
+          <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 lg:grid-cols-4">
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-1 sm:mb-2">Total Patients</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.totalPatients}</p>
+            </div>
+
+            <div className="bg-red-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-red-200">
+              <h3 className="text-xs sm:text-sm font-medium text-red-700 mb-1 sm:mb-2">Emergency</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-red-600">{stats.emergencyCount}</p>
+              <p className="text-xs text-red-600 mt-1">Within 30 min</p>
+            </div>
+
+            <div className="bg-yellow-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-yellow-200">
+              <h3 className="text-xs sm:text-sm font-medium text-yellow-700 mb-1 sm:mb-2">Urgent</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.urgentCount}</p>
+              <p className="text-xs text-yellow-600 mt-1">Within 24 hrs</p>
+            </div>
+
+            <div className="bg-green-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-green-200">
+              <h3 className="text-xs sm:text-sm font-medium text-green-700 mb-1 sm:mb-2">Routine</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.routineCount}</p>
+              <p className="text-xs text-green-600 mt-1">3-5 days</p>
+            </div>
+          </div>
+        </div>
+
         <div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">
-              {activeTab === 'active' ? 'Prioritized Triage Queue' : 'Triaged Cases'}
-            </h2>
             <p className="text-xs sm:text-sm text-gray-600">
               Showing {patients.length} of {totalPatients} patients
             </p>

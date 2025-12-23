@@ -23,6 +23,7 @@ interface SymptomInfo {
 interface TrendDataPoint {
   date: string;
   timestamp: number;
+  assessmentNumber: number;
   [symptomName: string]: number | string; // Dynamic symptom grades
 }
 
@@ -148,7 +149,8 @@ export function useToxicityHistory(options: UseToxicityHistoryOptions) {
         if (!dataPointMap.has(timestamp)) {
           dataPointMap.set(timestamp, {
             date: dateStr,
-            timestamp
+            timestamp,
+            assessmentNumber: 0 // Will be set after sorting
           });
         }
 
@@ -159,6 +161,11 @@ export function useToxicityHistory(options: UseToxicityHistoryOptions) {
       const dataPoints = Array.from(dataPointMap.values()).sort(
         (a, b) => a.timestamp - b.timestamp
       );
+
+      // Add sequential assessment numbers
+      dataPoints.forEach((point, index) => {
+        point.assessmentNumber = index + 1;
+      });
 
       // Calculate cycle markers (estimate based on 21-day intervals)
       const cycleMarkers: CycleMarker[] = [];
