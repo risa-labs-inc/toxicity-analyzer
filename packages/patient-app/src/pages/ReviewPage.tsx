@@ -129,10 +129,11 @@ export default function ReviewPage() {
                   </div>
                 </div>
 
-                {/* Change Answer Button - Full width on mobile */}
+                {/* Change Answer Button - Full width on mobile - HIDDEN FOR NOW */}
                 <button
                   onClick={() => handleChangeAnswer(response.itemId)}
                   className="w-full sm:w-auto sm:ml-4 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors min-h-[44px]"
+                  hidden
                 >
                   Change Answer
                 </button>
