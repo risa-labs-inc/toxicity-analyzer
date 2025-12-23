@@ -383,6 +383,11 @@ function TriagePage() {
         const response = await clinicianApi.getTriagedCases('limit=1000');
         const { cases } = response.data;
 
+        // Calculate statistics from triaged cases based on their original severity
+        const triagedEmergencyCount = cases.filter((c: any) => c.severity === 'red').length;
+        const triagedUrgentCount = cases.filter((c: any) => c.severity === 'yellow').length;
+        const triagedRoutineCount = cases.filter((c: any) => c.severity === 'green').length;
+
         // Client-side pagination
         const limit = 10;
         const totalFiltered = cases.length;
@@ -393,9 +398,9 @@ function TriagePage() {
         setPatients(paginatedCases);
         setStats({
           totalPatients: totalFiltered,
-          emergencyCount: 0,
-          urgentCount: 0,
-          routineCount: 0,
+          emergencyCount: triagedEmergencyCount,
+          urgentCount: triagedUrgentCount,
+          routineCount: triagedRoutineCount,
         });
         setCurrentPage(page);
         setTotalPages(totalPages);
@@ -1196,7 +1201,7 @@ function PatientDetailPage() {
         {/* Symptom Trend Visualization */}
         {patientId && <ToxicityTrendChart patientId={patientId} />}
 
-        {activeAlerts && activeAlerts.length > 0 && (
+        {!isFromTriaged && activeAlerts && activeAlerts.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Active Alerts</h3>
             <div className="space-y-3">
