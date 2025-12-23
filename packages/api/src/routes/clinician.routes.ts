@@ -492,6 +492,16 @@ router.get(
           currentDate: new Date(),
         });
 
+        // Get alerts for this questionnaire to determine severity
+        const alerts = await db('alerts')
+          .where('questionnaire_id', questionnaire.questionnaire_id)
+          .orderBy('severity', 'asc'); // red, yellow, green
+
+        // Determine overall severity from alerts (highest severity wins)
+        const hasRed = alerts.some((a: any) => a.severity === 'red');
+        const hasYellow = alerts.some((a: any) => a.severity === 'yellow');
+        const severity = hasRed ? 'red' : hasYellow ? 'yellow' : 'green';
+
         return {
           patientId: patient.patientId,
           patientName: patient.fullName
@@ -501,6 +511,7 @@ router.get(
           regimenCode: treatmentContext.regimen.regimenCode,
           currentCycle: context.currentCycle,
           treatmentDay: context.treatmentDay,
+          severity,
           triagedAt: questionnaire.triaged_at,
           triagedBy: questionnaire.triaged_by,
           questionnaireCompletedAt: questionnaire.completed_at,
