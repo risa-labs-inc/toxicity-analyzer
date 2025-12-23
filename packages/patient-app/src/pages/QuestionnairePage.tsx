@@ -189,42 +189,42 @@ export default function QuestionnairePage() {
   const progress = ((currentIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-3xl mx-auto">
         {/* Progress Bar */}
-        <div className="mb-8">
+        <div className="mb-4 sm:mb-8">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-xs sm:text-sm font-medium text-gray-700">
               Question {currentIndex + 1} of {questions.length}
             </span>
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-xs sm:text-sm font-medium text-gray-700">
               {Math.round(progress)}% Complete
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
             <div
-              className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+              className="bg-blue-600 h-2 sm:h-3 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         </div>
 
         {/* Question Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
-          <div className="mb-6">
-            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full mb-4">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+          <div className="mb-4 sm:mb-6">
+            <span className="inline-block px-2 sm:px-3 py-1 bg-blue-100 text-blue-800 text-xs sm:text-sm font-medium rounded-full mb-3 sm:mb-4">
               {currentQuestion.symptomCategory.replace(/_/g, ' ').toUpperCase()}
             </span>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">
               {currentQuestion.questionText}
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-xs sm:text-sm text-gray-500">
               {currentQuestion.attribute.charAt(0).toUpperCase() + currentQuestion.attribute.slice(1)} Assessment
             </p>
           </div>
 
           {/* Response Options */}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {currentQuestion.responseOptions.map((option) => {
               const isSelected = selectedOption?.value === option.value;
               return (
@@ -232,16 +232,16 @@ export default function QuestionnairePage() {
                   key={option.value}
                   onClick={() => handleSelectOption(option.value, option.label)}
                   disabled={submitting}
-                  className={`w-full text-left px-6 py-4 border-2 rounded-xl transition-all duration-200 ${
+                  className={`w-full text-left px-4 sm:px-6 py-3 sm:py-4 border-2 rounded-lg sm:rounded-xl transition-all duration-200 min-h-[44px] ${
                     isSelected
                       ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
                       : 'border-gray-200 hover:border-blue-300 hover:bg-blue-25'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="text-sm sm:text-base font-medium text-gray-900">{option.label}</span>
                     {isSelected && (
-                      <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0 ml-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
@@ -252,11 +252,11 @@ export default function QuestionnairePage() {
           </div>
 
           {/* Next Button */}
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <button
               onClick={handleNext}
               disabled={!selectedOption || submitting}
-              className="w-full px-6 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 min-h-[44px]"
             >
               {submitting ? 'Saving...' : (currentIndex === questions.length - 1 ? 'Review Answers' : 'Next →')}
             </button>
@@ -264,18 +264,18 @@ export default function QuestionnairePage() {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between items-stretch sm:items-center gap-3 sm:gap-0">
           <button
             onClick={handleBack}
             disabled={currentIndex === 0 || submitting}
-            className="px-6 py-3 text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+            className="px-4 sm:px-6 py-3 text-sm sm:text-base text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm min-h-[44px] order-2 sm:order-1"
           >
             ← Previous
           </button>
 
           <button
             onClick={() => navigate('/dashboard')}
-            className="px-6 py-3 text-gray-600 hover:text-gray-900 transition"
+            className="px-4 sm:px-6 py-3 text-sm sm:text-base text-gray-600 hover:text-gray-900 transition min-h-[44px] order-1 sm:order-2"
           >
             Cancel
           </button>

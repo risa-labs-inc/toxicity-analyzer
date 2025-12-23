@@ -81,16 +81,25 @@ router.get(
     const db = getDb();
     const patientRepo = new PatientRepository(db);
 
+    // Extract query parameters for pagination and filtering
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = Math.min(parseInt(req.query.limit as string) || 10, 50); // Max 50
+    const severityFilter = req.query.severity as string; // 'red', 'yellow', 'green'
+    const regimenFilter = req.query.regimen as string;
+    const phaseFilter = req.query.phase as string; // 'pre_session', 'post_session', etc.
+    const searchQuery = req.query.search as string;
+
     // Get all active patients
     const patients = await patientRepo.findActive();
 
     // Get recent questionnaires and alerts for each patient
     const patientsWithAlerts = await Promise.all(
       patients.map(async (patient) => {
-        // Get most recent questionnaire
+        // Get most recent questionnaire (only untriaged)
         const questionnaires = await db('questionnaires')
           .where('patient_id', patient.patientId)
           .where('status', 'completed')
+          .where('triaged', false)
           .orderBy('completed_at', 'desc')
           .limit(1);
 
@@ -122,7 +131,10 @@ router.get(
 
         return {
           patientId: patient.patientId,
-          patientName: patient.firebaseUid, // In real app, would be patient name
+          patientName: patient.fullName
+            ? `${patient.fullName} - ${patient.patientId}`
+            : patient.patientId,
+          questionnaireId: questionnaire.questionnaire_id,
           alerts: alerts.map((a: any) => ({
             alertType: a.alert_type,
             severity: a.severity,
@@ -142,16 +154,53 @@ router.get(
     );
 
     // Filter out patients without recent questionnaires
-    const validPatients = patientsWithAlerts.filter((p) => p !== null);
+    let validPatients = patientsWithAlerts.filter((p) => p !== null);
 
-    // Prioritize using Alert Engine
+    // Apply filters BEFORE prioritization
+    if (severityFilter) {
+      validPatients = validPatients.filter((p: any) => {
+        const hasRed = p.alerts.some((a: any) => a.severity === 'red');
+        const hasYellow = p.alerts.some((a: any) => a.severity === 'yellow');
+        const severity = hasRed ? 'red' : hasYellow ? 'yellow' : 'green';
+        return severity === severityFilter;
+      });
+    }
+
+    if (regimenFilter) {
+      validPatients = validPatients.filter((p: any) =>
+        p.regimenCode.toLowerCase().includes(regimenFilter.toLowerCase())
+      );
+    }
+
+    // Note: Phase filtering would require building context for each patient
+    // For now, we'll skip it to avoid performance overhead
+    // Can be added if needed by storing phase in patient data
+
+    if (searchQuery) {
+      const search = searchQuery.toLowerCase();
+      validPatients = validPatients.filter((p: any) =>
+        p.patientId.toLowerCase().includes(search) ||
+        p.patientName.toLowerCase().includes(search)
+      );
+    }
+
+    // Prioritize using Alert Engine (on filtered results)
     const triageQueue = prioritizeTriageQueue(validPatients as any);
 
-    // Get queue statistics
+    // Calculate pagination metadata (before slicing)
+    const totalPatients = triageQueue.length;
+    const totalPages = Math.ceil(totalPatients / limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    // Paginate results
+    const paginatedQueue = triageQueue.slice(startIndex, endIndex);
+
+    // Get queue statistics (use full queue, not paginated)
     const statistics = getQueueStatistics(triageQueue);
 
-    // Transform to flat structure for frontend
-    const formattedQueue = triageQueue.map((item) => {
+    // Transform paginated results to flat structure for frontend
+    const formattedQueue = paginatedQueue.map((item) => {
       // Determine overall severity from alerts (highest severity wins)
       const hasRed = item.patient.alerts.some((a) => a.severity === 'red');
       const hasYellow = item.patient.alerts.some((a) => a.severity === 'yellow');
@@ -161,6 +210,7 @@ router.get(
         rank: item.rank,
         patientId: item.patient.patientId,
         patientName: item.patient.patientName,
+        questionnaireId: item.patient.questionnaireId,
         regimen: item.patient.regimenCode,
         cycle: item.patient.currentCycle,
         day: item.patient.treatmentDay,
@@ -175,6 +225,14 @@ router.get(
     res.json({
       queue: formattedQueue,
       statistics,
+      pagination: {
+        page,
+        limit,
+        total: totalPatients,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
   })
 );
@@ -352,6 +410,124 @@ router.post(
 
     res.json({
       message: 'Alert acknowledged',
+    });
+  })
+);
+
+/**
+ * POST /api/v1/clinician/questionnaires/:id/mark-triaged
+ * Mark a questionnaire as triaged
+ */
+router.post(
+  '/questionnaires/:id/mark-triaged',
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const db = getDb();
+    const questionnaireId = req.params.id;
+
+    // Verify questionnaire exists and is completed
+    const questionnaire = await db('questionnaires')
+      .where('questionnaire_id', questionnaireId)
+      .first();
+
+    if (!questionnaire) {
+      res.status(404).json({ error: 'Not Found', message: 'Questionnaire not found' });
+      return;
+    }
+
+    if (questionnaire.status !== 'completed') {
+      res.status(400).json({ error: 'Invalid Request', message: 'Only completed questionnaires can be triaged' });
+      return;
+    }
+
+    // Update triage status
+    await db('questionnaires')
+      .where('questionnaire_id', questionnaireId)
+      .update({
+        triaged: true,
+        triaged_at: new Date(),
+        triaged_by: req.user!.userId,
+      });
+
+    res.json({ message: 'Questionnaire marked as triaged', questionnaireId });
+  })
+);
+
+/**
+ * GET /api/v1/clinician/triage/triaged-cases
+ * Get list of triaged cases
+ */
+router.get(
+  '/triage/triaged-cases',
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const db = getDb();
+    const patientRepo = new PatientRepository(db);
+
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
+
+    const patients = await patientRepo.findActive();
+
+    // Get most recent TRIAGED questionnaire for each patient
+    const patientsWithTriaged = await Promise.all(
+      patients.map(async (patient) => {
+        const questionnaires = await db('questionnaires')
+          .where('patient_id', patient.patientId)
+          .where('status', 'completed')
+          .where('triaged', true) // Only triaged
+          .orderBy('triaged_at', 'desc')
+          .limit(1);
+
+        if (questionnaires.length === 0) return null;
+
+        const questionnaire = questionnaires[0];
+        const treatmentRepo = new TreatmentRepository(db);
+        const treatmentContext = await treatmentRepo.getTreatmentContext(patient.patientId);
+
+        if (!treatmentContext) return null;
+
+        const context = buildTreatmentContext({
+          treatment: treatmentContext.treatment,
+          regimen: treatmentContext.regimen,
+          currentCycle: treatmentContext.currentCycle,
+          currentDate: new Date(),
+        });
+
+        return {
+          patientId: patient.patientId,
+          patientName: patient.fullName
+            ? `${patient.fullName} - ${patient.patientId}`
+            : patient.patientId,
+          questionnaireId: questionnaire.questionnaire_id,
+          regimenCode: treatmentContext.regimen.regimenCode,
+          currentCycle: context.currentCycle,
+          treatmentDay: context.treatmentDay,
+          triagedAt: questionnaire.triaged_at,
+          triagedBy: questionnaire.triaged_by,
+          questionnaireCompletedAt: questionnaire.completed_at,
+        };
+      })
+    );
+
+    const validCases = patientsWithTriaged
+      .filter((p) => p !== null)
+      .sort((a, b) => new Date(b.triagedAt).getTime() - new Date(a.triagedAt).getTime());
+
+    // Paginate
+    const totalCases = validCases.length;
+    const totalPages = Math.ceil(totalCases / limit);
+    const startIndex = (page - 1) * limit;
+    const paginatedCases = validCases.slice(startIndex, startIndex + limit);
+
+    res.json({
+      cases: paginatedCases,
+      pagination: {
+        page,
+        limit,
+        total: totalCases,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
   })
 );

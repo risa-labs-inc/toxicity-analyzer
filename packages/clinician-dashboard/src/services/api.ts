@@ -27,7 +27,8 @@ export type QuestionnaireGenerationMode = 'drug-module' | 'regimen';
 
 export const clinicianApi = {
   // Get prioritized triage queue
-  getTriageQueue: () => api.get('/clinician/triage/queue'),
+  getTriageQueue: (queryParams?: string) =>
+    api.get(`/clinician/triage/queue${queryParams ? `?${queryParams}` : ''}`),
 
   // Get patient overview
   getPatientOverview: (patientId: string) =>
@@ -44,6 +45,14 @@ export const clinicianApi = {
   // Acknowledge alert
   acknowledgeAlert: (alertId: string) =>
     api.post(`/clinician/alerts/${alertId}/acknowledge`),
+
+  // Mark questionnaire as triaged
+  markTriaged: (questionnaireId: string) =>
+    api.post(`/clinician/questionnaires/${questionnaireId}/mark-triaged`),
+
+  // Get triaged cases
+  getTriagedCases: (queryParams?: string) =>
+    api.get(`/clinician/triage/triaged-cases${queryParams ? `?${queryParams}` : ''}`),
 };
 
 // Patient API endpoints (for demo purposes - allows clinicians to trigger questionnaire generation)

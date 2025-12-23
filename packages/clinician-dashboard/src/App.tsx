@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { clinicianApi } from './services/api';
 import { QuestionnaireProvider, useQuestionnaire } from './contexts/QuestionnaireContext';
+import FilterBar, { FilterState } from './components/FilterBar';
+import PaginationControls from './components/PaginationControls';
 
 // ============================================
 // HELPER FUNCTIONS
@@ -59,6 +61,79 @@ function formatPhaseForClinician(phase: string): string {
 // ============================================
 // COMPONENTS
 // ============================================
+
+// Contact Patient Modal Component
+function ContactPatientModal({
+  isOpen,
+  onClose,
+  patient
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  patient: any;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900">Contact Patient</h3>
+            <p className="text-sm text-gray-600 mt-1">{patient?.patientName || 'Unknown'}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Contact Info */}
+        <div className="space-y-4 mb-6">
+          <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+            <p className="text-sm font-medium text-teal-900 mb-2">Phone Number</p>
+            <div className="flex items-center justify-between">
+              <p className="text-2xl font-bold text-teal-700">555-0123</p>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText('555-0123');
+                  alert('Phone number copied to clipboard');
+                }}
+                className="px-3 py-1 text-xs font-medium text-teal-700 bg-white border border-teal-300 rounded hover:bg-teal-50 transition"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <div className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
+            <p className="font-medium text-gray-900 mb-1">Note:</p>
+            <p>Contact the patient to discuss their recent questionnaire responses and address any concerns.</p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
+          >
+            Close
+          </button>
+          <a
+            href="tel:555-0123"
+            className="flex-1 px-4 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium text-center"
+          >
+            Call Now
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // Protected Route wrapper - ensures user is logged in
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -142,31 +217,170 @@ function TriagePage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    loadTriageData();
-  }, []);
+  // Pagination state
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(1);
+  const [totalPatients, setTotalPatients] = React.useState(0);
 
-  const loadTriageData = async () => {
+  // Filter state
+  const [filters, setFilters] = React.useState<FilterState>({
+    severity: '',
+    regimen: '',
+    phase: '',
+    search: ''
+  });
+
+  // Tab and modal state
+  const [activeTab, setActiveTab] = React.useState<'active' | 'triaged'>('active');
+  const [contactModalOpen, setContactModalOpen] = React.useState(false);
+  const [selectedPatient, setSelectedPatient] = React.useState<any>(null);
+
+  const loadTriageData = React.useCallback(async (
+    page: number,
+    filterState: FilterState,
+    tab: 'active' | 'triaged'
+  ) => {
     try {
       setLoading(true);
-      const response = await clinicianApi.getTriageQueue();
-      const { queue, statistics } = response.data;
 
-      setPatients(queue);
-      setStats({
-        totalPatients: statistics.totalPatients || 0,
-        emergencyCount: statistics.emergencyCount || 0,
-        urgentCount: statistics.urgentCount || 0,
-        routineCount: statistics.routineCount || 0
-      });
-      setError(null);
+      if (tab === 'triaged') {
+        // Fetch triaged cases
+        const response = await clinicianApi.getTriagedCases('limit=1000');
+        const { cases } = response.data;
+
+        // Client-side pagination
+        const limit = 10;
+        const totalFiltered = cases.length;
+        const totalPages = Math.ceil(totalFiltered / limit);
+        const startIndex = (page - 1) * limit;
+        const paginatedCases = cases.slice(startIndex, startIndex + limit);
+
+        setPatients(paginatedCases);
+        setStats({
+          totalPatients: totalFiltered,
+          emergencyCount: 0,
+          urgentCount: 0,
+          routineCount: 0,
+        });
+        setCurrentPage(page);
+        setTotalPages(totalPages);
+        setTotalPatients(totalFiltered);
+        setError(null);
+      } else {
+        // Fetch ALL data from API (backend filtering not yet deployed)
+        const response = await clinicianApi.getTriageQueue('limit=1000');
+        const { queue, statistics } = response.data;
+
+        // CLIENT-SIDE FILTERING (temporary until backend is deployed)
+        let filteredQueue = queue || [];
+
+        // Apply severity filter
+        if (filterState.severity) {
+          filteredQueue = filteredQueue.filter((p: any) =>
+            p.severity === filterState.severity
+          );
+        }
+
+        // Apply regimen filter
+        if (filterState.regimen) {
+          filteredQueue = filteredQueue.filter((p: any) =>
+            p.regimen.toLowerCase().includes(filterState.regimen.toLowerCase())
+          );
+        }
+
+        // Apply search filter (patient ID or name)
+        if (filterState.search) {
+          const search = filterState.search.toLowerCase();
+          filteredQueue = filteredQueue.filter((p: any) =>
+            p.patientId.toLowerCase().includes(search) ||
+            p.patientName.toLowerCase().includes(search)
+          );
+        }
+
+        // Calculate client-side pagination
+        const limit = 10;
+        const totalFiltered = filteredQueue.length;
+        const totalPages = Math.ceil(totalFiltered / limit);
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedQueue = filteredQueue.slice(startIndex, endIndex);
+
+        // Calculate statistics from filtered data
+        const emergencyCount = filteredQueue.filter((p: any) => p.severity === 'red').length;
+        const urgentCount = filteredQueue.filter((p: any) => p.severity === 'yellow').length;
+        const routineCount = filteredQueue.filter((p: any) => p.severity === 'green').length;
+
+        setPatients(paginatedQueue);
+        setStats({
+          totalPatients: totalFiltered,
+          emergencyCount,
+          urgentCount,
+          routineCount
+        });
+
+        setCurrentPage(page);
+        setTotalPages(totalPages);
+        setTotalPatients(totalFiltered);
+        setError(null);
+      }
     } catch (err: any) {
       console.error('Error loading triage data:', err);
       setError(err.response?.data?.message || 'Failed to load triage data');
     } finally {
       setLoading(false);
     }
+  }, []); // Empty dependency array - function doesn't close over any state
+
+  const handleFilterChange = React.useCallback((newFilters: FilterState) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to page 1 when filters change
+    loadTriageData(1, newFilters, activeTab);
+  }, [loadTriageData, activeTab]);
+
+  const handlePageChange = React.useCallback((page: number) => {
+    setCurrentPage(page);
+    loadTriageData(page, filters, activeTab);
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+  }, [loadTriageData, filters, activeTab]);
+
+  const handleTabChange = React.useCallback((tab: 'active' | 'triaged') => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+    setFilters({ severity: '', regimen: '', phase: '', search: '' });
+    loadTriageData(1, { severity: '', regimen: '', phase: '', search: '' }, tab);
+  }, [loadTriageData]);
+
+  const handleMarkTriaged = async (questionnaireId: string, patientName: string) => {
+    try {
+      const confirmed = window.confirm(
+        `Mark ${patientName} as triaged?\n\nThis will remove them from the active queue.`
+      );
+
+      if (!confirmed) return;
+
+      await clinicianApi.markTriaged(questionnaireId);
+      loadTriageData(currentPage, filters, activeTab);
+      alert('Patient marked as triaged successfully');
+    } catch (err: any) {
+      console.error('Error marking as triaged:', err);
+      alert(err.response?.data?.message || 'Failed to mark as triaged');
+    }
   };
+
+  const handleContactPatient = (patient: any) => {
+    setSelectedPatient(patient);
+    setContactModalOpen(true);
+  };
+
+  const handleCloseContactModal = () => {
+    setContactModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  // Load initial data on mount - independent of FilterBar
+  React.useEffect(() => {
+    loadTriageData(1, filters, activeTab);
+  }, [activeTab]); // Load when tab changes
 
   const handleLogout = () => {
     localStorage.removeItem('clinicianId');
@@ -202,7 +416,7 @@ function TriagePage() {
           <p className="text-gray-600 mb-6">{error}</p>
           <div className="flex gap-3 justify-center">
             <button
-              onClick={loadTriageData}
+              onClick={() => loadTriageData(currentPage, filters, activeTab)}
               className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
             >
               Retry
@@ -222,129 +436,211 @@ function TriagePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">Clinician Dashboard</h1>
-              <p className="text-xs text-gray-500">Clinician: {clinicianId}</p>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">Clinician Dashboard</h1>
+              <p className="text-xs text-gray-500 truncate">Clinician: {clinicianId}</p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <button
-                onClick={loadTriageData}
-                className="px-4 py-2 text-sm text-teal-700 hover:text-teal-900 hover:bg-teal-50 rounded-lg transition"
+                onClick={() => loadTriageData(currentPage, filters, activeTab)}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm text-teal-700 hover:text-teal-900 hover:bg-teal-50 rounded-lg transition min-h-[44px]"
               >
-                Refresh
+                <span className="hidden sm:inline">Refresh</span>
+                <span className="sm:hidden">↻</span>
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition min-h-[44px]"
               >
-                Logout
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Patient Queue Statistics</h2>
-          <div className="grid gap-6 md:grid-cols-4">
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Total Patients</h3>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalPatients}</p>
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Patient Queue Statistics</h2>
+          <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 lg:grid-cols-4">
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-1 sm:mb-2">Total Patients</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.totalPatients}</p>
             </div>
 
-            <div className="bg-red-50 rounded-xl shadow-sm p-6 border border-red-200">
-              <h3 className="text-sm font-medium text-red-700 mb-2">Emergency</h3>
-              <p className="text-3xl font-bold text-red-600">{stats.emergencyCount}</p>
+            <div className="bg-red-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-red-200">
+              <h3 className="text-xs sm:text-sm font-medium text-red-700 mb-1 sm:mb-2">Emergency</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-red-600">{stats.emergencyCount}</p>
               <p className="text-xs text-red-600 mt-1">Within 30 min</p>
             </div>
 
-            <div className="bg-yellow-50 rounded-xl shadow-sm p-6 border border-yellow-200">
-              <h3 className="text-sm font-medium text-yellow-700 mb-2">Urgent</h3>
-              <p className="text-3xl font-bold text-yellow-600">{stats.urgentCount}</p>
-              <p className="text-xs text-yellow-600 mt-1">Within 24 hours</p>
+            <div className="bg-yellow-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-yellow-200">
+              <h3 className="text-xs sm:text-sm font-medium text-yellow-700 mb-1 sm:mb-2">Urgent</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.urgentCount}</p>
+              <p className="text-xs text-yellow-600 mt-1">Within 24 hrs</p>
             </div>
 
-            <div className="bg-green-50 rounded-xl shadow-sm p-6 border border-green-200">
-              <h3 className="text-sm font-medium text-green-700 mb-2">Routine</h3>
-              <p className="text-3xl font-bold text-green-600">{stats.routineCount}</p>
+            <div className="bg-green-50 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-green-200">
+              <h3 className="text-xs sm:text-sm font-medium text-green-700 mb-1 sm:mb-2">Routine</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.routineCount}</p>
               <p className="text-xs text-green-600 mt-1">3-5 days</p>
             </div>
           </div>
         </div>
 
+        {/* Tab Navigation */}
+        <div className="mb-6">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              <button
+                onClick={() => handleTabChange('active')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition ${
+                  activeTab === 'active'
+                    ? 'border-teal-500 text-teal-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Active Queue
+                {activeTab === 'active' && stats.totalPatients > 0 && (
+                  <span className="ml-2 py-0.5 px-2 rounded-full text-xs bg-teal-100 text-teal-800">
+                    {stats.totalPatients}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => handleTabChange('triaged')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition ${
+                  activeTab === 'triaged'
+                    ? 'border-teal-500 text-teal-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Triaged Cases
+              </button>
+            </nav>
+          </div>
+        </div>
+
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Prioritized Triage Queue</h2>
-          {patients.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-sm p-12 border border-gray-200 text-center">
-              <div className="text-gray-400 text-5xl mb-4">📋</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Patients in Queue</h3>
-              <p className="text-gray-600 mb-4">
-                There are no completed questionnaires to review at this time.
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">
+              {activeTab === 'active' ? 'Prioritized Triage Queue' : 'Triaged Cases'}
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-600">
+              Showing {patients.length} of {totalPatients} patients
+            </p>
+          </div>
+
+          {/* Filter Bar Component */}
+          <FilterBar
+            currentFilters={filters}
+            onFilterChange={handleFilterChange}
+          />
+
+          {patients.length === 0 && !loading ? (
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-8 sm:p-12 border border-gray-200 text-center">
+              <div className="text-gray-400 text-4xl sm:text-5xl mb-4">📋</div>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
+                {(filters.severity || filters.regimen || filters.phase || filters.search)
+                  ? 'No Patients Match Your Filters'
+                  : 'No Patients in Queue'}
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-4">
+                {(filters.severity || filters.regimen || filters.phase || filters.search)
+                  ? 'Try adjusting your filter criteria to see more results.'
+                  : 'There are no completed questionnaires to review at this time.'}
               </p>
               <button
-                onClick={loadTriageData}
-                className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+                onClick={() => loadTriageData(currentPage, filters, activeTab)}
+                className="px-4 sm:px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition min-h-[44px] text-sm sm:text-base"
               >
                 Refresh Data
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
-              {patients.map((patient) => (
-              <div key={patient.rank} className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 hover:shadow-md transition">
-                <div className="flex items-start gap-6">
-                  <div className={`flex-shrink-0 w-12 h-12 rounded-full ${getSeverityColor(patient.severity)} flex items-center justify-center font-bold text-lg`}>
+            <>
+              <div className="space-y-3 sm:space-y-4">
+                {patients.map((patient) => (
+              <div key={patient.rank} className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 hover:shadow-md transition">
+                <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                  {/* Rank Badge */}
+                  <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full ${getSeverityColor(patient.severity)} flex items-center justify-center font-bold text-base sm:text-lg`}>
                     #{patient.rank}
                   </div>
 
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{patient.patientName}</h3>
-                        <p className="text-sm text-gray-600">
+                  <div className="flex-1 w-full min-w-0">
+                    {/* Patient Header - Stack on mobile */}
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{patient.patientName}</h3>
+                        <p className="text-xs sm:text-sm text-gray-600">
                           {patient.regimen} • Cycle {patient.cycle}, Day {patient.day}
                         </p>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(patient.severity)}`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(patient.severity)} self-start`}>
                         {patient.severity.toUpperCase()}
                       </span>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    {/* Info Grid - Stack on mobile */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-1">Priority Reason:</p>
-                        <p className="text-sm text-gray-600">{patient.priorityReason}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority Reason:</p>
+                        <p className="text-xs sm:text-sm text-gray-600">{patient.priorityReason}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-1">Recommended Action:</p>
-                        <p className="text-sm text-gray-600">{patient.recommendedAction}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Recommended Action:</p>
+                        <p className="text-xs sm:text-sm text-gray-600">{patient.recommendedAction}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div className="flex gap-2">
-                        {patient.alerts.map((alert: string, idx: number) => (
-                          <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
-                            {alert}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex gap-2">
+                    {/* Alerts and Actions - Stack on mobile */}
+                    <div className="flex flex-col gap-3 pt-3 sm:pt-4 border-t border-gray-100">
+                      {/* Alerts - Only show if present */}
+                      {patient.alerts && patient.alerts.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                          {patient.alerts.slice(0, 3).map((alert: string, idx: number) => (
+                            <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs whitespace-nowrap">
+                              {alert ? alert.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : ''}
+                            </span>
+                          ))}
+                          {patient.alerts.length > 3 && (
+                            <span className="px-2 py-1 bg-gray-200 text-gray-600 rounded text-xs whitespace-nowrap">
+                              +{patient.alerts.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Action Buttons - Full width on mobile */}
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <button
                           onClick={() => navigate(`/patient/${patient.patientId}`)}
-                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                          className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition min-h-[44px]"
                         >
                           View Details
                         </button>
-                        <button className="px-4 py-2 text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition">
+                        <button
+                          onClick={() => handleContactPatient(patient)}
+                          className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition min-h-[44px]"
+                        >
                           Contact Patient
                         </button>
+                        {activeTab === 'active' && (
+                          <button
+                            onClick={() => handleMarkTriaged(patient.questionnaireId, patient.patientName)}
+                            className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition min-h-[44px]"
+                          >
+                            Mark as Triaged
+                          </button>
+                        )}
                       </div>
                     </div>
 
+                    {/* Timeline */}
                     <div className="mt-2 text-xs text-gray-500">
                       Response Timeline: <span className="font-medium">{patient.timelineTarget}</span>
                     </div>
@@ -352,10 +648,26 @@ function TriagePage() {
                 </div>
               </div>
               ))}
-            </div>
+              </div>
+
+              {/* Pagination Controls */}
+              <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                loading={loading}
+              />
+            </>
           )}
         </div>
       </main>
+
+      {/* Contact Patient Modal */}
+      <ContactPatientModal
+        isOpen={contactModalOpen}
+        onClose={handleCloseContactModal}
+        patient={selectedPatient}
+      />
     </div>
   );
 }
@@ -375,6 +687,7 @@ function PatientDetailPage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [patientData, setPatientData] = React.useState<any>(null);
+  const [contactModalOpen, setContactModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     loadPatientData();
@@ -486,7 +799,31 @@ function PatientDetailPage() {
               </button>
             </div>
             <h1 className="text-xl font-bold text-gray-900">Patient Detail</h1>
-            <div className="w-24"></div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setContactModalOpen(true)}
+                className="px-4 py-2 text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 rounded-lg transition"
+              >
+                Contact Patient
+              </button>
+              <button
+                onClick={async () => {
+                  const confirmed = window.confirm('Mark this patient as triaged?\n\nThis will remove them from the active queue.');
+                  if (!confirmed) return;
+
+                  try {
+                    await clinicianApi.markTriaged(patientData.recentQuestionnaires[0].questionnaire_id);
+                    alert('Patient marked as triaged successfully');
+                    navigate('/triage');
+                  } catch (err: any) {
+                    alert(err.response?.data?.message || 'Failed to mark as triaged');
+                  }
+                }}
+                className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition"
+              >
+                Mark as Triaged
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -498,7 +835,9 @@ function PatientDetailPage() {
           <div className="flex items-start justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Patient {patient.firebaseUid}
+                {patient.fullName
+                  ? `${patient.fullName} - ${patient.patientId}`
+                  : `Patient ${patient.patientId}`}
               </h2>
               <p className="text-sm text-gray-500 mt-1">
                 MRN: {patient.medicalRecordNumber || 'N/A'} •
@@ -711,6 +1050,13 @@ function PatientDetailPage() {
           </div>
         )}
       </main>
+
+      {/* Contact Patient Modal */}
+      <ContactPatientModal
+        isOpen={contactModalOpen}
+        onClose={() => setContactModalOpen(false)}
+        patient={patientData?.patient}
+      />
     </div>
   );
 }

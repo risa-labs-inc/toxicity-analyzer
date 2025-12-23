@@ -91,48 +91,50 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Review Your Answers</h1>
-          <p className="text-gray-600">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2">Review Your Answers</h1>
+          <p className="text-sm sm:text-base text-gray-600">
             Please review your responses below. You can change any answer before submitting.
           </p>
         </div>
 
         {/* Responses List */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
           {responses.map((response, index) => (
-            <div key={response.itemId} className="bg-white rounded-xl shadow-lg p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-800 text-sm font-bold rounded-full">
+            <div key={response.itemId} className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+                    <span className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-blue-100 text-blue-800 text-xs sm:text-sm font-bold rounded-full flex-shrink-0">
                       {index + 1}
                     </span>
-                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                    <span className="inline-block px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
                       {response.symptomCategory.replace(/_/g, ' ').toUpperCase()}
                     </span>
                     <span className="text-xs text-gray-500">
                       {response.attribute.charAt(0).toUpperCase() + response.attribute.slice(1)}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">
                     {response.questionText}
                   </h3>
-                  <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                  <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
-                      <span className="font-medium text-gray-900">{response.responseLabel}</span>
+                      <span className="text-sm sm:text-base font-medium text-gray-900">{response.responseLabel}</span>
                     </div>
                   </div>
                 </div>
+
+                {/* Change Answer Button - Full width on mobile */}
                 <button
                   onClick={() => handleChangeAnswer(response.itemId)}
-                  className="ml-4 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                  className="w-full sm:w-auto sm:ml-4 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors min-h-[44px]"
                 >
                   Change Answer
                 </button>
@@ -142,24 +144,24 @@ export default function ReviewPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               onClick={handleBack}
               disabled={submitting}
-              className="flex-1 px-6 py-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-gray-700 bg-gray-100 rounded-lg sm:rounded-xl hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium min-h-[44px]"
             >
               ← Go Back
             </button>
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex-1 px-6 py-4 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base bg-green-600 text-white font-semibold rounded-lg sm:rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 min-h-[44px]"
             >
               {submitting ? 'Submitting...' : 'Submit Questionnaire ✓'}
             </button>
           </div>
-          <p className="text-center text-sm text-gray-500 mt-4">
+          <p className="text-center text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4">
             {responses.length} response{responses.length !== 1 ? 's' : ''} recorded
           </p>
         </div>

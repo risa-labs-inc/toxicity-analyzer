@@ -152,30 +152,31 @@ function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">Patient Portal</h1>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-sm sm:text-xl font-bold text-gray-900 truncate">Patient Portal</h1>
               {patientProfile?.fullName ? (
                 <>
-                  <p className="text-sm text-gray-900 font-medium">{patientProfile.fullName}</p>
-                  <p className="text-xs text-gray-500">ID: {patientId}</p>
+                  <p className="text-xs sm:text-sm text-gray-900 font-medium truncate">{patientProfile.fullName}</p>
+                  <p className="text-xs text-gray-500 truncate">ID: {patientId}</p>
                 </>
               ) : (
-                <p className="text-xs text-gray-500">Patient ID: {patientId}</p>
+                <p className="text-xs text-gray-500 truncate">Patient ID: {patientId}</p>
               )}
             </div>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition min-h-[44px]"
             >
-              Logout
+              <span className="hidden sm:inline">Logout</span>
+              <span className="sm:hidden">Exit</span>
             </button>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -183,25 +184,24 @@ function DashboardPage() {
         ) : (
           <>
             {/* Treatment Timeline Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Current Treatment</h3>
-                  <p className="text-2xl font-bold text-gray-900">{treatmentInfo?.regimen || 'Loading...'}</p>
-                  <p className="text-sm text-gray-600 mt-1">Cycle {treatmentInfo?.cycle || '-'}, Day {treatmentInfo?.day || '-'}</p>
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 mb-4 sm:mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-4">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Current Treatment</h3>
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900 truncate">{treatmentInfo?.regimen || 'Loading...'}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">Cycle {treatmentInfo?.cycle || '-'}, Day {treatmentInfo?.day || '-'}</p>
                 </div>
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs sm:text-sm font-medium rounded-full self-start">
                   {treatmentInfo?.phase || 'Loading...'}
                 </span>
               </div>
 
-              {/* Timeline Visualization */}
-              <div className="mt-6">
+              {/* Timeline Visualization - Desktop Horizontal Layout */}
+              <div className="mt-4 sm:mt-6 hidden sm:block">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-medium text-gray-500">Treatment Cycle Timeline</span>
                 </div>
                 <div className="relative">
-                  {/* Timeline bar */}
                   <div className="flex items-center gap-1">
                     {[
                       { phase: 'Pre-Session', color: 'bg-purple-500', label: 'Pre' },
@@ -231,24 +231,54 @@ function DashboardPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Timeline Visualization - Mobile Vertical List */}
+              <div className="mt-4 sm:hidden">
+                <p className="text-xs font-medium text-gray-500 mb-3">Treatment Cycle Timeline</p>
+                <div className="space-y-2">
+                  {[
+                    { phase: 'Pre-Session', color: 'bg-purple-500', label: 'Pre-Session' },
+                    { phase: 'Post-Session', color: 'bg-pink-500', label: 'Post-Session' },
+                    { phase: 'Nadir Window', color: 'bg-red-500', label: 'Nadir Window' },
+                    { phase: 'Recovery', color: 'bg-yellow-500', label: 'Recovery/Adjustment' },
+                    { phase: 'Inter-Cycle', color: 'bg-green-500', label: 'Inter-Cycle' }
+                  ].map((item) => {
+                    const isActive = treatmentInfo?.phase === item.phase;
+                    return (
+                      <div
+                        key={item.phase}
+                        className={`p-3 rounded-lg transition-all ${
+                          isActive
+                            ? `${item.color} text-white ring-2 ring-offset-2 ring-blue-400`
+                            : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        <p className={`text-sm font-medium ${isActive ? 'font-semibold' : ''}`}>
+                          {item.label}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Next Action</h3>
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
+              <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
+                <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2">Next Action</h3>
                 <p className="text-sm text-gray-900 mb-4">Complete your symptom questionnaire</p>
                 <button
                   onClick={handleStartQuestionnaire}
                   disabled={generating}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition transform hover:scale-[1.02]"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition transform hover:scale-[1.02] min-h-[44px] text-sm sm:text-base"
                 >
                   {generating ? 'Generating...' : 'Start Questionnaire'}
                 </button>
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Quick Info</h3>
-                <div className="space-y-3 text-sm text-gray-600">
+              <div className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
+                <h3 className="text-xs sm:text-sm font-medium text-gray-500 mb-2">Quick Info</h3>
+                <div className="space-y-3 text-xs sm:text-sm text-gray-600">
                   <div className="flex items-center gap-2">
                     <span className="text-blue-600">📋</span>
                     <span>Personalized symptom tracking</span>
@@ -265,25 +295,25 @@ function DashboardPage() {
               </div>
             </div>
 
-            <div className="mt-8 bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Welcome to Your Patient Portal</h2>
-              <div className="space-y-4 text-gray-600">
+            <div className="mt-6 sm:mt-8 bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Welcome to Your Patient Portal</h2>
+              <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-gray-600">
                 <p>This portal helps you track your cancer treatment and report any side effects you may be experiencing.</p>
 
-                <div className="grid md:grid-cols-3 gap-4 mt-6">
-                  <div className="p-4 bg-blue-50 rounded-lg">
-                    <h3 className="font-semibold text-blue-900 mb-2">📋 Questionnaires</h3>
-                    <p className="text-sm text-blue-800">Complete personalized symptom assessments tailored to your treatment</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-4 sm:mt-6">
+                  <div className="p-3 sm:p-4 bg-blue-50 rounded-lg">
+                    <h3 className="text-sm sm:text-base font-semibold text-blue-900 mb-1 sm:mb-2">📋 Questionnaires</h3>
+                    <p className="text-xs sm:text-sm text-blue-800">Complete personalized symptom assessments tailored to your treatment</p>
                   </div>
 
-                  <div className="p-4 bg-green-50 rounded-lg">
-                    <h3 className="font-semibold text-green-900 mb-2">📊 Track Progress</h3>
-                    <p className="text-sm text-green-800">Monitor your symptoms and see trends over time</p>
+                  <div className="p-3 sm:p-4 bg-green-50 rounded-lg">
+                    <h3 className="text-sm sm:text-base font-semibold text-green-900 mb-1 sm:mb-2">📊 Track Progress</h3>
+                    <p className="text-xs sm:text-sm text-green-800">Monitor your symptoms and see trends over time</p>
                   </div>
 
-                  <div className="p-4 bg-purple-50 rounded-lg">
-                    <h3 className="font-semibold text-purple-900 mb-2">🔔 Alerts</h3>
-                    <p className="text-sm text-purple-800">Receive important notifications about your care</p>
+                  <div className="p-3 sm:p-4 bg-purple-50 rounded-lg">
+                    <h3 className="text-sm sm:text-base font-semibold text-purple-900 mb-1 sm:mb-2">🔔 Alerts</h3>
+                    <p className="text-xs sm:text-sm text-purple-800">Receive important notifications about your care</p>
                   </div>
                 </div>
               </div>

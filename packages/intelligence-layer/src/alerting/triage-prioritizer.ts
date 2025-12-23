@@ -3,6 +3,7 @@ import { EmergencyAlert, AlertSeverity } from './emergency-detector';
 export interface TriagePatient {
   patientId: string;
   patientName: string;
+  questionnaireId: string;
   alerts: EmergencyAlert[];
   questionnaireCompletedAt: Date;
   regimenCode: string;

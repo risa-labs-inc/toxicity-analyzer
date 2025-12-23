@@ -173,6 +173,42 @@ Password: (to be configured)
 - Principle of least privilege
 - Service accounts with minimal permissions
 
+## Deployment
+
+### Deploying the Backend API
+
+**IMPORTANT:** Always use the ROOT `cloudbuild.yaml` for API deployment.
+
+```bash
+# From project root
+gcloud builds submit --config=cloudbuild.yaml --substitutions=COMMIT_SHA=$(git rev-parse --short HEAD)
+```
+
+**What happens:**
+1. Builds Docker image with latest code
+2. Pushes to Artifact Registry
+3. Deploys to Cloud Run (`toxicity-analyzer-api`)
+4. Runs database migrations automatically
+5. Updates environment variables and secrets
+
+**Live API:** https://toxicity-analyzer-api-4tebejtipa-uc.a.run.app/api/v1
+
+### Deploying the Frontend
+
+**Patient App:**
+```bash
+firebase deploy --only hosting:patient-app
+```
+
+**Clinician Dashboard:**
+```bash
+firebase deploy --only hosting:clinician-dashboard
+```
+
+**Live URLs:**
+- Patient App: https://toxicity-analyzer-patient.web.app
+- Clinician Dashboard: https://toxicity-analyzer-clinician.web.app
+
 ## Contributing
 
 1. Create a feature branch
