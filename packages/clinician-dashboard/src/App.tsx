@@ -741,17 +741,19 @@ function TriagePage() {
                       </span>
                     </div>
 
-                    {/* Info Grid - Stack on mobile */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority Reason:</p>
-                        <p className="text-xs sm:text-sm text-gray-600">{patient.priorityReason}</p>
+                    {/* Info Grid - Stack on mobile - Only show for Active Queue */}
+                    {activeTab === 'active' && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div>
+                          <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority Reason:</p>
+                          <p className="text-xs sm:text-sm text-gray-600">{patient.priorityReason}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Recommended Action:</p>
+                          <p className="text-xs sm:text-sm text-gray-600">{patient.recommendedAction}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Recommended Action:</p>
-                        <p className="text-xs sm:text-sm text-gray-600">{patient.recommendedAction}</p>
-                      </div>
-                    </div>
+                    )}
 
                     {/* Alerts and Actions - Stack on mobile */}
                     <div className="flex flex-col gap-3 pt-3 sm:pt-4 border-t border-gray-100">
@@ -796,10 +798,12 @@ function TriagePage() {
                       </div>
                     </div>
 
-                    {/* Timeline */}
-                    <div className="mt-2 text-xs text-gray-500">
-                      Response Timeline: <span className="font-medium">{patient.timelineTarget}</span>
-                    </div>
+                    {/* Timeline - Only show for Active Queue */}
+                    {activeTab === 'active' && patient.timelineTarget && (
+                      <div className="mt-2 text-xs text-gray-500">
+                        Response Timeline: <span className="font-medium">{patient.timelineTarget}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

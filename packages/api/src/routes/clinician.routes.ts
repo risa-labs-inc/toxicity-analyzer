@@ -131,9 +131,11 @@ router.get(
 
         return {
           patientId: patient.patientId,
-          patientName: patient.fullName
-            ? `${patient.fullName} - ${patient.patientId}`
-            : patient.patientId,
+          patientName: patient.medicalRecordNumber
+            ? patient.fullName
+              ? `${patient.fullName} - ${patient.medicalRecordNumber}`
+              : patient.medicalRecordNumber
+            : patient.fullName || patient.patientId,
           questionnaireId: questionnaire.questionnaire_id,
           alerts: alerts.map((a: any) => ({
             alertType: a.alert_type,
@@ -504,14 +506,17 @@ router.get(
 
         return {
           patientId: patient.patientId,
-          patientName: patient.fullName
-            ? `${patient.fullName} - ${patient.patientId}`
-            : patient.patientId,
+          patientName: patient.medicalRecordNumber
+            ? patient.fullName
+              ? `${patient.fullName} - ${patient.medicalRecordNumber}`
+              : patient.medicalRecordNumber
+            : patient.fullName || patient.patientId,
           questionnaireId: questionnaire.questionnaire_id,
-          regimenCode: treatmentContext.regimen.regimenCode,
-          currentCycle: context.currentCycle,
-          treatmentDay: context.treatmentDay,
+          regimen: treatmentContext.regimen.regimenCode,
+          cycle: context.currentCycle,
+          day: context.treatmentDay,
           severity,
+          alerts: alerts.map((a: any) => a.symptom_term).filter(Boolean),
           triagedAt: questionnaire.triaged_at,
           triagedBy: questionnaire.triaged_by,
           questionnaireCompletedAt: questionnaire.completed_at,
@@ -527,7 +532,10 @@ router.get(
     const totalCases = validCases.length;
     const totalPages = Math.ceil(totalCases / limit);
     const startIndex = (page - 1) * limit;
-    const paginatedCases = validCases.slice(startIndex, startIndex + limit);
+    const paginatedCases = validCases.slice(startIndex, startIndex + limit).map((c, index) => ({
+      ...c,
+      rank: startIndex + index + 1,
+    }));
 
     res.json({
       cases: paginatedCases,
