@@ -111,9 +111,6 @@ export default function ReviewPage() {
                     <span className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-blue-100 text-blue-800 text-xs sm:text-sm font-bold rounded-full flex-shrink-0">
                       {index + 1}
                     </span>
-                    <span className="inline-block px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
-                      {response.symptomCategory.replace(/_/g, ' ').toUpperCase()}
-                    </span>
                     <span className="text-xs text-gray-500">
                       {response.attribute.charAt(0).toUpperCase() + response.attribute.slice(1)}
                     </span>

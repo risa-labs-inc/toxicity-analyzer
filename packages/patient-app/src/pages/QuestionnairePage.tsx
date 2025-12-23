@@ -24,6 +24,30 @@ export default function QuestionnairePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Helper function to render question text with timeframe badge
+  const renderQuestionText = (text: string) => {
+    // Check if question starts with "In the last 7 days"
+    const timeframePattern = /^In the last (\d+) days?,?\s*/i;
+    const match = text.match(timeframePattern);
+
+    if (match) {
+      const timeframePart = match[0].trim();
+      const remainingText = text.substring(match[0].length);
+
+      return (
+        <>
+          <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full mb-3">
+            {timeframePart.replace(/,$/, '')}
+          </span>
+          <br />
+          <span>{remainingText}</span>
+        </>
+      );
+    }
+
+    return text;
+  };
+
   useEffect(() => {
     loadQuestionnaire();
   }, [questionnaireId]);
@@ -111,11 +135,21 @@ export default function QuestionnairePage() {
 
       setQuestions(newQuestions);
 
-      // If in edit mode, go back to review page
+      // If in edit mode, check if there are branching questions
       if (editItemId) {
-        navigate(`/review/${questionnaireId}`);
+        // If branching questions were added, stay on questionnaire to answer them
+        const hasBranchingQuestions = result.data.branchingQuestions && result.data.branchingQuestions.length > 0;
+
+        if (hasBranchingQuestions && currentIndex < newQuestions.length - 1) {
+          // Move to the next question (the first branching question)
+          setCurrentIndex(currentIndex + 1);
+          setSelectedOption(null);
+        } else {
+          // No branching questions, go back to review page
+          navigate(`/review/${questionnaireId}`);
+        }
       } else {
-        // Move to next question or go to review page
+        // Normal flow: Move to next question or go to review page
         if (currentIndex < newQuestions.length - 1) {
           setCurrentIndex(currentIndex + 1);
           setSelectedOption(null); // Clear selection for next question
@@ -212,11 +246,8 @@ export default function QuestionnairePage() {
         {/* Question Card */}
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
           <div className="mb-4 sm:mb-6">
-            <span className="inline-block px-2 sm:px-3 py-1 bg-blue-100 text-blue-800 text-xs sm:text-sm font-medium rounded-full mb-3 sm:mb-4">
-              {currentQuestion.symptomCategory.replace(/_/g, ' ').toUpperCase()}
-            </span>
             <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">
-              {currentQuestion.questionText}
+              {renderQuestionText(currentQuestion.questionText)}
             </h2>
             <p className="text-xs sm:text-sm text-gray-500">
               {currentQuestion.attribute.charAt(0).toUpperCase() + currentQuestion.attribute.slice(1)} Assessment

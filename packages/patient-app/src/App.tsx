@@ -157,12 +157,13 @@ function DashboardPage() {
             <div className="flex-1 min-w-0">
               <h1 className="text-sm sm:text-xl font-bold text-gray-900 truncate">Patient Portal</h1>
               {patientProfile?.fullName ? (
-                <>
-                  <p className="text-xs sm:text-sm text-gray-900 font-medium truncate">{patientProfile.fullName}</p>
-                  <p className="text-xs text-gray-500 truncate">ID: {patientId}</p>
-                </>
+                <p className="text-xs sm:text-sm truncate">
+                  <span className="text-gray-900 font-medium">{patientProfile.fullName}</span>
+                  <span className="text-gray-400 mx-1 sm:mx-2">|</span>
+                  <span className="text-gray-600">{patientId}</span>
+                </p>
               ) : (
-                <p className="text-xs text-gray-500 truncate">Patient ID: {patientId}</p>
+                <p className="text-xs sm:text-sm text-gray-600 truncate">{patientId}</p>
               )}
             </div>
             <button
