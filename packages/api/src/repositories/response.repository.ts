@@ -24,30 +24,38 @@ export class ResponseRepository {
 
   /**
    * Upsert questionnaire response (update if exists, insert if not)
-   * Uses PostgreSQL's ON CONFLICT to properly handle upserts
+   * Uses transaction to ensure atomicity and prevent race conditions
    */
   async upsertResponse(response: Omit<QuestionnaireResponse, 'responseId' | 'createdAt'>): Promise<QuestionnaireResponse> {
-    // First, delete any existing responses for this questionnaire + item_id combination
-    // This ensures we don't have duplicates
-    await this.db('questionnaire_responses')
-      .where({
-        questionnaire_id: response.questionnaireId,
-        item_id: response.itemId,
-      })
-      .delete();
+    // Use a transaction to ensure the delete and insert are atomic
+    return await this.db.transaction(async (trx) => {
+      console.log(`[UPSERT] Starting upsert for questionnaire=${response.questionnaireId}, item=${response.itemId}`);
 
-    // Then insert the new response
-    const [row] = await this.db('questionnaire_responses')
-      .insert({
-        questionnaire_id: response.questionnaireId,
-        item_id: response.itemId,
-        response_value: response.responseValue,
-        response_label: response.responseLabel,
-        conditional_triggered: response.conditionalTriggered,
-      })
-      .returning('*');
+      // First, delete any existing responses for this questionnaire + item_id combination
+      const deletedCount = await trx('questionnaire_responses')
+        .where({
+          questionnaire_id: response.questionnaireId,
+          item_id: response.itemId,
+        })
+        .delete();
 
-    return this.mapToResponse(row);
+      console.log(`[UPSERT] Deleted ${deletedCount} existing responses`);
+
+      // Then insert the new response
+      const [row] = await trx('questionnaire_responses')
+        .insert({
+          questionnaire_id: response.questionnaireId,
+          item_id: response.itemId,
+          response_value: response.responseValue,
+          response_label: response.responseLabel,
+          conditional_triggered: response.conditionalTriggered,
+        })
+        .returning('*');
+
+      console.log(`[UPSERT] Inserted new response with id=${row.response_id}, label=${row.response_label}`);
+
+      return this.mapToResponse(row);
+    });
   }
 
   /**
