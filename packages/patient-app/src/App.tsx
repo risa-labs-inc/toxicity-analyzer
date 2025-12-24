@@ -116,37 +116,38 @@ function DashboardPage() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    loadTreatmentInfo();
-    loadPatientProfile();
+    loadDashboardData();
   }, []);
 
-  const loadTreatmentInfo = async () => {
+  // OPTIMIZED: Load both API calls in parallel instead of sequentially
+  const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const response = await patientApi.getTimeline();
-      const timeline = response.data.timeline;
+
+      // Fetch timeline and profile in parallel
+      const [timelineResponse, profileResponse] = await Promise.all([
+        patientApi.getTimeline(),
+        patientApi.getProfile()
+      ]);
+
+      // Update treatment info
+      const timeline = timelineResponse.data.timeline;
       setTreatmentInfo({
         regimen: timeline.regimenCode,
         cycle: timeline.currentCycle,
         day: timeline.treatmentDay,
         phase: formatPhase(timeline.phase)
       });
-    } catch (error) {
-      console.error('Error loading treatment info:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const loadPatientProfile = async () => {
-    try {
-      const response = await patientApi.getProfile();
+      // Update patient profile
       setPatientProfile({
-        fullName: response.data.patient.fullName,
-        patientId: response.data.patient.patientId
+        fullName: profileResponse.data.patient.fullName,
+        patientId: profileResponse.data.patient.patientId
       });
     } catch (error) {
-      console.error('Error loading patient profile:', error);
+      console.error('Error loading dashboard data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 

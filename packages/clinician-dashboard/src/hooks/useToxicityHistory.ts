@@ -59,18 +59,10 @@ export function useToxicityHistory(options: UseToxicityHistoryOptions) {
       setLoading(true);
       setError(null);
 
-      console.log('[useToxicityHistory] Fetching data for patient:', patientId);
-
       // Fetch toxicity history from API
       const response = await clinicianApi.getPatientToxicityHistory(patientId);
       const scores: ToxicityScore[] = response.data.scores || [];
       const bySymptom: Record<string, ToxicityScore[]> = response.data.bySymptom || {};
-
-      console.log('[useToxicityHistory] API Response:', {
-        scoresCount: scores.length,
-        symptomsCount: Object.keys(bySymptom).length,
-        symptoms: Object.keys(bySymptom)
-      });
 
       // Sort scores by date
       scores.sort((a, b) => new Date(a.calculatedAt).getTime() - new Date(b.calculatedAt).getTime());

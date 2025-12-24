@@ -89,74 +89,120 @@ router.get(
     const phaseFilter = req.query.phase as string; // 'pre_session', 'post_session', etc.
     const searchQuery = req.query.search as string;
 
-    // Get all active patients
-    const patients = await patientRepo.findActive();
+    // OPTIMIZED: Get all patients with their latest untriaged questionnaire in a single query
+    // This replaces 45+ queries (3 per patient) with just 2-3 queries
+    const patientsWithQuestionnaires = await db('patients as p')
+      .select(
+        'p.patient_id',
+        'p.full_name',
+        'p.medical_record_number',
+        'q.questionnaire_id',
+        'q.completed_at',
+        'pt.treatment_id',
+        'pt.start_date',
+        'r.regimen_id',
+        'r.regimen_code',
+        'r.regimen_name',
+        'r.cycle_length_days',
+        'r.nadirStart',
+        'r.nadirEnd',
+        'tc.cycle_number',
+        'tc.infusion_date'
+      )
+      .innerJoin(
+        db('questionnaires')
+          .select('*')
+          .whereRaw('questionnaire_id IN (SELECT questionnaire_id FROM questionnaires q2 WHERE q2.patient_id = questionnaires.patient_id AND q2.status = ? AND q2.triaged = false ORDER BY q2.completed_at DESC LIMIT 1)', ['completed'])
+          .as('q'),
+        'p.patient_id',
+        'q.patient_id'
+      )
+      .innerJoin('patient_treatments as pt', function() {
+        this.on('p.patient_id', '=', 'pt.patient_id')
+          .andOn('pt.status', '=', db.raw('?', ['active']));
+      })
+      .innerJoin('regimens as r', 'pt.regimen_id', 'r.regimen_id')
+      .leftJoin('treatment_cycles as tc', function() {
+        this.on('pt.treatment_id', '=', 'tc.treatment_id')
+          .andOn('tc.infusion_date', '<=', db.raw('CURRENT_DATE'));
+      })
+      .where('p.status', 'active')
+      .orderBy('tc.cycle_number', 'desc')
+      .orderBy('tc.infusion_date', 'desc');
 
-    // Get recent questionnaires and alerts for each patient
-    const patientsWithAlerts = await Promise.all(
-      patients.map(async (patient) => {
-        // Get most recent questionnaire (only untriaged)
-        const questionnaires = await db('questionnaires')
-          .where('patient_id', patient.patientId)
-          .where('status', 'completed')
-          .where('triaged', false)
-          .orderBy('completed_at', 'desc')
-          .limit(1);
+    // Get all questionnaire IDs for alert fetching
+    const questionnaireIds = patientsWithQuestionnaires.map(p => p.questionnaire_id);
 
-        if (questionnaires.length === 0) {
-          return null;
-        }
+    // OPTIMIZED: Get all alerts for these questionnaires in a single query
+    const alertsRaw = questionnaireIds.length > 0
+      ? await db('alerts')
+          .whereIn('questionnaire_id', questionnaireIds)
+          .orderBy('severity', 'asc')
+      : [];
 
-        const questionnaire = questionnaires[0];
+    // Group alerts by questionnaire ID for fast lookup
+    const alertsByQuestionnaire = alertsRaw.reduce((acc: any, alert: any) => {
+      if (!acc[alert.questionnaire_id]) {
+        acc[alert.questionnaire_id] = [];
+      }
+      acc[alert.questionnaire_id].push({
+        alertType: alert.alert_type,
+        severity: alert.severity,
+        symptomTerm: alert.symptom_term,
+        grade: alert.grade,
+        alertMessage: alert.alert_message,
+        patientInstructions: alert.patient_instructions,
+        clinicianInstructions: alert.clinician_instructions,
+        requiresImmediateAction: alert.requires_immediate_action,
+      });
+      return acc;
+    }, {});
 
-        // Get alerts for this questionnaire
-        const alerts = await db('alerts')
-          .where('questionnaire_id', questionnaire.questionnaire_id)
-          .orderBy('severity', 'asc'); // red, yellow, green
+    // Group by patient to get the most recent cycle
+    const patientMap = new Map();
+    for (const row of patientsWithQuestionnaires) {
+      if (!patientMap.has(row.patient_id)) {
+        const alerts = alertsByQuestionnaire[row.questionnaire_id] || [];
 
-        // Get treatment context
-        const treatmentRepo = new TreatmentRepository(db);
-        const treatmentContext = await treatmentRepo.getTreatmentContext(patient.patientId);
-
-        if (!treatmentContext) {
-          return null;
-        }
-
+        // Build treatment context
         const context = buildTreatmentContext({
-          treatment: treatmentContext.treatment,
-          regimen: treatmentContext.regimen,
-          currentCycle: treatmentContext.currentCycle,
+          treatment: {
+            treatmentId: row.treatment_id,
+            patientId: row.patient_id,
+            regimenId: row.regimen_id,
+            startDate: new Date(row.start_date),
+          },
+          regimen: {
+            regimenId: row.regimen_id,
+            regimenCode: row.regimen_code,
+            regimenName: row.regimen_name,
+            cycleLengthDays: row.cycle_length_days,
+            nadirStart: row.nadirStart,
+            nadirEnd: row.nadirEnd,
+          },
+          currentCycle: row.cycle_number || 1,
           currentDate: new Date(),
         });
 
-        return {
-          patientId: patient.patientId,
-          patientName: patient.medicalRecordNumber
-            ? patient.fullName
-              ? `${patient.fullName} - ${patient.medicalRecordNumber}`
-              : patient.medicalRecordNumber
-            : patient.fullName || patient.patientId,
-          questionnaireId: questionnaire.questionnaire_id,
-          alerts: alerts.map((a: any) => ({
-            alertType: a.alert_type,
-            severity: a.severity,
-            symptomTerm: a.symptom_term,
-            grade: a.grade,
-            alertMessage: a.alert_message,
-            patientInstructions: a.patient_instructions,
-            clinicianInstructions: a.clinician_instructions,
-            requiresImmediateAction: a.requires_immediate_action,
-          })),
-          questionnaireCompletedAt: new Date(questionnaire.completed_at),
-          regimenCode: treatmentContext.regimen.regimenCode,
+        patientMap.set(row.patient_id, {
+          patientId: row.patient_id,
+          patientName: row.medical_record_number
+            ? row.full_name
+              ? `${row.full_name} - ${row.medical_record_number}`
+              : row.medical_record_number
+            : row.full_name || row.patient_id,
+          questionnaireId: row.questionnaire_id,
+          alerts,
+          questionnaireCompletedAt: new Date(row.completed_at),
+          regimenCode: row.regimen_code,
           currentCycle: context.currentCycle,
           treatmentDay: context.treatmentDay,
-        };
-      })
-    );
+        });
+      }
+    }
 
-    // Filter out patients without recent questionnaires
-    let validPatients = patientsWithAlerts.filter((p) => p !== null);
+    // Convert map to array
+    let validPatients = Array.from(patientMap.values());
 
     // Apply filters BEFORE prioritization
     if (severityFilter) {
@@ -467,65 +513,119 @@ router.get(
     const page = parseInt(req.query.page as string) || 1;
     const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
 
-    const patients = await patientRepo.findActive();
+    // OPTIMIZED: Get all patients with their latest triaged questionnaire in a single query
+    const patientsWithTriaged = await db('patients as p')
+      .select(
+        'p.patient_id',
+        'p.full_name',
+        'p.medical_record_number',
+        'q.questionnaire_id',
+        'q.completed_at',
+        'q.triaged_at',
+        'q.triaged_by',
+        'pt.treatment_id',
+        'pt.start_date',
+        'r.regimen_id',
+        'r.regimen_code',
+        'r.regimen_name',
+        'r.cycle_length_days',
+        'r.nadirStart',
+        'r.nadirEnd',
+        'tc.cycle_number',
+        'tc.infusion_date'
+      )
+      .innerJoin(
+        db('questionnaires')
+          .select('*')
+          .whereRaw('questionnaire_id IN (SELECT questionnaire_id FROM questionnaires q2 WHERE q2.patient_id = questionnaires.patient_id AND q2.status = ? AND q2.triaged = true ORDER BY q2.triaged_at DESC LIMIT 1)', ['completed'])
+          .as('q'),
+        'p.patient_id',
+        'q.patient_id'
+      )
+      .innerJoin('patient_treatments as pt', function() {
+        this.on('p.patient_id', '=', 'pt.patient_id')
+          .andOn('pt.status', '=', db.raw('?', ['active']));
+      })
+      .innerJoin('regimens as r', 'pt.regimen_id', 'r.regimen_id')
+      .leftJoin('treatment_cycles as tc', function() {
+        this.on('pt.treatment_id', '=', 'tc.treatment_id')
+          .andOn('tc.infusion_date', '<=', db.raw('CURRENT_DATE'));
+      })
+      .where('p.status', 'active')
+      .orderBy('tc.cycle_number', 'desc')
+      .orderBy('tc.infusion_date', 'desc');
 
-    // Get most recent TRIAGED questionnaire for each patient
-    const patientsWithTriaged = await Promise.all(
-      patients.map(async (patient) => {
-        const questionnaires = await db('questionnaires')
-          .where('patient_id', patient.patientId)
-          .where('status', 'completed')
-          .where('triaged', true) // Only triaged
-          .orderBy('triaged_at', 'desc')
-          .limit(1);
+    // Get all questionnaire IDs for alert fetching
+    const questionnaireIds = patientsWithTriaged.map(p => p.questionnaire_id);
 
-        if (questionnaires.length === 0) return null;
+    // OPTIMIZED: Get all alerts for these questionnaires in a single query
+    const alertsRaw = questionnaireIds.length > 0
+      ? await db('alerts')
+          .whereIn('questionnaire_id', questionnaireIds)
+          .orderBy('severity', 'asc')
+      : [];
 
-        const questionnaire = questionnaires[0];
-        const treatmentRepo = new TreatmentRepository(db);
-        const treatmentContext = await treatmentRepo.getTreatmentContext(patient.patientId);
+    // Group alerts by questionnaire ID
+    const alertsByQuestionnaire = alertsRaw.reduce((acc: any, alert: any) => {
+      if (!acc[alert.questionnaire_id]) {
+        acc[alert.questionnaire_id] = [];
+      }
+      acc[alert.questionnaire_id].push(alert);
+      return acc;
+    }, {});
 
-        if (!treatmentContext) return null;
+    // Process results
+    const patientMap = new Map();
+    for (const row of patientsWithTriaged) {
+      if (!patientMap.has(row.patient_id)) {
+        const alerts = alertsByQuestionnaire[row.questionnaire_id] || [];
 
-        const context = buildTreatmentContext({
-          treatment: treatmentContext.treatment,
-          regimen: treatmentContext.regimen,
-          currentCycle: treatmentContext.currentCycle,
-          currentDate: new Date(),
-        });
-
-        // Get alerts for this questionnaire to determine severity
-        const alerts = await db('alerts')
-          .where('questionnaire_id', questionnaire.questionnaire_id)
-          .orderBy('severity', 'asc'); // red, yellow, green
-
-        // Determine overall severity from alerts (highest severity wins)
+        // Determine overall severity from alerts
         const hasRed = alerts.some((a: any) => a.severity === 'red');
         const hasYellow = alerts.some((a: any) => a.severity === 'yellow');
         const severity = hasRed ? 'red' : hasYellow ? 'yellow' : 'green';
 
-        return {
-          patientId: patient.patientId,
-          patientName: patient.medicalRecordNumber
-            ? patient.fullName
-              ? `${patient.fullName} - ${patient.medicalRecordNumber}`
-              : patient.medicalRecordNumber
-            : patient.fullName || patient.patientId,
-          questionnaireId: questionnaire.questionnaire_id,
-          regimen: treatmentContext.regimen.regimenCode,
+        // Build treatment context
+        const context = buildTreatmentContext({
+          treatment: {
+            treatmentId: row.treatment_id,
+            patientId: row.patient_id,
+            regimenId: row.regimen_id,
+            startDate: new Date(row.start_date),
+          },
+          regimen: {
+            regimenId: row.regimen_id,
+            regimenCode: row.regimen_code,
+            regimenName: row.regimen_name,
+            cycleLengthDays: row.cycle_length_days,
+            nadirStart: row.nadirStart,
+            nadirEnd: row.nadirEnd,
+          },
+          currentCycle: row.cycle_number || 1,
+          currentDate: new Date(),
+        });
+
+        patientMap.set(row.patient_id, {
+          patientId: row.patient_id,
+          patientName: row.medical_record_number
+            ? row.full_name
+              ? `${row.full_name} - ${row.medical_record_number}`
+              : row.medical_record_number
+            : row.full_name || row.patient_id,
+          questionnaireId: row.questionnaire_id,
+          regimen: row.regimen_code,
           cycle: context.currentCycle,
           day: context.treatmentDay,
           severity,
           alerts: alerts.map((a: any) => a.symptom_term).filter(Boolean),
-          triagedAt: questionnaire.triaged_at,
-          triagedBy: questionnaire.triaged_by,
-          questionnaireCompletedAt: questionnaire.completed_at,
-        };
-      })
-    );
+          triagedAt: row.triaged_at,
+          triagedBy: row.triaged_by,
+          questionnaireCompletedAt: row.completed_at,
+        });
+      }
+    }
 
-    const validCases = patientsWithTriaged
-      .filter((p) => p !== null)
+    const validCases = Array.from(patientMap.values())
       .sort((a, b) => new Date(b.triagedAt).getTime() - new Date(a.triagedAt).getTime());
 
     // Paginate

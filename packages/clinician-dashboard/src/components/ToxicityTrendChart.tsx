@@ -73,15 +73,6 @@ export function ToxicityTrendChart({ patientId }: ToxicityTrendChartProps) {
     timeRange: 'all'
   });
 
-  // Debug logging
-  console.log('[ToxicityTrendChart] Render:', {
-    patientId,
-    loading,
-    error: error?.message,
-    symptomsCount: data.symptoms.length,
-    dataPointsCount: data.dataPoints.length
-  });
-
   // Auto-select all symptoms if none are selected and data is loaded
   React.useEffect(() => {
     if (!loading && data.symptoms.length > 0 && selectedSymptoms.length === 0) {
