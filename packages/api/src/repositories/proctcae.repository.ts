@@ -85,6 +85,18 @@ export class ProCTCAERepository {
   }
 
   /**
+   * Find items by item code pattern
+   * Used to fetch related items for the same symptom (e.g., all NAUSEA_* items)
+   */
+  async findByItemCodePattern(pattern: string): Promise<ProCTCAEItem[]> {
+    const rows = await this.db('proctcae_items')
+      .where('item_code', 'like', `${pattern}%`)
+      .orderBy('attribute', 'asc');
+
+    return rows.map(this.mapToItem);
+  }
+
+  /**
    * Get all unique symptom categories
    */
   async getSymptomCategories(): Promise<string[]> {

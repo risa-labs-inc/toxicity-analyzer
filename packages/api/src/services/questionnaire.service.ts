@@ -157,51 +157,37 @@ export class QuestionnaireService {
       throw new NotFoundError('PRO-CTCAE item');
     }
 
-    // Check if branching triggered
-    const allItems = await this.proctcaeRepo.findAll();
-    const branchingEval = evaluateBranching(item, responseValue, allItems);
+    // OPTIMIZED: Extract symptom term and fetch only related items (2-3 items instead of 200)
+    const currentSymptomTerm = extractSymptomTerm(item.itemCode);
+    const symptomPrefix = currentSymptomTerm.toUpperCase();
+    const relatedItems = await this.proctcaeRepo.findByItemCodePattern(symptomPrefix);
+
+    // Check if branching triggered (using only related items for this symptom)
+    const branchingEval = evaluateBranching(item, responseValue, relatedItems);
 
     // Determine items to skip based on response
     const skipItemIds: string[] = [];
 
-    // Extract specific symptom term from item code (e.g., "NAUSEA_FREQ" → "nausea")
-    // This ensures we only skip questions for the SAME symptom, not the entire category
-    const currentSymptomTerm = extractSymptomTerm(item.itemCode);
-
     // If frequency is 0 (Never), skip severity and interference for same symptom
     if (item.attribute === 'frequency' && responseValue === 0) {
-      const relatedItems = allItems.filter((i) => {
-        const itemSymptomTerm = extractSymptomTerm(i.itemCode);
-        return (
-          itemSymptomTerm === currentSymptomTerm &&
-          (i.attribute === 'severity' || i.attribute === 'interference')
-        );
-      });
-      skipItemIds.push(...relatedItems.map((i) => i.itemId));
+      const itemsToSkip = relatedItems.filter((i) =>
+        i.attribute === 'severity' || i.attribute === 'interference'
+      );
+      skipItemIds.push(...itemsToSkip.map((i) => i.itemId));
     }
 
     // If severity is 0 (None), skip interference for same symptom
     if (item.attribute === 'severity' && responseValue === 0) {
-      const interferenceItems = allItems.filter((i) => {
-        const itemSymptomTerm = extractSymptomTerm(i.itemCode);
-        return (
-          itemSymptomTerm === currentSymptomTerm &&
-          i.attribute === 'interference'
-        );
-      });
-      skipItemIds.push(...interferenceItems.map((i) => i.itemId));
+      const itemsToSkip = relatedItems.filter((i) => i.attribute === 'interference');
+      skipItemIds.push(...itemsToSkip.map((i) => i.itemId));
     }
 
     // If present_absent is 0 (No), skip severity and interference for same symptom
     if (item.attribute === 'present_absent' && responseValue === 0) {
-      const relatedItems = allItems.filter((i) => {
-        const itemSymptomTerm = extractSymptomTerm(i.itemCode);
-        return (
-          itemSymptomTerm === currentSymptomTerm &&
-          (i.attribute === 'severity' || i.attribute === 'interference')
-        );
-      });
-      skipItemIds.push(...relatedItems.map((i) => i.itemId));
+      const itemsToSkip = relatedItems.filter((i) =>
+        i.attribute === 'severity' || i.attribute === 'interference'
+      );
+      skipItemIds.push(...itemsToSkip.map((i) => i.itemId));
     }
 
     // Get existing responses to check for updates/deletions
@@ -298,7 +284,6 @@ export class QuestionnaireService {
 
       // Extract specific symptom term from item code
       const symptomTerm = extractSymptomTerm(item.itemCode);
-      console.log(`Extracted symptom: "${symptomTerm}" from itemCode: "${item.itemCode}" (attribute: ${item.attribute})`);
 
       if (!symptomTerm || symptomTerm.trim() === '') {
         console.error(`ERROR: Empty symptom term from itemCode: ${item.itemCode}`);
@@ -321,8 +306,6 @@ export class QuestionnaireService {
         symptomData.interferenceResponse = response.responseValue;
       }
     });
-
-    console.log('Final symptom responses map:', Array.from(symptomResponses.entries()));
 
     // Calculate grades using NCI Scoring Algorithm
     const gradingResults = calculateMultipleGrades(
@@ -430,7 +413,6 @@ export class QuestionnaireService {
             alert_message: `SYSTEM ERROR: Alert creation failed for questionnaire with ${criticalAlerts.length} critical symptom(s). MANUAL REVIEW REQUIRED.`,
             patient_instructions: 'Please contact your care team immediately. There was a technical issue submitting your questionnaire responses.',
           });
-          console.log('✓ Fallback alert created successfully');
         } catch (fallbackError) {
           console.error('❌ FALLBACK ALERT CREATION ALSO FAILED:', fallbackError);
           // At this point, we need immediate manual intervention

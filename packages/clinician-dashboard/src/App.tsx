@@ -63,8 +63,8 @@ function formatPhaseForClinician(phase: string): string {
 // COMPONENTS
 // ============================================
 
-// Contact Patient Modal Component
-function ContactPatientModal({
+// Contact Patient Modal Component (Memoized to prevent unnecessary re-renders)
+const ContactPatientModal = React.memo(function ContactPatientModal({
   isOpen,
   onClose,
   patient
@@ -139,10 +139,10 @@ function ContactPatientModal({
       </div>
     </div>
   );
-}
+});
 
-// Confirmation Modal Component
-function ConfirmationModal({
+// Confirmation Modal Component (Memoized to prevent unnecessary re-renders)
+const ConfirmationModal = React.memo(function ConfirmationModal({
   isOpen,
   onClose,
   onConfirm,
@@ -203,10 +203,10 @@ function ConfirmationModal({
       </div>
     </div>
   );
-}
+});
 
-// Toast Notification Component
-function Toast({
+// Toast Notification Component (Memoized to prevent unnecessary re-renders)
+const Toast = React.memo(function Toast({
   isOpen,
   message,
   type = 'success',
@@ -254,7 +254,7 @@ function Toast({
       </div>
     </div>
   );
-}
+});
 
 // Protected Route wrapper - ensures user is logged in
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
