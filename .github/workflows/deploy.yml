@@ -174,7 +174,7 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-          projectId: toxicity-analyzer
+          projectId: toxicity-analyzer-prod
           channelId: live
 
       - name: Authenticate to Google Cloud
@@ -218,7 +218,7 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-          projectId: toxicity-analyzer
+          projectId: toxicity-analyzer-prod
           expires: 7d  # Preview expires after 7 days
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
