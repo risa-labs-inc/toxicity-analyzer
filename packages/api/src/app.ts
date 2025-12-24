@@ -43,8 +43,8 @@ export function createApp(): Application {
     // Allow Firebase preview channels for both apps
     // Pattern: https://toxicity-analyzer-{patient|clinician}--pr*-*.web.app
     const previewPatterns = [
-      /^https:\/\/toxicity-analyzer-patient--pr\d+-[a-z0-9]+\.web\.app$/,
-      /^https:\/\/toxicity-analyzer-clinician--pr\d+-[a-z0-9]+\.web\.app$/,
+      /^https:\/\/toxicity-analyzer-patient--pr\d+-[a-z0-9-]+\.web\.app$/,
+      /^https:\/\/toxicity-analyzer-clinician--pr\d+-[a-z0-9-]+\.web\.app$/,
     ];
 
     return previewPatterns.some(pattern => pattern.test(origin));
