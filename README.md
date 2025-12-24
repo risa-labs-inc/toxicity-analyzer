@@ -209,13 +209,58 @@ firebase deploy --only hosting:clinician-dashboard
 - Patient App: https://toxicity-analyzer-patient.web.app
 - Clinician Dashboard: https://toxicity-analyzer-clinician.web.app
 
+## Development Workflow
+
+### Branch Strategy
+
+- **`main`** - Production branch (protected, manual deployment only)
+- **`develop`** - Integration branch for ongoing development
+- **`feature/*`** - Feature branches created from develop
+
+### Working on New Features
+
+```bash
+# 1. Start from develop
+git checkout develop
+git pull origin develop
+
+# 2. Create feature branch
+git checkout -b feature/your-feature-name
+
+# 3. Make changes and commit
+git add .
+git commit -m "feat: description"
+
+# 4. Push and create PR to develop
+git push -u origin feature/your-feature-name
+```
+
+### Preview Deployments
+
+When you create a pull request to `develop`, GitHub Actions automatically:
+- Builds the frontend applications
+- Deploys to a Firebase preview channel
+- Comments on the PR with preview URLs
+- Preview expires after 7 days
+
+Use preview URLs to test changes or share with stakeholders before merging.
+
+### Deploying to Production
+
+Production deployments require manual approval:
+
+1. Merge approved PRs into `develop`
+2. Create release PR: `main` ← `develop`
+3. After merge, go to GitHub Actions → Deploy to Firebase
+4. Click "Run workflow" → Select `main` → Enable "Deploy to production"
+
 ## Contributing
 
-1. Create a feature branch
+1. Create a feature branch from `develop`
 2. Make your changes
 3. Run tests: `npm run test`
 4. Run linting: `npm run lint`
-5. Submit a pull request
+5. Submit a pull request to `develop`
 
 ## License
 
