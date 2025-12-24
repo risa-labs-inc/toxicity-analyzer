@@ -94,13 +94,13 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
 
       - name: Upload patient-app dist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: patient-app-dist
           path: packages/patient-app/dist
 
       - name: Upload clinician-dashboard dist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: clinician-dashboard-dist
           path: packages/clinician-dashboard/dist
@@ -158,13 +158,13 @@ jobs:
         run: npm ci
 
       - name: Download patient-app dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: patient-app-dist
           path: packages/patient-app/dist
 
       - name: Download clinician-dashboard dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: clinician-dashboard-dist
           path: packages/clinician-dashboard/dist
@@ -202,13 +202,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Download patient-app dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: patient-app-dist
           path: packages/patient-app/dist
 
       - name: Download clinician-dashboard dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: clinician-dashboard-dist
           path: packages/clinician-dashboard/dist
