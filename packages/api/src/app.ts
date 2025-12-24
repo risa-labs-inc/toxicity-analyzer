@@ -33,9 +33,39 @@ export function createApp(): Application {
     allowedOrigins.push(process.env.CORS_ORIGIN);
   }
 
+  // Function to check if origin is allowed
+  const isOriginAllowed = (origin: string | undefined): boolean => {
+    if (!origin) return false;
+
+    // Check exact matches
+    if (allowedOrigins.includes(origin)) return true;
+
+    // Allow Firebase preview channels for both apps
+    // Pattern: https://toxicity-analyzer-{patient|clinician}--pr*-*.web.app
+    const previewPatterns = [
+      /^https:\/\/toxicity-analyzer-patient--pr\d+-[a-z0-9-]+\.web\.app$/,
+      /^https:\/\/toxicity-analyzer-clinician--pr\d+-[a-z0-9-]+\.web\.app$/,
+    ];
+
+    return previewPatterns.some(pattern => pattern.test(origin));
+  };
+
   app.use(
     cors({
-      origin: process.env.NODE_ENV === 'production' ? allowedOrigins : '*',
+      origin: (origin, callback) => {
+        // In development, allow all origins
+        if (process.env.NODE_ENV !== 'production') {
+          callback(null, true);
+          return;
+        }
+
+        // In production, check if origin is allowed
+        if (isOriginAllowed(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       credentials: true,
     })
   );
