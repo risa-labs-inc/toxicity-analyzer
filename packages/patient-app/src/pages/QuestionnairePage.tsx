@@ -24,6 +24,86 @@ export default function QuestionnairePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Helper function to render question text with timeframe badge
+  const renderQuestionText = (text: string) => {
+    // Helper to capitalize first letter
+    const capitalizeFirstLetter = (str: string) => {
+      if (!str) return str;
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
+    // Check if question starts with "In the last 7 days"
+    const timeframePattern = /^In the last (\d+) days?,?\s*/i;
+    const match = text.match(timeframePattern);
+
+    if (match) {
+      const timeframePart = match[0].trim();
+      const remainingText = text.substring(match[0].length);
+
+      return (
+        <>
+          <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full mb-3">
+            {timeframePart.replace(/,$/, '')}
+          </span>
+          <br />
+          <span>{capitalizeFirstLetter(remainingText)}</span>
+        </>
+      );
+    }
+
+    return capitalizeFirstLetter(text);
+  };
+
+  // Helper function to render assessment type badge with icon and tooltip
+  const renderAssessmentBadge = (attribute: string) => {
+    const assessmentConfig: Record<string, { icon: string; color: string; bgColor: string; tooltip: string }> = {
+      frequency: {
+        icon: '🔄',
+        color: 'text-purple-700',
+        bgColor: 'bg-purple-50',
+        tooltip: 'How often this symptom occurs (e.g., rarely, occasionally, frequently)',
+      },
+      severity: {
+        icon: '⚡',
+        color: 'text-orange-700',
+        bgColor: 'bg-orange-50',
+        tooltip: 'How intense or strong the symptom feels when it occurs',
+      },
+      interference: {
+        icon: '🎯',
+        color: 'text-blue-700',
+        bgColor: 'bg-blue-50',
+        tooltip: 'How much this symptom affects your daily activities and quality of life',
+      },
+    };
+
+    const config = assessmentConfig[attribute.toLowerCase()] || {
+      icon: '📋',
+      color: 'text-gray-700',
+      bgColor: 'bg-gray-50',
+      tooltip: 'Assessment type',
+    };
+
+    const capitalizedAttribute = attribute.charAt(0).toUpperCase() + attribute.slice(1);
+
+    return (
+      <div className="inline-flex items-center gap-2 group relative">
+        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${config.bgColor} ${config.color} text-xs sm:text-sm font-medium rounded-full`}>
+          <span className="text-base">{config.icon}</span>
+          <span>{capitalizedAttribute} Assessment</span>
+        </span>
+        <span className="inline-flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gray-200 text-gray-600 text-xs cursor-help">
+          ℹ️
+        </span>
+        {/* Tooltip */}
+        <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+          {config.tooltip}
+          <div className="absolute -top-1 left-4 w-2 h-2 bg-gray-900 transform rotate-45"></div>
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     loadQuestionnaire();
   }, [questionnaireId]);
@@ -111,11 +191,21 @@ export default function QuestionnairePage() {
 
       setQuestions(newQuestions);
 
-      // If in edit mode, go back to review page
+      // If in edit mode, check if there are branching questions
       if (editItemId) {
-        navigate(`/review/${questionnaireId}`);
+        // If branching questions were added, stay on questionnaire to answer them
+        const hasBranchingQuestions = result.data.branchingQuestions && result.data.branchingQuestions.length > 0;
+
+        if (hasBranchingQuestions && currentIndex < newQuestions.length - 1) {
+          // Move to the next question (the first branching question)
+          setCurrentIndex(currentIndex + 1);
+          setSelectedOption(null);
+        } else {
+          // No branching questions, go back to review page
+          navigate(`/review/${questionnaireId}`);
+        }
       } else {
-        // Move to next question or go to review page
+        // Normal flow: Move to next question or go to review page
         if (currentIndex < newQuestions.length - 1) {
           setCurrentIndex(currentIndex + 1);
           setSelectedOption(null); // Clear selection for next question
@@ -212,15 +302,12 @@ export default function QuestionnairePage() {
         {/* Question Card */}
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8 mb-4 sm:mb-6">
           <div className="mb-4 sm:mb-6">
-            <span className="inline-block px-2 sm:px-3 py-1 bg-blue-100 text-blue-800 text-xs sm:text-sm font-medium rounded-full mb-3 sm:mb-4">
-              {currentQuestion.symptomCategory.replace(/_/g, ' ').toUpperCase()}
-            </span>
             <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-2">
-              {currentQuestion.questionText}
+              {renderQuestionText(currentQuestion.questionText)}
             </h2>
-            <p className="text-xs sm:text-sm text-gray-500">
-              {currentQuestion.attribute.charAt(0).toUpperCase() + currentQuestion.attribute.slice(1)} Assessment
-            </p>
+            <div className="mb-2">
+              {renderAssessmentBadge(currentQuestion.attribute)}
+            </div>
           </div>
 
           {/* Response Options */}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { patientApi } from '../services/api';
 
 interface QuestionResponse {
@@ -15,6 +15,7 @@ interface QuestionResponse {
 export default function ReviewPage() {
   const { questionnaireId } = useParams<{ questionnaireId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [responses, setResponses] = useState<QuestionResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -22,7 +23,7 @@ export default function ReviewPage() {
 
   useEffect(() => {
     loadResponses();
-  }, [questionnaireId]);
+  }, [questionnaireId, location]);
 
   const loadResponses = async () => {
     try {
@@ -111,9 +112,6 @@ export default function ReviewPage() {
                     <span className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-blue-100 text-blue-800 text-xs sm:text-sm font-bold rounded-full flex-shrink-0">
                       {index + 1}
                     </span>
-                    <span className="inline-block px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
-                      {response.symptomCategory.replace(/_/g, ' ').toUpperCase()}
-                    </span>
                     <span className="text-xs text-gray-500">
                       {response.attribute.charAt(0).toUpperCase() + response.attribute.slice(1)}
                     </span>
@@ -131,10 +129,11 @@ export default function ReviewPage() {
                   </div>
                 </div>
 
-                {/* Change Answer Button - Full width on mobile */}
+                {/* Change Answer Button - Full width on mobile - HIDDEN FOR NOW */}
                 <button
                   onClick={() => handleChangeAnswer(response.itemId)}
                   className="w-full sm:w-auto sm:ml-4 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors min-h-[44px]"
+                  hidden
                 >
                   Change Answer
                 </button>
@@ -151,7 +150,7 @@ export default function ReviewPage() {
               disabled={submitting}
               className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-gray-700 bg-gray-100 rounded-lg sm:rounded-xl hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium min-h-[44px]"
             >
-              ← Go Back
+              ↻ Retake Assessment
             </button>
             <button
               onClick={handleSubmit}

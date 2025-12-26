@@ -9,7 +9,24 @@ function LoginPage() {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const patients = Array.from({ length: 15 }, (_, i) => `P${String(i + 1).padStart(3, '0')}`);
+  // Demo patients with names and IDs
+  const patients = [
+    { id: 'P001', name: 'Sarah Johnson' },
+    { id: 'P002', name: 'Michael Chen' },
+    { id: 'P003', name: 'Emily Rodriguez' },
+    { id: 'P004', name: 'James Wilson' },
+    { id: 'P005', name: 'Maria Garcia' },
+    { id: 'P006', name: 'David Lee' },
+    { id: 'P007', name: 'Susan Martinez' },
+    { id: 'P008', name: 'Robert Taylor' },
+    { id: 'P009', name: 'Jennifer Anderson' },
+    { id: 'P010', name: 'William Brown' },
+    { id: 'P011', name: 'Linda Davis' },
+    { id: 'P012', name: 'Christopher White' },
+    { id: 'P013', name: 'Patricia Harris' },
+    { id: 'P014', name: 'Daniel Clark' },
+    { id: 'P015', name: 'Nicole Moore' },
+  ];
 
   const handleLogin = () => {
     if (selectedPatient) {
@@ -24,8 +41,22 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
+      <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-xl">
+        {/* Partner Logos */}
+        <div className="flex items-center justify-center gap-10 mb-10">
+          <img
+            src="/assets/mayo-clinic-logo.svg"
+            alt="Mayo Clinic"
+            className="h-14 w-auto"
+          />
+          <img
+            src="/assets/risa-logo.svg"
+            alt="RISA"
+            className="h-12 w-auto"
+          />
+        </div>
+
+        <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Patient Portal</h1>
           <p className="text-gray-600">Toxicity Analyzer</p>
         </div>
@@ -41,9 +72,9 @@ function LoginPage() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             >
               <option value="">Choose your ID...</option>
-              {patients.map((id) => (
-                <option key={id} value={id}>
-                  {id}
+              {patients.map((patient) => (
+                <option key={patient.id} value={patient.id}>
+                  {patient.name} - {patient.id}
                 </option>
               ))}
             </select>
@@ -157,12 +188,13 @@ function DashboardPage() {
             <div className="flex-1 min-w-0">
               <h1 className="text-sm sm:text-xl font-bold text-gray-900 truncate">Patient Portal</h1>
               {patientProfile?.fullName ? (
-                <>
-                  <p className="text-xs sm:text-sm text-gray-900 font-medium truncate">{patientProfile.fullName}</p>
-                  <p className="text-xs text-gray-500 truncate">ID: {patientId}</p>
-                </>
+                <p className="text-xs sm:text-sm truncate">
+                  <span className="text-gray-900 font-medium">{patientProfile.fullName}</span>
+                  <span className="text-gray-400 mx-1 sm:mx-2">|</span>
+                  <span className="text-gray-600">{patientId}</span>
+                </p>
               ) : (
-                <p className="text-xs text-gray-500 truncate">Patient ID: {patientId}</p>
+                <p className="text-xs sm:text-sm text-gray-600 truncate">{patientId}</p>
               )}
             </div>
             <button

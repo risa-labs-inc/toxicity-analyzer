@@ -144,6 +144,7 @@ export class QuestionnaireService {
     response: any;
     branchingQuestions: ProCTCAEItem[];
     skipItemIds: string[];
+    invalidatedItemIds: string[];
   }> {
     // Get questionnaire and item
     const questionnaire = await this.questionnaireRepo.findById(questionnaireId);
@@ -203,8 +204,15 @@ export class QuestionnaireService {
       skipItemIds.push(...relatedItems.map((i) => i.itemId));
     }
 
-    // Save response
-    const response = await this.responseRepo.createResponse({
+    // Get existing responses to check for updates/deletions
+    const existingResponses = await this.responseRepo.findByQuestionnaireId(questionnaireId);
+    const answeredItemIds = new Set(existingResponses.map(r => r.itemId));
+
+    // Check if this is an update (response already exists for this itemId)
+    const isUpdate = answeredItemIds.has(itemId);
+
+    // Upsert response (update if exists, insert if not)
+    const response = await this.responseRepo.upsertResponse({
       questionnaireId,
       itemId,
       responseValue,
@@ -212,15 +220,29 @@ export class QuestionnaireService {
       conditionalTriggered: branchingEval.shouldBranch,
     });
 
+    // Identify responses that need to be deleted due to branching logic changes
+    // These are items that:
+    // 1. Should now be skipped based on the new response value
+    // 2. AND have existing responses that need to be invalidated
+    const invalidatedItemIds = skipItemIds.filter(skipId => answeredItemIds.has(skipId));
+
+    // Delete obsolete responses
+    if (invalidatedItemIds.length > 0) {
+      await this.responseRepo.deleteResponses(questionnaireId, invalidatedItemIds);
+    }
+
     // Filter out branching questions that are already in the questionnaire
-    // or have already been answered
+    // or have already been answered (excluding the ones we just invalidated)
     const selectedItemIds = new Set(questionnaire.selectedItems || []);
-    const existingResponses = await this.responseRepo.findByQuestionnaireId(questionnaireId);
-    const answeredItemIds = new Set(existingResponses.map(r => r.itemId));
+    const currentAnsweredItemIds = new Set(
+      existingResponses
+        .map(r => r.itemId)
+        .filter(id => !invalidatedItemIds.includes(id))
+    );
 
     const branchingQuestions = branchingEval.targetQuestion &&
       !selectedItemIds.has(branchingEval.targetQuestion.itemId) &&
-      !answeredItemIds.has(branchingEval.targetQuestion.itemId)
+      !currentAnsweredItemIds.has(branchingEval.targetQuestion.itemId)
       ? [branchingEval.targetQuestion]
       : [];
 
@@ -228,6 +250,7 @@ export class QuestionnaireService {
       response,
       branchingQuestions,
       skipItemIds,
+      invalidatedItemIds,
     };
   }
 

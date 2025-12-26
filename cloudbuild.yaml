@@ -1,67 +1,26 @@
-# Cloud Build configuration for Toxicity Analyzer API
-# Based on GHMonitoring's successful deployment pattern
-
 steps:
-  # Step 1: Build Docker image
+  # Build the container image from root (monorepo context)
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Build'
-    args:
-      - 'build'
-      - '--no-cache'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
-      - '.'
-      - '-f'
-      - 'Dockerfile'
+    args: ['build', '-f', 'packages/api/Dockerfile', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/toxicity-analyzer-api:$BUILD_ID', '.']
 
-  # Step 2: Push Docker image to Artifact Registry
+  # Push the container image
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Push'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/toxicity-analyzer-api:$BUILD_ID']
 
-  # Step 3: Deploy to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    id: 'Deploy'
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       - 'run'
-      - 'services'
-      - 'update'
+      - 'deploy'
       - 'toxicity-analyzer-api'
-      - '--platform=managed'
-      - '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
-      - '--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=${COMMIT_SHA},gcb-build-id=${BUILD_ID}'
+      - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/toxicity-analyzer-api:$BUILD_ID'
       - '--region=us-central1'
-      - '--cpu=2'
-      - '--memory=2Gi'
-      - '--min-instances=0'
-      - '--max-instances=10'
-      - '--concurrency=80'
-      - '--execution-environment=gen2'
-      - '--set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/toxicity-analyzer-prod:us-central1:toxicity-analyzer-db,DB_PORT=5432,DB_NAME=toxicity_analyzer,FIREBASE_PROJECT_ID=toxicity-analyzer-prod,LOG_LEVEL=info'
-      - '--set-secrets=DB_USER=DB_USER:latest,DB_PASSWORD=DB_PASSWORD:latest'
-      - '--set-cloudsql-instances=toxicity-analyzer-prod:us-central1:toxicity-analyzer-db'
-      - '--vpc-connector=toxicity-connector'
-      - '--vpc-egress=private-ranges-only'
-      - '--quiet'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
 
-# Substitutions
-substitutions:
-  _SERVICE_NAME: toxicity-analyzer-api
-  _DEPLOY_REGION: us-central1
-
-# Build options
-options:
-  logging: CLOUD_LOGGING_ONLY
-  substitutionOption: ALLOW_LOOSE
-
-# Tag the build
-tags:
-  - 'gcp-cloud-build-deploy-cloud-run'
-  - 'toxicity-analyzer-api'
-
-# Images to push
 images:
-  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/toxicity-analyzer/toxicity-analyzer-api:${COMMIT_SHA}'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/toxicity-analyzer-api:$BUILD_ID'
+
+options:
+  machineType: 'E2_HIGHCPU_8'

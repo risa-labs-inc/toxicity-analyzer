@@ -284,8 +284,22 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
+      <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-xl">
+        {/* Partner Logos */}
+        <div className="flex items-center justify-center gap-10 mb-10">
+          <img
+            src="/assets/mayo-clinic-logo.svg"
+            alt="Mayo Clinic"
+            className="h-14 w-auto"
+          />
+          <img
+            src="/assets/risa-logo.svg"
+            alt="RISA"
+            className="h-12 w-auto"
+          />
+        </div>
+
+        <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Clinician Dashboard</h1>
           <p className="text-gray-600">Toxicity Analyzer</p>
         </div>
@@ -741,17 +755,19 @@ function TriagePage() {
                       </span>
                     </div>
 
-                    {/* Info Grid - Stack on mobile */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority Reason:</p>
-                        <p className="text-xs sm:text-sm text-gray-600">{patient.priorityReason}</p>
+                    {/* Info Grid - Stack on mobile - Only show for Active Queue */}
+                    {activeTab === 'active' && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div>
+                          <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority Reason:</p>
+                          <p className="text-xs sm:text-sm text-gray-600">{patient.priorityReason}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Recommended Action:</p>
+                          <p className="text-xs sm:text-sm text-gray-600">{patient.recommendedAction}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Recommended Action:</p>
-                        <p className="text-xs sm:text-sm text-gray-600">{patient.recommendedAction}</p>
-                      </div>
-                    </div>
+                    )}
 
                     {/* Alerts and Actions - Stack on mobile */}
                     <div className="flex flex-col gap-3 pt-3 sm:pt-4 border-t border-gray-100">
@@ -796,10 +812,12 @@ function TriagePage() {
                       </div>
                     </div>
 
-                    {/* Timeline */}
-                    <div className="mt-2 text-xs text-gray-500">
-                      Response Timeline: <span className="font-medium">{patient.timelineTarget}</span>
-                    </div>
+                    {/* Timeline - Only show for Active Queue */}
+                    {activeTab === 'active' && patient.timelineTarget && (
+                      <div className="mt-2 text-xs text-gray-500">
+                        Response Timeline: <span className="font-medium">{patient.timelineTarget}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

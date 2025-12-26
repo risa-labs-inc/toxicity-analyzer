@@ -23,6 +23,58 @@ export class ResponseRepository {
   }
 
   /**
+   * Upsert questionnaire response (update if exists, insert if not)
+   * Uses transaction to ensure atomicity and prevent race conditions
+   */
+  async upsertResponse(response: Omit<QuestionnaireResponse, 'responseId' | 'createdAt'>): Promise<QuestionnaireResponse> {
+    // Use a transaction to ensure the delete and insert are atomic
+    return await this.db.transaction(async (trx) => {
+      console.log(`[UPSERT] Starting upsert for questionnaire=${response.questionnaireId}, item=${response.itemId}`);
+
+      // First, delete any existing responses for this questionnaire + item_id combination
+      const deletedCount = await trx('questionnaire_responses')
+        .where({
+          questionnaire_id: response.questionnaireId,
+          item_id: response.itemId,
+        })
+        .delete();
+
+      console.log(`[UPSERT] Deleted ${deletedCount} existing responses`);
+
+      // Then insert the new response
+      const [row] = await trx('questionnaire_responses')
+        .insert({
+          questionnaire_id: response.questionnaireId,
+          item_id: response.itemId,
+          response_value: response.responseValue,
+          response_label: response.responseLabel,
+          conditional_triggered: response.conditionalTriggered,
+        })
+        .returning('*');
+
+      console.log(`[UPSERT] Inserted new response with id=${row.response_id}, label=${row.response_label}`);
+
+      return this.mapToResponse(row);
+    });
+  }
+
+  /**
+   * Delete responses by item IDs
+   */
+  async deleteResponses(questionnaireId: string, itemIds: string[]): Promise<number> {
+    if (itemIds.length === 0) {
+      return 0;
+    }
+
+    const deletedCount = await this.db('questionnaire_responses')
+      .where('questionnaire_id', questionnaireId)
+      .whereIn('item_id', itemIds)
+      .delete();
+
+    return deletedCount;
+  }
+
+  /**
    * Get all responses for questionnaire
    */
   async findByQuestionnaireId(questionnaireId: string): Promise<QuestionnaireResponse[]> {
